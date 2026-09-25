@@ -6,7 +6,7 @@ Small, self-contained browser tools that work without an internet connection. Ea
 
 | Tool | What it does |
 | --- | --- |
-| [JSON diff](json-diff/json-diff.html) | Compare two JSON documents (or any text): line diff, every structural change, shared properties (copyable as a Markdown table), what's only in A or B, and an RFC 6902 JSON Patch. |
+| [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch and field filtering. |
 
 ## Using a tool
 
@@ -16,7 +16,7 @@ Open the tool's `.html` file in any modern browser, by double-clicking it or dra
 
 Each tool follows the same conventions so the collection stays easy to use and maintain:
 
-- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file. Add a row to the table above.
+- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file and a `README.md` covering the tool's features and usage. Add a row to the table above linking to the folder.
 - **Fully self-contained.** Inline all CSS and JS. No CDNs, web fonts, external requests or build step. The file has to keep working with no network.
 - **No uploads.** Process all data in the browser. Use `localStorage` only for preferences such as the theme, never for user content.
 - **Keep logic separate from the UI.** Put the core logic in its own `<script>` as pure functions with no DOM access, so it can be tested on its own (JSON diff exports it via `module.exports` when loaded in Node).
