@@ -663,14 +663,12 @@ function matchSegs(ps, path, i = 0, j = 0) {
   if (ps[i] === '**') { for (let k = j; k <= path.length; k++) if (matchSegs(ps, path, i + 1, k)) return true; return false; }
   return j < path.length && (ps[i] === '*' || (ps[i].re ? ps[i].re.test(String(path[j])) : String(ps[i].k) === String(path[j]))) && matchSegs(ps, path, i + 1, j + 1);
 }
-/* rules = { include: [pattern…], exclude: [pattern…] }.
-   If there are include patterns, only fields matching any of them are kept (plus what's needed to reach them);
-   exclude patterns are then removed from what's left.
+/* steps = [{ mode: 'include' | 'exclude', pats: [pattern…] }…], applied in order, each to what the previous left.
+   include keeps only fields matching any of its patterns (plus what's needed to reach them); exclude removes them.
+   So two include steps narrow (%a% then %b% keeps keys containing both), and patterns within one step are alternatives.
    keepKey: objects inside arrays keep this field when filtering by include, so "match objects by key" still works. */
-function filterFields(value, rules, keepKey) {
-  const inc = rules.include || [], exc = rules.exclude || [];
-  if (inc.length) value = onlyFields(value, inc, keepKey);
-  if (exc.length) value = dropFields(value, exc);
+function filterFields(value, steps, keepKey) {
+  for (const st of steps) if (st.pats.length) value = st.mode === 'include' ? onlyFields(value, st.pats, keepKey) : dropFields(value, st.pats);
   return value;
 }
 const hitAny = (pats, path) => pats.some(p => matchSegs(p, path));
@@ -755,11 +753,7 @@ let R = null; // computed results
 const rules = [];
 let ruleSeq = 0;
 const PLACEHOLDER = { include: 'e.g. name, price%, $.address', exclude: 'e.g. updatedAt, %At, $.meta' };
-function activeRules() {
-  const r = { include: [], exclude: [] };
-  for (const x of rules) if (x.on) r[x.mode].push(...parsePatterns(x.text));
-  return r;
-}
+const activeRules = () => rules.filter(r => r.on).map(r => ({ mode: r.mode, pats: parsePatterns(r.text) })).filter(r => r.pats.length);
 
 function opts() {
   return { arrMode: $('#arrMode').value, arrKey: $('#arrKey').value.trim(), ignoreCase: $('#ignoreCase').checked, numLoose: $('#numLoose').checked,
@@ -780,12 +774,20 @@ function compute() {
   const pa = parseJSON(ta), pb = parseJSON(tb);
   setStatus('A', pa, ta); setStatus('B', pb, tb);
   const json = pa.ok && pb.ok, o = opts();
-  R = { json, ta, tb, pa, pb, o, empty: pa.empty && pb.empty, filtered: json && (o.fields.include.length + o.fields.exclude.length) > 0 };
+  R = { json, ta, tb, pa, pb, o, empty: pa.empty && pb.empty, filtered: json && o.fields.length > 0 };
   if (json) {
     const keepKey = o.arrMode === 'key' ? o.arrKey : '';
-    R.paths = listPaths(pb.value, listPaths(pa.value));
-    R.va = filterFields(pa.value, o.fields, keepKey);
-    R.vb = filterFields(pb.value, o.fields, keepKey);
+    // run the filters in order; each one's count is measured against what the filters above it left
+    let va = pa.value, vb = pb.value;
+    R.ruleCounts = new Map();
+    for (const r of rules) {
+      const pats = parsePatterns(r.text); if (!pats.length) continue;
+      R.ruleCounts.set(r.id, countMatches(pats, listPaths(vb, listPaths(va))));
+      if (!r.on) continue;
+      va = filterFields(va, [{ mode: r.mode, pats }], keepKey);
+      vb = filterFields(vb, [{ mode: r.mode, pats }], keepKey);
+    }
+    R.va = va; R.vb = vb;
     R.entries = structDiff(R.va, R.vb, o);
     R.patch = jsonPatch(R.va, R.vb);
     const c = { added: 0, removed: 0, changed: 0, type: 0, equal: 0 };
@@ -1051,21 +1053,24 @@ function renderRules() {
   const inc = rules.some(r => r.on && r.mode === 'include'), exc = rules.some(r => r.on && r.mode === 'exclude');
   const hint = $('#rulesHint');
   hint.hidden = !rules.length;
-  hint.innerHTML = inc && exc ? 'Fields matching <b>any</b> “Only compare” filter are kept, then “Ignore” filters remove fields from those.'
-    : inc ? 'Only fields matching <b>any</b> of these filters are compared. Everything else is left out.'
-    : exc ? 'Matching fields are left out of the comparison on both sides.'
-    : 'All filters are turned off.';
+  const on = rules.filter(r => r.on).length;
+  hint.innerHTML = !on ? 'All filters are turned off.'
+    : (on > 1 ? 'Filters apply top to bottom, each narrowing what the ones above left. ' : '')
+      + (inc && exc ? '“Only compare” keeps matching fields and “Ignore” removes them.' : inc ? '“Only compare” keeps only matching fields.' : 'Matching fields are left out on both sides.')
+      + ' Commas in one filter mean <b>any</b> of those patterns.';
   updateRuleCounts();
 }
 function updateRuleCounts() {
   document.querySelectorAll('.rule').forEach(el => {
     const r = rules.find(x => x.id === +el.dataset.id), out = el.querySelector('.rule-count');
     const pats = parsePatterns(r.text);
-    if (!R || !R.json || !pats.length) { out.textContent = ''; out.className = 'rule-count'; out.title = ''; return; }
-    const n = countMatches(pats, R.paths);
-    out.textContent = n ? `${n} field${n > 1 ? 's' : ''}` : 'no matches';
+    const n = R && R.json && pats.length ? R.ruleCounts.get(r.id) : undefined;
+    if (n === undefined) { out.textContent = ''; out.className = 'rule-count'; out.title = ''; return; }
+    const first = rules.indexOf(r) === 0, f = `${n} field${n === 1 ? '' : 's'}`;
+    out.textContent = n ? f : 'no matches';
     out.className = 'rule-count' + (n ? '' : ' warn');
-    out.title = n ? `Matches ${n} field${n > 1 ? 's' : ''} across A and B` : 'Nothing in A or B matches these patterns';
+    out.title = !n ? (first ? 'Nothing in A or B matches these patterns' : 'Nothing left by the filters above matches these patterns')
+      : (r.mode === 'include' ? 'Keeps ' : 'Removes ') + f + (first ? ' across A and B' : ' of what the filters above left');
   });
 }
 function addRule(mode, text = '', focus = true) {

@@ -33,14 +33,22 @@ The structural tabs need valid JSON on both sides.
 
 ## Field filters
 
-Use **+ Only compare** and **+ Ignore** to add as many filters as you need. Each filter holds one or more patterns separated by commas. Filters combine like this:
+Use **+ Only compare** and **+ Ignore** to add as many filters as you need. Filters apply **top to bottom, each one working on what the filters above it left**:
 
-1. If there are any **Only compare** filters, a field is kept when it matches **any** of them.
-2. **Ignore** filters then remove fields from what's left.
+- **Only compare** keeps only the fields that match, so two of them narrow each other.
+- **Ignore** removes the fields that match.
+- **Commas inside one filter** mean *any* of those patterns.
 
-For example, *Only compare* `x, y, z` + *Only compare* `a%` + *Ignore* `b%` compares `x`, `y`, `z` and every key starting with `a`, minus any key starting with `b` inside them.
+For example, with the keys `aabbaa`, `aaccaa`, `aaddaa` and `bbddbb`:
 
-- **Match count:** each filter shows how many fields it matches across A and B, and says **no matches** when nothing does, which usually means a typo. Fields nested inside a matched field aren't counted again.
+| Filters | Result |
+| --- | --- |
+| *Only compare* `%a%` | `aabbaa`, `aaccaa`, `aaddaa` |
+| *Only compare* `%a%` → *Only compare* `%b%` | `aabbaa` |
+| *Only compare* `%a%, %b%` (one filter) | all four |
+| *Only compare* `%a%` → *Ignore* `%c%` | `aabbaa`, `aaddaa` |
+
+- **Match count:** each filter shows how many fields it matches in what's left at that step. The first filter counts across all of A and B, and each later filter counts only what the filters above left. It says **no matches** when nothing matches, which usually means a typo or an earlier filter that already removed those fields. Fields nested inside a matched field aren't counted again.
 - **Turning filters on and off:** the checkbox turns a single filter off without deleting it. **Turn off** in the summary line turns off all of them.
 - **Changing and removing:** the *Only compare* / *Ignore* toggle switches a filter's type, and **×** removes it.
 - **Keyboard:** press Enter in a filter to add another filter of the same type.
