@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BPM tapper</title>
+<script>
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in the CSS.
+   "auto" follows the OS light/dark setting using the two ids named below. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+];
+const THEME_KEY = 'bpm-tapper.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  document.documentElement.dataset.theme = t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id;
+  return t.id;
+}
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+</script>
+<style>
+/* ===== Themes =====
+   Each theme sets only the base tokens below; everything else (tints, hover states,
+   focus rings) is derived from them further down. To add a theme: copy a block, give it
+   a new data-theme id, and add a matching entry to THEMES in the <head> script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* derived tokens: shared by every theme */
+:root{
+  --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
+  --flash:color-mix(in oklab,var(--accent) 24%,var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.wrap{position:relative;max-width:1100px;margin:0 auto;padding:18px 20px 60px}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.nav:disabled{opacity:.45;cursor:not-allowed}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+kbd{font:600 .82em var(--mono);letter-spacing:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel);color:var(--ink)}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.note{margin:0;padding:10px 14px;color:var(--muted);font-size:.84rem}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px;align-items:start}
+
+/* tap pad */
+.pad{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;min-height:340px;padding:28px 16px 34px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background .35s,border-color .2s}
+.pad:hover{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pad.hit{background:var(--flash);transition:none}
+.pad.done .bpm{color:var(--accent-text)}
+.pad-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.bpm{font-size:clamp(4.5rem,15vw,8.5rem);font-weight:700;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;transition:color .3s}
+.bpm.idle{color:var(--muted);opacity:.5}
+.unit{font-size:.95rem;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.pad-hint{margin-top:6px;font-size:.92rem;color:var(--muted);text-align:center}
+.beats{display:flex;gap:8px;margin-top:10px;min-height:14px}
+.beats i{width:12px;height:12px;border-radius:50%;background:var(--surface);border:1px solid var(--line);transition:background .3s,transform .3s}
+.beats i:first-child{width:14px;height:14px;margin-top:-1px}
+.beats i.on{background:var(--accent);border-color:var(--accent);transform:scale(1.25);transition:none}
+.timer{position:absolute;left:0;bottom:0;height:4px;width:0;background:color-mix(in oklab,var(--accent) 70%,transparent)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin-top:16px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.stat{background:var(--panel);padding:10px 14px;min-width:0}
+.stat dt{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat dd{margin:2px 0 0;font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat dd small{font-size:.8rem;color:var(--muted);font-weight:600;margin-left:3px}
+.stat dd.muted{color:var(--muted);font-weight:500}
+
+/* options */
+.opts{display:flex;flex-direction:column}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:.9rem}
+.opt:last-child{border-bottom:0}
+.opt>span:first-child{display:flex;flex-direction:column}
+.opt small{color:var(--muted);font-size:.76rem;line-height:1.3}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.84rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.side-col{display:flex;flex-direction:column;gap:16px}
+.keys{list-style:none;margin:0;padding:8px 14px 12px;font-size:.84rem;color:var(--muted);display:flex;flex-direction:column;gap:5px}
+.keys li{display:flex;justify-content:space-between;gap:10px}
+
+/* chart */
+.lower{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px;margin-top:16px;align-items:start}
+.chart-box{padding:10px 8px 6px}
+svg.chart{display:block;width:100%;height:180px;overflow:visible}
+svg.chart .grid line{stroke:var(--line)}
+svg.chart .grid text{fill:var(--muted);font:11px var(--mono);letter-spacing:0}
+svg.chart .avg{stroke:var(--accent-text);stroke-dasharray:5 4;stroke-width:1.5;opacity:.8}
+svg.chart .ln{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-linejoin:round;opacity:.6}
+svg.chart circle{fill:var(--accent)}
+svg.chart circle.last{stroke:var(--panel);stroke-width:2}
+.legend{display:flex;gap:14px;flex-wrap:wrap;padding:0 14px 10px;font-size:.78rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:16px;height:0;border-top:2px dashed var(--accent-text)}
+.legend b{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.empty{padding:40px 16px;text-align:center;color:var(--muted);font-size:.9rem}
+
+/* history */
+.hist{list-style:none;margin:0;padding:4px 0;max-height:260px;overflow:auto}
+.hist li{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:4px 10px;padding:7px 14px;border-bottom:1px solid var(--line)}
+.hist li:last-child{border-bottom:0}
+.hist .hb{font-size:1.1rem;font-weight:700;font-variant-numeric:tabular-nums}
+.hist .hb small{font-size:.72rem;color:var(--muted);margin-left:3px}
+.hist .hm{font-size:.78rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist .copy{border:1px solid var(--line);background:none;border-radius:var(--pill);padding:0 9px;font:600 .72rem var(--sans);color:var(--muted)}
+.hist .copy:hover{color:var(--accent-text);border-color:var(--accent)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media (max-width:800px){
+  .main,.lower{grid-template-columns:1fr}
+  .wrap{padding:12px 12px 40px}
+  header{position:static;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+  .pad{min-height:280px}
+  .keys-card{display:none}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.timer{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo"><b>BPM</b>.tap</span>
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="reset" title="Reset (Esc)">Reset</button>
+      <button class="nav" id="copy" title="Copy the current result" disabled>Copy result</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Tap the tempo</h1>
+    <p>Tap, click or press any key in time with the beat. A few bars is enough for a solid reading. Everything runs in your browser.</p>
+  </div>
+
+  <div class="main">
+    <div>
+      <button type="button" class="pad" id="pad" aria-describedby="padHint">
+        <span class="pad-label" id="padLabel">Average</span>
+        <span class="bpm idle" id="bpm">–</span>
+        <span class="unit">BPM</span>
+        <span class="beats" id="beats" aria-hidden="true"></span>
+        <span class="pad-hint" id="padHint">Tap here, or press any key</span>
+        <span class="timer" id="timer" aria-hidden="true"></span>
+      </button>
+      <dl class="stats" id="stats"></dl>
+    </div>
+
+    <div class="side-col">
+      <section class="card" aria-labelledby="optsTitle">
+        <div class="card-head"><h2 id="optsTitle">Options</h2></div>
+        <div class="opts">
+          <label class="opt"><span>Auto reset<small>Start over after a pause</small></span>
+            <select id="optTimeout">
+              <option value="2000">after 2 s</option>
+              <option value="3000">after 3 s</option>
+              <option value="5000">after 5 s</option>
+              <option value="10000">after 10 s</option>
+              <option value="0">never</option>
+            </select>
+          </label>
+          <label class="opt"><span>Recent<small>Taps used for “Recent”</small></span>
+            <select id="optWindow">
+              <option value="4">last 4</option>
+              <option value="8">last 8</option>
+              <option value="16">last 16</option>
+              <option value="32">last 32</option>
+            </select>
+          </label>
+          <label class="opt"><span>Beats per bar<small>Counts along on the pad</small></span>
+            <select id="optBar">
+              <option value="0">off</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+          </label>
+          <div class="opt"><span id="decLabel">Decimals</span>
+            <span class="seg" role="group" aria-labelledby="decLabel" id="optDec">
+              <button type="button" data-v="0">0</button><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button>
+            </span>
+          </div>
+          <label class="opt"><span>Click sound<small>Plays on each tap</small></span>
+            <input type="checkbox" id="optSound">
+          </label>
+        </div>
+      </section>
+      <section class="card keys-card" aria-labelledby="keysTitle">
+        <div class="card-head"><h2 id="keysTitle">Keyboard</h2></div>
+        <ul class="keys">
+          <li><span>Tap</span><span>any key</span></li>
+          <li><span>Reset</span><kbd>Esc</kbd></li>
+          <li><span>Copy result</span><span><kbd>⌘</kbd>/<kbd>Ctrl</kbd> <kbd>C</kbd></span></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <div class="lower">
+    <section class="card" aria-labelledby="chartTitle">
+      <div class="card-head"><h2 id="chartTitle">Each tap</h2><span class="spacer"></span></div>
+      <div id="chart"></div>
+    </section>
+    <section class="card" aria-labelledby="histTitle">
+      <div class="card-head"><h2 id="histTitle">Results</h2><span class="spacer"></span><button class="btn" id="histClear" disabled>Clear</button></div>
+      <ul class="hist" id="hist"></ul>
+      <p class="note" id="histNote">Finished runs appear here. They're kept only until you close the page.</p>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="sr-only" id="announce" aria-live="polite"></div>
+
+<!-- ===== Core tempo logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Tap times are milliseconds on any monotonic clock (e.g. event.timeStamp). */
+const intervalsOf = times => times.slice(1).map((t, i) => t - times[i]);
+const toBpm = ms => ms > 0 ? 60000 / ms : null;
+const mean = xs => xs.reduce((s, x) => s + x, 0) / xs.length;
+
+/* Beat length by least-squares fit of tap time against tap number. Less sensitive
+   to one early or late tap than (last - first) / (n - 1), and uses every tap. */
+function fitBeat(times) {
+  const n = times.length;
+  if (n < 2) return null;
+  const mi = (n - 1) / 2, mt = mean(times);
+  let num = 0, den = 0;
+  for (let i = 0; i < n; i++) { num += (i - mi) * (times[i] - mt); den += (i - mi) ** 2; }
+  return num / den;
+}
+
+/* Everything the UI shows for one run of taps. BPM fields are null until there's enough data. */
+function tapStats(times, { window = 8 } = {}) {
+  const taps = times.length, iv = intervalsOf(times);
+  const s = { taps, intervals: iv, bpm: null, recent: null, min: null, max: null, consistency: null, elapsed: taps ? times[taps - 1] - times[0] : 0 };
+  if (!iv.length) return s;
+  s.bpm = toBpm(fitBeat(times));
+  s.recent = toBpm(mean(iv.slice(-window)));
+  s.min = toBpm(Math.max(...iv));
+  s.max = toBpm(Math.min(...iv));
+  if (iv.length >= 2) {
+    // 100% = perfectly even taps; drops by 1 point per 1% of spread (coefficient of variation)
+    const m = mean(iv), sd = Math.sqrt(mean(iv.map(x => (x - m) ** 2)));
+    s.consistency = Math.max(0, Math.round((1 - sd / m) * 100));
+  }
+  return s;
+}
+
+const fmtBpm = (v, decimals = 1) => v == null || !isFinite(v) ? '–' : v.toFixed(decimals);
+function fmtDuration(ms) {
+  const s = ms / 1000;
+  if (s < 60) return s.toFixed(1) + ' s';
+  const m = Math.floor(s / 60);
+  return `${m}:${String(Math.floor(s - m * 60)).padStart(2, '0')}`;
+}
+/* Position in the bar for the nth tap (1-based), e.g. tap 6 in 4/4 -> bar 2, beat 2. */
+const barPos = (taps, perBar) => taps && perBar ? { bar: Math.floor((taps - 1) / perBar) + 1, beat: (taps - 1) % perBar + 1 } : null;
+/* One-line summary, used for copying. */
+const summarize = (s, decimals = 1) => s.bpm == null ? '' :
+  `${fmtBpm(s.bpm, decimals)} BPM (${s.taps} taps over ${fmtDuration(s.elapsed)}${s.consistency == null ? '' : `, ${s.consistency}% consistent`})`;
+
+if (typeof module !== 'undefined') module.exports = { intervalsOf, toBpm, fitBeat, tapStats, fmtBpm, fmtDuration, barPos, summarize };
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'bpm-tapper.settings';
+const DEFAULTS = { timeout: 3000, window: 8, perBar: 4, decimals: 1, sound: false };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+
+/* ---------- run state ---------- */
+let times = [];      // tap times for the current run
+let done = false;    // run ended by the auto reset; the result stays on screen until the next tap
+let timeoutId = 0;
+const history = [];  // finished runs, newest first; in memory only
+
+function tap(t) {
+  if (done || (times.length && settings.timeout && t - times[times.length - 1] > settings.timeout)) {
+    if (!done) finish();
+    times = []; done = false;
+  }
+  times.push(t);
+  click(times.length);
+  flash();
+  armTimeout();
+  render();
+}
+
+/* End the run: keep its result on screen and add it to the history. */
+function finish() {
+  clearTimeout(timeoutId);
+  const s = tapStats(times, settings);
+  if (s.taps >= 4) {
+    history.unshift({ ...s, at: new Date() });
+    renderHistory();
+    $('#announce').textContent = `Result: ${fmtBpm(s.bpm, settings.decimals)} BPM`;
+  }
+  done = true;
+}
+function reset() {
+  if (times.length && !done) finish();
+  times = []; done = false;
+  clearTimeout(timeoutId); stopTimer();
+  render();
+}
+function armTimeout() {
+  clearTimeout(timeoutId);
+  if (!settings.timeout) return stopTimer();
+  timeoutId = setTimeout(() => { finish(); render(); }, settings.timeout);
+  // bar along the bottom of the pad runs down until the auto reset
+  const bar = $('#timer');
+  bar.style.transition = 'none'; bar.style.width = '100%';
+  void bar.offsetWidth;
+  bar.style.transition = `width ${settings.timeout}ms linear`; bar.style.width = '0';
+}
+function stopTimer() { const bar = $('#timer'); bar.style.transition = 'none'; bar.style.width = '0'; }
+
+/* ---------- feedback ---------- */
+let flashTimer;
+function flash() {
+  const pad = $('#pad');
+  pad.classList.add('hit');
+  clearTimeout(flashTimer); flashTimer = setTimeout(() => pad.classList.remove('hit'), 60);
+}
+let audio;
+function click(n) {
+  if (!settings.sound) return;
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    const accent = settings.perBar && (n - 1) % settings.perBar === 0;
+    const t = audio.currentTime, osc = audio.createOscillator(), gain = audio.createGain();
+    osc.frequency.value = accent ? 1600 : 1000;
+    gain.gain.setValueAtTime(.35, t); gain.gain.exponentialRampToValueAtTime(.001, t + .05);
+    osc.connect(gain).connect(audio.destination); osc.start(t); osc.stop(t + .06);
+  } catch {}
+}
+
+/* ---------- render ---------- */
+function render() {
+  const s = tapStats(times, settings), d = settings.decimals;
+  const bpm = $('#bpm');
+  bpm.textContent = fmtBpm(s.bpm, d);
+  bpm.classList.toggle('idle', s.bpm == null);
+  $('#pad').classList.toggle('done', done);
+  $('#padLabel').textContent = done ? 'Result' : 'Average';
+  $('#padHint').textContent = done ? 'Tap to start again'
+    : s.taps === 0 ? 'Tap here, or press any key'
+    : s.taps === 1 ? 'Keep tapping…'
+    : s.taps < 4 ? 'Keep going for a steadier reading' : ' ';
+  $('#pad').setAttribute('aria-label', s.bpm == null ? 'Tap pad' : `Tap pad, ${fmtBpm(s.bpm, d)} BPM`);
+
+  const pos = barPos(s.taps, settings.perBar);
+  $('#beats').innerHTML = settings.perBar
+    ? Array.from({ length: settings.perBar }, (_, i) => `<i class="${pos && !done && pos.beat === i + 1 ? 'on' : ''}"></i>`).join('') : '';
+
+  const stat = (label, val, unit = '', title = '') => `<div class="stat"${title ? ` title="${esc(title)}"` : ''}><dt>${label}</dt><dd${val === '–' ? ' class="muted"' : ''}>${val}${val !== '–' && unit ? `<small>${unit}</small>` : ''}</dd></div>`;
+  $('#stats').innerHTML = [
+    stat(`Recent`, fmtBpm(s.recent, d), 'BPM', `Average of the last ${settings.window} taps`),
+    stat('Taps', s.taps || '–', pos ? `bar ${pos.bar}` : ''),
+    stat('Time', s.taps > 1 ? fmtDuration(s.elapsed) : '–'),
+    stat('Range', s.min == null ? '–' : `${fmtBpm(s.min, 0)}–${fmtBpm(s.max, 0)}`, 'BPM', 'Slowest and fastest single tap'),
+    stat('Consistency', s.consistency == null ? '–' : s.consistency, '%', 'How even the taps are. 100% means every gap was identical'),
+    stat('½ / 2×', s.bpm == null ? '–' : `${fmtBpm(s.bpm / 2, d)} / ${fmtBpm(s.bpm * 2, d)}`, '', 'Half and double time, in case you tapped every other beat or every half-beat'),
+  ].join('');
+
+  $('#copy').disabled = s.bpm == null;
+  renderChart(s);
+}
+
+function renderChart(s) {
+  const box = $('#chart');
+  if (s.intervals.length < 2) { box.innerHTML = '<div class="empty">Tap at least three times to see how steady each tap was.</div>'; return; }
+  const pts = s.intervals.map(x => 60000 / x);
+  const W = Math.max(280, box.clientWidth - 16), H = 180, L = 40, R = 8, T = 8, B = 22;
+  let lo = Math.min(...pts, s.bpm), hi = Math.max(...pts, s.bpm);
+  const pad = Math.max((hi - lo) * .15, s.bpm * .02, 1); lo -= pad; hi += pad;
+  const x = i => L + (pts.length === 1 ? 0 : i / (pts.length - 1)) * (W - L - R);
+  const y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  // three gridlines at round values
+  const step = niceStep((hi - lo) / 3);
+  const ticks = []; for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) ticks.push(v);
+  const dec = step < 1 ? 1 : 0;
+  box.innerHTML = `<div class="chart-box"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Tempo of each tap, ${pts.length} taps">
+    <g class="grid">${ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v.toFixed(dec)}</text>`).join('')}
+      <text x="${L}" y="${H - 4}">1</text><text x="${W - R}" y="${H - 4}" text-anchor="end">${pts.length}</text></g>
+    <line class="avg" x1="${L}" x2="${W - R}" y1="${y(s.bpm)}" y2="${y(s.bpm)}"/>
+    <polyline class="ln" points="${pts.map((v, i) => `${x(i)},${y(v)}`).join(' ')}"/>
+    ${pts.length <= 120 ? pts.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="${i === pts.length - 1 ? 4.5 : 3}"${i === pts.length - 1 ? ' class="last"' : ''}><title>Tap ${i + 2}: ${v.toFixed(1)} BPM</title></circle>`).join('') : ''}
+  </svg></div><div class="legend"><span><b></b>BPM of each tap</span><span><i></i>average ${fmtBpm(s.bpm, settings.decimals)}</span></div>`;
+}
+function niceStep(raw) {
+  const p = 10 ** Math.floor(Math.log10(raw)), f = raw / p;
+  return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p;
+}
+
+function renderHistory() {
+  const d = settings.decimals;
+  $('#hist').innerHTML = history.map((h, i) => `<li>
+    <span class="hb">${fmtBpm(h.bpm, d)}<small>BPM</small></span>
+    <span class="hm">${h.at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · ${h.taps} taps${h.consistency == null ? '' : ` · ${h.consistency}%`}</span>
+    <button class="copy" data-i="${i}" aria-label="Copy ${fmtBpm(h.bpm, d)} BPM">copy</button></li>`).join('');
+  $('#histClear').disabled = !history.length;
+  $('#histNote').hidden = !!history.length;
+}
+
+/* ---------- copy / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); toast(`Copied ${text}`); } catch { toast('Couldn’t copy to the clipboard'); }
+}
+const copyCurrent = () => { const s = tapStats(times, settings); if (s.bpm != null) copyText(summarize(s, settings.decimals)); };
+
+/* ---------- input ---------- */
+const pad = $('#pad');
+pad.addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  e.preventDefault();          // keep focus handling and text selection from lagging the tap
+  pad.focus({ preventScroll: true });
+  tap(e.timeStamp);
+});
+pad.addEventListener('contextmenu', e => e.preventDefault());
+
+const IGNORE_KEYS = new Set(['Tab', 'Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Fn', 'FnLock', 'Hyper', 'Super', 'OS', 'ContextMenu', 'Dead', 'Unidentified']);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.preventDefault(); return reset(); }
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'c' && !getSelection().toString()) { e.preventDefault(); return copyCurrent(); }
+  if (e.metaKey || e.ctrlKey || e.altKey || e.repeat || IGNORE_KEYS.has(e.key) || /^F\d+$/.test(e.key)) return;
+  // let focused controls (other than the pad) handle their own keys
+  const el = e.target;
+  if (el !== pad && el.closest && el.closest('button, select, input, a, [contenteditable]')) return;
+  e.preventDefault();          // no page scroll on Space / arrows
+  tap(e.timeStamp);
+});
+
+$('#reset').onclick = () => { reset(); pad.focus(); };
+$('#copy').onclick = copyCurrent;
+$('#hist').addEventListener('click', e => {
+  const b = e.target.closest('.copy'); if (!b) return;
+  copyText(summarize(history[+b.dataset.i], settings.decimals));
+});
+$('#histClear').onclick = () => { history.length = 0; renderHistory(); };
+
+/* ---------- options ---------- */
+const themeSel = $('#theme');
+themeSel.innerHTML = THEMES.map(t => `<option value="${t.id}">${esc(t.label)}</option>`).join('');
+themeSel.value = savedTheme();
+themeSel.onchange = () => { const id = applyTheme(themeSel.value); try { localStorage.setItem(THEME_KEY, id); } catch {} };
+
+function bindSelect(sel, key) {
+  const el = $(sel);
+  if (![...el.options].some(o => +o.value === settings[key])) settings[key] = DEFAULTS[key];
+  el.value = String(settings[key]);
+  el.onchange = () => { settings[key] = +el.value; saveSettings(); if (key === 'timeout' && times.length && !done) armTimeout(); render(); };
+}
+bindSelect('#optTimeout', 'timeout');
+bindSelect('#optWindow', 'window');
+bindSelect('#optBar', 'perBar');
+const decBtns = [...document.querySelectorAll('#optDec button')];
+const syncDec = () => decBtns.forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === settings.decimals)));
+decBtns.forEach(b => b.onclick = () => { settings.decimals = +b.dataset.v; saveSettings(); syncDec(); render(); renderHistory(); });
+syncDec();
+const sound = $('#optSound');
+sound.checked = !!settings.sound;
+sound.onchange = () => { settings.sound = sound.checked; saveSettings(); };
+
+let resizeRaf;
+addEventListener('resize', () => { cancelAnimationFrame(resizeRaf); resizeRaf = requestAnimationFrame(() => renderChart(tapStats(times, settings))); });
+
+render();
+renderHistory();
+pad.focus({ preventScroll: true });
+</script>
+</body>
+</html>

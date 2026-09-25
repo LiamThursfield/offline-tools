@@ -6,6 +6,7 @@ Small, self-contained browser tools that work without an internet connection. Ea
 
 | Tool | What it does |
 | --- | --- |
+| [BPM tapper](bpm-tapper/) | Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter. |
 | [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch, combinable field filters and saved comparisons. |
 
 ## Using a tool
