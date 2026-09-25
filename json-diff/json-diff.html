@@ -261,12 +261,59 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
   .rule .seg button{padding:2px 9px}
   textarea{height:180px;min-height:140px}
 }
+/* saved comparisons */
+.current{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.88rem;color:var(--muted)}
+.current b{color:var(--ink);font-weight:600}
+.current .dirty{color:var(--chg);font-weight:600}
+dialog#saves{width:min(560px,calc(100vw - 24px));max-height:min(720px,calc(100vh - 48px));padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--ink);box-shadow:var(--shadow);overflow:hidden;flex-direction:column}
+dialog#saves[open]{display:flex}
+dialog#saves::backdrop{background:color-mix(in oklab,var(--bg) 70%,transparent);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.dlg-head{display:flex;align-items:center;justify-content:space-between;padding:12px 10px 4px 18px}
+.dlg-head h2{margin:0;font-size:1.1rem;letter-spacing:-.015em}
+.save-form{padding:8px 18px 12px;border-bottom:1px solid var(--line)}
+.save-form label{display:block;font-size:.84rem;color:var(--muted);margin-bottom:6px}
+.save-row{display:flex;gap:8px}
+.save-row input{flex:1;min-width:0;padding:6px 14px}
+.save-row .btn{padding:6px 16px}
+.save-msg{margin:8px 2px 0;font-size:.84rem;color:var(--muted);min-height:1.3em}
+.save-msg:empty{display:none}
+.save-msg.warn{color:var(--chg)}.save-msg.bad{color:var(--del)}
+.btn.danger{background:var(--del);border-color:var(--del);color:var(--panel)}
+.btn.danger:hover:not(:disabled){color:var(--panel);background:color-mix(in oklab,var(--del) 88%,var(--bg))}
+.saves-tools{padding:10px 18px 0}
+.saves-tools input{width:100%}
+.saves-list{list-style:none;margin:0;padding:6px 8px;overflow:auto;flex:1;min-height:60px}
+.saves-empty{padding:26px 12px;text-align:center;color:var(--muted);font-size:.9rem}
+.save-item{display:flex;align-items:center;gap:8px;padding:4px;border-radius:calc(var(--radius) - 4px)}
+.save-item:hover,.save-item.pending{background:var(--hover)}
+.save-open{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;border:0;background:none;padding:6px 10px;border-radius:calc(var(--radius) - 4px)}
+.save-name{font-weight:600;display:flex;align-items:center;gap:8px;max-width:100%}
+.save-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.save-open:hover .save-name span{color:var(--accent-text)}
+.save-meta{font-size:.78rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.save-item .badge{font-size:.62rem;flex:none}
+.save-acts{display:flex;align-items:center;gap:6px;flex:none;padding-right:4px}
+.save-acts .btn{padding:3px 11px;font-size:.8rem}
+.save-q{font-size:.8rem;color:var(--chg);font-weight:600;max-width:15em}
+.save-item .rule-x{flex:none}
+.save-item .rule-x svg{display:block;margin:auto}
+.saves-foot{margin:0;padding:10px 18px 12px;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
 @media (max-width:640px){
   header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
   .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
   .tp-label{display:none}
   .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
-  .nav{padding:6px 10px;font-size:.88rem}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .save-item{flex-wrap:wrap}
+  .save-item.pending .save-open{flex-basis:100%}
+  .save-acts{margin-left:auto}
+  .save-row{flex-wrap:wrap}
+  .save-row input{flex-basis:100%}
+  .save-row .btn{flex:1}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -279,6 +326,7 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
       <button class="nav" id="swap" title="Swap A and B">Swap A ⇄ B</button>
       <button class="nav" id="sample">Load example</button>
       <button class="nav" id="clear">Clear</button>
+      <button class="nav" id="openSaves" aria-haspopup="dialog">Saves</button>
     </nav>
     <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
   </header>
@@ -287,6 +335,7 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
     <span class="eyebrow">Offline tool</span>
     <h1>Compare JSON</h1>
     <p>Paste or drop two files. Everything runs in your browser; nothing is uploaded.</p>
+    <p class="current" id="current" hidden></p>
   </div>
 
   <div class="inputs">
@@ -366,6 +415,26 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
   </div>
   <div class="out" id="out"></div>
 </div>
+
+<dialog id="saves" aria-labelledby="savesTitle">
+  <div class="dlg-head">
+    <h2 id="savesTitle">Saved comparisons</h2>
+    <button type="button" class="rule-x" data-close title="Close" aria-label="Close">×</button>
+  </div>
+  <form id="saveForm" class="save-form" novalidate>
+    <label for="saveName">Save the current comparison as</label>
+    <div class="save-row">
+      <input type="text" id="saveName" maxlength="120" autocomplete="off" spellcheck="false">
+      <button type="submit" class="btn primary" id="saveBtn">Save</button>
+      <button type="button" class="btn" id="saveCancel" hidden>Cancel</button>
+    </div>
+    <p class="save-msg" id="saveMsg" aria-live="polite"></p>
+  </form>
+  <div class="saves-tools" id="savesTools" hidden><input type="text" id="saveSearch" placeholder="Search saved comparisons" aria-label="Search saved comparisons" autocomplete="off"></div>
+  <ul class="saves-list" id="savesList"></ul>
+  <p class="saves-foot" id="savesFoot"></p>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ===== Core diff logic (pure functions, no DOM) ===== -->
 <script id="core">
@@ -917,7 +986,7 @@ function renderPatch() {
 }
 
 function render() {
-  renderSummary(); renderTabs();
+  renderSummary(); renderTabs(); updateCurrent();
   const out = $('#out');
   if (R.empty) { out.innerHTML = '<div class="empty">Paste text into A and B, open files, or load the example to see how it works.</div>'; return; }
   if ((R.pa.ok === false && /^\s*[\[{]/.test(R.ta)) || (R.pb.ok === false && /^\s*[\[{]/.test(R.tb))) {
@@ -958,7 +1027,7 @@ $('#swap').onclick = () => {
   const fa = $('#fnameA'), fb = $('#fnameB'); [fa.textContent, fb.textContent] = [fb.textContent, fa.textContent];
   compute();
 };
-$('#clear').onclick = () => { $('#inA').value = $('#inB').value = ''; $('#fnameA').textContent = 'original'; $('#fnameB').textContent = 'changed'; compute(); };
+$('#clear').onclick = () => { $('#inA').value = $('#inB').value = ''; $('#fnameA').textContent = 'original'; $('#fnameB').textContent = 'changed'; current = null; compute(); };
 const themeSel = $('#theme');
 themeSel.innerHTML = THEMES.map(t => `<option value="${t.id}">${esc(t.label)}</option>`).join('');
 themeSel.value = savedTheme();
@@ -1100,8 +1169,209 @@ $('#sample').onclick = () => {
     payments: ["card", "cash"]
   }, null, 2);
   $('#fnameA').textContent = 'cafe-v3.json'; $('#fnameB').textContent = 'cafe-v4.json';
+  current = null;
   compute();
 };
+
+/* ---------- saved comparisons (localStorage) ---------- */
+const SAVES_KEY = 'json-diff.saves', SAVE_VERSION = 1;
+const VIEW_KEYS = ['tab', 'textFmt', 'textView', 'context', 'full', 'wrap', 'sharedView', 'sharedOnlyDiff', 'sharedFmt', 'search'];
+let current = null;          // { id, name, sig } of the save that's open, if any
+let confirmOverwrite = null; // id of the save the user has been warned about
+let pending = null;          // { id, act: 'load' | 'delete' } awaiting inline confirmation
+
+function readSaves() {
+  try { const v = JSON.parse(localStorage.getItem(SAVES_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch { return []; }
+}
+function writeSaves(list) { localStorage.setItem(SAVES_KEY, JSON.stringify(list)); }   // throws when storage is full or blocked
+const normName = n => n.trim().replace(/\s+/g, ' ').toLowerCase();
+const findByName = (list, name) => list.find(x => normName(x.name) === normName(name));
+
+/* the data that makes a comparison; view settings are saved too but don't count as "unsaved changes" */
+function content() {
+  return {
+    a: $('#inA').value, b: $('#inB').value, fnameA: $('#fnameA').textContent, fnameB: $('#fnameB').textContent,
+    options: { arrMode: $('#arrMode').value, arrKey: $('#arrKey').value, ignoreCase: $('#ignoreCase').checked, numLoose: $('#numLoose').checked },
+    rules: rules.map(({ mode, text, on }) => ({ mode, text, on })),
+  };
+}
+const sig = () => JSON.stringify(content());
+function snapshot() {
+  const view = {}; for (const k of VIEW_KEYS) view[k] = state[k];
+  view.filters = { ...state.filters };
+  return { ...content(), view };
+}
+function applySnapshot(x) {
+  $('#inA').value = x.a || ''; $('#inB').value = x.b || '';
+  $('#fnameA').textContent = x.fnameA || 'original'; $('#fnameB').textContent = x.fnameB || 'changed';
+  const o = x.options || {};
+  $('#arrMode').value = o.arrMode || 'index'; $('#arrKey').value = o.arrKey ?? 'id';
+  $('#ignoreCase').checked = !!o.ignoreCase; $('#numLoose').checked = !!o.numLoose;
+  $('#keyWrap').hidden = $('#arrMode').value !== 'key';
+  rules.length = 0;
+  for (const r of x.rules || []) rules.push({ id: ++ruleSeq, mode: r.mode === 'include' ? 'include' : 'exclude', text: r.text || '', on: r.on !== false });
+  const v = x.view || {};
+  for (const k of VIEW_KEYS) if (k in v) state[k] = v[k];
+  if (v.filters) Object.assign(state.filters, v.filters);
+  renderRules(); compute();
+}
+const hasInput = () => !!($('#inA').value.trim() || $('#inB').value.trim());
+const isDirty = () => hasInput() && (!current || current.sig !== sig());
+
+function updateCurrent() {
+  const el = $('#current');
+  if (!current) { el.hidden = true; return; }
+  el.hidden = false;
+  el.innerHTML = `Open: <b>${esc(current.name)}</b>` + (current.sig !== sig() ? '<span class="dirty">· unsaved changes</span>' : '');
+}
+
+const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' });
+function ago(ts) {
+  const s = (ts - Date.now()) / 1000;
+  for (const [u, n] of [['year', 31536e3], ['month', 2592e3], ['week', 604800], ['day', 86400], ['hour', 3600], ['minute', 60]])
+    if (Math.abs(s) >= n) return rtf.format(Math.round(s / n), u);
+  return 'just now';
+}
+const bytes = n => n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+function describe(x) {
+  const on = (x.rules || []).filter(r => r.on && r.text.trim()).length;
+  const names = [x.fnameA, x.fnameB].every(n => n && n !== 'original' && n !== 'changed') ? `${x.fnameA} ↔ ${x.fnameB}` : '';
+  return [names, bytes(((x.a || '') + (x.b || '')).length), on ? `${on} filter${on > 1 ? 's' : ''}` : '', 'saved ' + ago(x.savedAt)].filter(Boolean).join(' · ');
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* --- save form --- */
+function suggestName() {
+  if (current) return current.name;
+  const a = $('#fnameA').textContent, b = $('#fnameB').textContent;
+  if (a !== 'original' && b !== 'changed') return `${a} vs ${b}`;
+  return 'Comparison ' + new Date().toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+function updateSaveForm() {
+  const name = $('#saveName').value, btn = $('#saveBtn'), msg = $('#saveMsg'), list = readSaves();
+  const hit = name.trim() && findByName(list, name);
+  msg.className = 'save-msg'; $('#saveCancel').hidden = true;
+  btn.className = 'btn primary'; btn.disabled = false;
+  if (!hasInput()) { btn.textContent = 'Save'; btn.disabled = true; msg.textContent = 'Nothing to save yet. Add something to A or B first.'; return; }
+  if (!name.trim()) { btn.textContent = 'Save'; btn.disabled = true; msg.textContent = ''; return; }
+  if (!hit) { btn.textContent = 'Save'; msg.textContent = ''; return; }
+  if (current && hit.id === current.id) { btn.textContent = 'Update'; msg.textContent = `Updates “${hit.name}” with your current inputs, filters and settings.`; return; }
+  if (confirmOverwrite === hit.id) {
+    btn.textContent = 'Yes, overwrite'; btn.className = 'btn danger'; $('#saveCancel').hidden = false;
+    msg.className = 'save-msg bad'; msg.textContent = `Replace “${hit.name}” (${describe(hit)})? This can’t be undone.`;
+    return;
+  }
+  btn.textContent = 'Overwrite…';
+  msg.className = 'save-msg warn'; msg.textContent = `“${hit.name}” already exists (saved ${ago(hit.savedAt)}). Saving will replace it.`;
+}
+function doSave(name) {
+  name = name.trim().replace(/\s+/g, ' ');
+  const list = readSaves(), hit = findByName(list, name), now = Date.now();
+  const entry = { v: SAVE_VERSION, id: hit ? hit.id : now.toString(36) + Math.random().toString(36).slice(2, 7), name, createdAt: hit ? hit.createdAt : now, savedAt: now, ...snapshot() };
+  try { writeSaves([entry, ...list.filter(x => x !== hit)]); }
+  catch (err) {
+    const full = err && (err.name === 'QuotaExceededError' || err.code === 22);
+    return full ? 'Your browser’s storage for this page is full. Delete some saved comparisons and try again.'
+      : 'Your browser blocked saving (private browsing or site data turned off?).';
+  }
+  current = { id: entry.id, name, sig: sig() };
+  updateCurrent();
+  toast(hit ? `Updated “${name}”` : `Saved “${name}”`);
+  return null;
+}
+$('#saveName').addEventListener('input', () => { confirmOverwrite = null; updateSaveForm(); });
+$('#saveCancel').onclick = () => { confirmOverwrite = null; updateSaveForm(); $('#saveName').focus(); };
+$('#saveForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#saveName').value;
+  if (!name.trim() || !hasInput()) return;
+  const hit = findByName(readSaves(), name);
+  if (hit && (!current || hit.id !== current.id) && confirmOverwrite !== hit.id) {
+    confirmOverwrite = hit.id; updateSaveForm(); $('#saveBtn').focus(); return;
+  }
+  const err = doSave(name);
+  if (err) { const m = $('#saveMsg'); m.className = 'save-msg bad'; m.textContent = err; return; }
+  confirmOverwrite = null; $('#saves').close();
+});
+
+/* --- list --- */
+const TRASH = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>';
+function renderSaves() {
+  const all = readSaves().sort((a, b) => b.savedAt - a.savedAt), q = $('#saveSearch').value.trim().toLowerCase();
+  $('#savesTools').hidden = all.length < 6;
+  const list = q ? all.filter(x => x.name.toLowerCase().includes(q) || describe(x).toLowerCase().includes(q)) : all;
+  $('#savesList').innerHTML = !all.length ? '<li class="saves-empty">Nothing saved yet. Name this comparison above to keep it for later.</li>'
+    : !list.length ? '<li class="saves-empty">No saved comparisons match.</li>'
+    : list.map(x => {
+      const isCur = current && current.id === x.id, p = pending && pending.id === x.id ? pending.act : null;
+      const acts = p === 'delete' ? `<span class="save-q">Delete this save?</span><button type="button" class="btn danger" data-act="delete-yes">Delete</button><button type="button" class="btn" data-act="cancel">Cancel</button>`
+        : p === 'load' ? `<span class="save-q">${isCur ? 'Discard your unsaved changes?' : 'Your current work isn’t saved. Replace it?'}</span><button type="button" class="btn danger" data-act="load-yes">${isCur ? 'Discard' : 'Load'}</button><button type="button" class="btn" data-act="cancel">Cancel</button>`
+        : `<button type="button" class="rule-x" data-act="delete" title="Delete “${esc(x.name)}”" aria-label="Delete ${esc(x.name)}">${TRASH}</button>`;
+      return `<li class="save-item${p ? ' pending' : ''}" data-id="${esc(x.id)}">
+        <button type="button" class="save-open" data-act="load" title="Load “${esc(x.name)}”">
+          <span class="save-name"><span>${esc(x.name)}</span>${isCur ? '<span class="badge k-added">open</span>' : ''}</span>
+          <span class="save-meta">${esc(describe(x))}</span>
+        </button>
+        <span class="save-acts">${acts}</span></li>`;
+    }).join('');
+  let used = 0; try { used = (localStorage.getItem(SAVES_KEY) || '').length * 2; } catch {}
+  $('#savesFoot').textContent = `Stored in this browser only, not synced or uploaded. ${all.length} saved · ${bytes(used)} used (browsers allow around 5 MB).`;
+}
+function loadSave(id) {
+  const x = readSaves().find(s => s.id === id); if (!x) return;
+  applySnapshot(x);
+  current = { id: x.id, name: x.name, sig: sig() };
+  updateCurrent();
+  pending = null; $('#saves').close();
+  toast(`Loaded “${x.name}”`);
+}
+$('#savesList').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const id = b.closest('.save-item').dataset.id, act = b.dataset.act;
+  const focusRow = sel => { const el = $('#savesList').querySelector(`.save-item[data-id="${CSS.escape(id)}"] ${sel}`); if (el) el.focus(); };
+  if (act === 'load') {
+    if (isDirty()) { pending = { id, act: 'load' }; renderSaves(); focusRow('[data-act=cancel]'); }
+    else loadSave(id);
+  } else if (act === 'load-yes') loadSave(id);
+  else if (act === 'delete') { pending = { id, act: 'delete' }; renderSaves(); focusRow('[data-act=cancel]'); }
+  else if (act === 'delete-yes') {
+    const list = readSaves(), x = list.find(s => s.id === id);
+    try { writeSaves(list.filter(s => s.id !== id)); } catch {}
+    if (current && current.id === id) { current = null; updateCurrent(); }
+    pending = null; renderSaves(); updateSaveForm();
+    toast(`Deleted “${x ? x.name : 'save'}”`);
+  } else if (act === 'cancel') { pending = null; renderSaves(); focusRow('[data-act=load]'); }
+});
+$('#saveSearch').addEventListener('input', () => { pending = null; renderSaves(); });
+
+/* --- dialog --- */
+function openSaves() {
+  const d = $('#saves');
+  pending = null; confirmOverwrite = null;
+  $('#saveName').value = suggestName(); $('#saveSearch').value = '';
+  updateSaveForm(); renderSaves();
+  d.showModal();
+  const n = $('#saveName'); if (hasInput()) { n.focus(); n.select(); } else d.querySelector('.save-open, [data-close]').focus();
+}
+$('#openSaves').onclick = openSaves;
+$('#saves').addEventListener('click', e => {
+  if (e.target.closest('[data-close]') || e.target === e.currentTarget) $('#saves').close();   // close button or backdrop
+});
+document.addEventListener('keydown', e => {
+  // Cmd/Ctrl+S: save straight back to the open comparison, otherwise open the dialog
+  if (e.key.toLowerCase() !== 's' || !(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
+  e.preventDefault();
+  if ($('#saves').open) return $('#saveForm').requestSubmit();
+  if (current && readSaves().some(x => x.id === current.id) && hasInput()) {
+    if (current.sig === sig()) return toast(`“${current.name}” is already saved`);
+    const err = doSave(current.name); if (err) toast(err);
+  } else openSaves();
+});
 
 compute();
 </script>

@@ -65,6 +65,17 @@ Segments: `.name` or `["any key"]` for a key, `[3]` for an index, `*` or `[*]` f
 - **One-click ignore:** hover over a row in *All changes*, *Only in A / B* or the *Shared properties* table and click **ignore**. This adds that path to your last active *Ignore* filter, or creates one if there isn't one. Paths from key-matched arrays become `[*]`, so the field is ignored on every matched object.
 - **Only compare filters:** array elements that are objects or arrays but contain no match are kept as `{}` / `[]`, so positions still line up. With *match objects by key*, the key field is always kept.
 
+## Saving comparisons
+
+**Saves** in the header (or ⌘/Ctrl+S) opens *Saved comparisons*. Give the comparison a name and save it, or load or delete an earlier one.
+
+- **What's saved:** both inputs and their file names, every field filter (including ones switched off), the array, case and number options, and view settings (tab, line diff format and layout, context, wrap, shared-properties view, change-type chips and path search).
+- **Overwriting:** names are unique, ignoring case and extra spaces. Typing an existing name shows a warning, and the button becomes **Overwrite…**. You then have to confirm with **Yes, overwrite**. Saving over the comparison you currently have open just updates it.
+- **Unsaved changes:** the comparison you have open is shown under the heading. It's marked *unsaved changes* once the inputs, filters or options differ from the saved copy. View settings don't count as changes.
+- **Guarding your work:** loading asks first if your current work isn't saved, and deleting always asks first.
+- **⌘/Ctrl+S:** saves straight back to the open comparison, or opens the dialog if there isn't one.
+- **Storage:** saves live in this browser's `localStorage` (key `json-diff.saves`). They're never uploaded, don't sync between browsers or devices, and are lost if you clear site data or use a private window. Browsers allow roughly 5 MB per site, and the dialog shows how much is in use.
+
 ## Theme
 
 Pick a theme in the header. **Auto** follows the system light/dark setting. See the [root README](../README.md#theming) for how themes work and how to add one.
