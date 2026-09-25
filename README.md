@@ -6,10 +6,12 @@ The tools are also hosted at [tools.lxst.digital](https://tools.lxst.digital/).
 
 ## Tools
 
+<!-- shared:tool-table -->
 | Tool | What it does |
 | --- | --- |
 | [BPM tapper](bpm-tapper/) | Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter. |
 | [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch, combinable field filters and saved comparisons. |
+<!-- /shared:tool-table -->
 
 ## Using a tool
 
@@ -19,26 +21,34 @@ Open the tool's `.html` file in any modern browser, by double-clicking it or dra
 
 Each tool follows the same conventions so the collection stays easy to use and maintain:
 
-- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file and a `README.md` covering the tool's features and usage. Add a row to the table above linking to the folder, a card to `index.html`, and a pair of rewrites to `_redirects` (see [Deployment](#deployment)).
+- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file and a `README.md` covering the tool's features and usage. Add it to `shared/tools.json` (slug, name, logo text, a short summary for the tool switcher and a description for the index), add a pair of rewrites to `_redirects` (see [Deployment](#deployment)), then run the [sync script](#shared-snippets).
 - **Fully self-contained.** Inline all CSS and JS. No CDNs, web fonts, external requests or build step. The file has to keep working with no network.
 - **No uploads.** Process all data in the browser. `localStorage` is for preferences such as the theme, and for user content only when the user explicitly saves it (for example JSON diff's saved comparisons). Never store user content silently.
 - **Keep logic separate from the UI.** Put the core logic in its own `<script>` as pure functions with no DOM access, so it can be tested on its own (JSON diff exports it via `module.exports` when loaded in Node).
 - **Responsive and accessible.** Make it usable at phone width, operable by keyboard and readable in both light and dark themes.
-- **Shared header and footer.** Include the [shared snippets](#shared-snippets): the back link in the header and the footer at the end of `.wrap`. Copying the markers from an existing tool is the easiest way.
+- **Shared header and footer.** Include the [shared snippets](#shared-snippets): `brand` in the header in place of a logo, `footer.html` at the end of `.wrap`, and `chrome.css` in the styles. Copying the markers from an existing tool is the easiest way.
 
 ## Shared snippets
 
-Some pieces are the same on every page: the back link to the index, the footer and their CSS. They live in `shared/`, and `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
+Some pieces are the same on every page: the header's back link and tool switcher, the footer, the index cards and the table above. The script `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
 
 ```html
-<!-- shared:footer.html -->
+<!-- shared:NAME -->
 …replaced on every sync…
-<!-- /shared:footer.html -->
+<!-- /shared:NAME -->
 ```
 
-CSS snippets use `/* shared:chrome.css */ … /* /shared:chrome.css */`. A page only gets the snippets it has markers for. For example, `index.html` has no back link.
+CSS uses `/* shared:NAME */ … /* /shared:NAME */`. A page only gets the snippets it has markers for.
 
-After editing anything in `shared/`, run:
+| Snippet | Source | Used in |
+| --- | --- | --- |
+| `chrome.css` | `shared/chrome.css` | Every page's `<style>` |
+| `footer.html` | `shared/footer.html`, footer plus the link and tool-switcher script | End of `.wrap` on every page |
+| `brand` | Generated from `shared/tools.json`: back link, logo and tool switcher | Each tool's `<header>` |
+| `tool-cards` | Generated from `shared/tools.json` | `index.html` |
+| `tool-table` | Generated from `shared/tools.json` | This README |
+
+After changing anything in `shared/`, run:
 
 ```
 node scripts/sync-shared.mjs

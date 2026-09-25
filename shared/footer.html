@@ -1,7 +1,27 @@
 <footer class="site-foot">
-  <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. Save a tool's page (Ctrl/⌘+S) to use it offline.</p>
+  <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
 </footer>
 <script>
 /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
 if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+/* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+(() => {
+  const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+  if (!brand || !btn || !menu) return;
+  const links = [...menu.querySelectorAll('a')];
+  const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', () => setOpen(menu.hidden));
+  brand.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+    const i = links.indexOf(document.activeElement);
+    const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+      : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+    if (to === undefined) return;
+    e.preventDefault(); e.stopPropagation();
+    setOpen(true); links[to].focus();
+  });
+  brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+  document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+})();
 </script>
