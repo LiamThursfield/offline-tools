@@ -22,6 +22,27 @@ Open [`json-diff.html`](json-diff.html) in any modern browser.
 
 The structural tabs need valid JSON on both sides.
 
+### Copy JSON [A, B]
+
+Most views have a **Copy JSON [A, B]** button. It copies a two-item JSON array, with A's side first and B's second, matching what the view shows. Field filters are always applied.
+
+| View | `[A, B]` contains |
+| --- | --- |
+| Line diff | Both documents, formatted as selected (with sorted keys if *Pretty + sorted keys* is on) |
+| Shared properties → Line diff | Only the properties both documents share |
+| Shared properties → Table | `{ "path": value }` for each row shown (respects *Only show differing values*) |
+| All changes | `{ "path": value }` for each change shown (respects the kind chips and path filter). A has the old values and B the new ones |
+| Only in A / only in B | `{ "path": value }` for what's only in A, then what's only in B |
+
+For example, from *Only in A / only in B*:
+
+```json
+[
+  { "$.legacyCode": "HC-01" },
+  { "$.address.country": "UK", "$.payments": ["card", "cash"] }
+]
+```
+
 ## Comparison options
 
 - **Arrays**:

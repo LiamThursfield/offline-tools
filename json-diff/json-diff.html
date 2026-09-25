@@ -195,6 +195,9 @@ select,input[type=text],input[type=number]{border:1px solid var(--line);backgrou
 .seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.84rem;color:var(--muted)}
 .seg button:hover{color:var(--ink)}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.subbar .copy-json,.subbar .copies{margin-left:auto}
+.subbar .copies{display:inline-flex;gap:8px;flex-wrap:wrap}
+.subbar .copies .copy-json{margin-left:0}
 .note{padding:10px 14px;color:var(--muted);font-size:.88rem}
 .empty{padding:44px 16px;text-align:center;color:var(--muted)}
 
@@ -909,12 +912,36 @@ function textControls(showFmt) {
     <label><input type="checkbox" data-ctl="wrap" ${state.wrap ? 'checked' : ''}> Wrap lines</label>`;
 }
 
+/* ---------- "Copy JSON [A, B]": a two-item array, A's side first ---------- */
+const sortedIf = (on, v) => on ? sortKeys(v) : v;
+/* flat { path: value } maps for a list of entries; values only on the side that has them */
+function pathPair(list) {
+  const a = {}, b = {};
+  for (const e of list) { const k = fmtPath(e.path); if (e.kind !== 'added') a[k] = e.a; if (e.kind !== 'removed') b[k] = e.b; }
+  return [a, b];
+}
+const PAIR = {
+  text: () => [R.va, R.vb].map(v => sortedIf(state.textFmt === 'sorted', v)),
+  shared: () => state.sharedView === 'text' ? intersect(R.va, R.vb, R.o).map(v => sortedIf(state.sharedFmt === 'sorted', v)) : pathPair(sharedList()),
+  changes: () => pathPair(changesList()),
+  only: () => pathPair(R.entries.filter(e => e.kind === 'added' || e.kind === 'removed')),
+};
+const PAIR_TITLE = {
+  text: 'Copies [A, B] as JSON: both documents with field filters applied, formatted as shown',
+  shared: 'Copies [A, B] as JSON: the properties both documents share',
+  sharedTable: 'Copies [A, B] as JSON: { path: value } for each row shown',
+  changes: 'Copies [A, B] as JSON: { path: value } for each change shown. A has the old values and B the new ones',
+  only: 'Copies [A, B] as JSON: { path: value } for what exists only in A, then only in B',
+};
+const pairBtn = (kind, titleKey = kind, disabled = false) =>
+  `<button type="button" class="btn copy-json" data-copy="pair:${kind}" data-label="Copy JSON [A, B]" title="${PAIR_TITLE[titleKey]}"${disabled ? ' disabled' : ''}>Copy JSON [A, B]</button>`;
+
 function renderText() {
   const [a, b] = textPair();
   const note = !R.json ? '<div class="note">Not valid JSON on both sides, so this is a plain line-by-line comparison.</div>'
     : R.filtered && state.textFmt === 'raw' ? '<div class="note">A field filter is on, so both sides are re-formatted with the filtered fields removed.</div>'
     : state.textFmt === 'sorted' ? '<div class="note">Keys are sorted on both sides, so key order differences are ignored.</div>' : '';
-  return `<div class="subbar">${textControls(R.json)}</div>${note}${diffTableHTML(a, b, 'The two files are identical in this view.')}`;
+  return `<div class="subbar">${textControls(R.json)}${R.json ? pairBtn('text') : ''}</div>${note}${diffTableHTML(a, b, 'The two files are identical in this view.')}`;
 }
 
 function valueCell(e) {
@@ -927,13 +954,16 @@ function valueCell(e) {
 const ignoreBtn = path => `<button type="button" class="ign" data-ignore="${esc(toPattern(path))}" title="Ignore ${esc(toPattern(path))}">ignore</button>`;
 const LABEL = { added: 'added', removed: 'removed', changed: 'changed', type: 'type change', equal: 'same' };
 
-function renderChanges() {
+const changesList = () => {
   const q = state.search.toLowerCase();
-  const list = R.entries.filter(e => e.kind !== 'equal' && state.filters[e.kind] && (!q || fmtPath(e.path).toLowerCase().includes(q)));
+  return R.entries.filter(e => e.kind !== 'equal' && state.filters[e.kind] && (!q || fmtPath(e.path).toLowerCase().includes(q)));
+};
+function renderChanges() {
+  const list = changesList();
   const chips = ['added', 'removed', 'changed', 'type'].map(k =>
     `<button type="button" class="chip k-${k}" data-filter="${k}" aria-pressed="${state.filters[k]}">${LABEL[k]} ${R.counts[k]}</button>`).join(' ');
   const rows = list.map(e => `<li class="row"><span class="badge k-${e.kind}">${LABEL[e.kind]}</span><span class="path">${esc(fmtPath(e.path))}${ignoreBtn(e.path)}</span>${valueCell(e)}</li>`).join('');
-  return `<div class="subbar">${chips}<label>Filter paths <input type="text" data-ctl="search" value="${esc(state.search)}" placeholder="e.g. address"></label></div>`
+  return `<div class="subbar">${chips}<label>Filter paths <input type="text" data-ctl="search" value="${esc(state.search)}" placeholder="e.g. address"></label>${pairBtn('changes', 'changes', !list.length)}</div>`
     + (rows ? `<ul class="list">${rows}</ul>` : `<div class="empty">${R.counts.added + R.counts.removed + R.counts.changed + R.counts.type ? 'Nothing matches these filters.' : 'No differences. The two documents are equivalent.'}</div>`);
 }
 
@@ -954,8 +984,8 @@ function sharedMarkdown() {
 function renderShared() {
   const bar = `<div class="subbar">${seg('sharedView', state.sharedView, [['table', 'Table'], ['text', 'Line diff']])}`
     + (state.sharedView === 'table' ? `<label><input type="checkbox" data-ctl="sharedOnlyDiff" ${state.sharedOnlyDiff ? 'checked' : ''}> Only show differing values</label>`
-      + `<button class="btn" data-copy="sharedMd" data-label="Copy as Markdown"${sharedList().length ? '' : ' disabled'}>Copy as Markdown</button>`
-      : `<label>Format ${seg('sharedFmt', state.sharedFmt, [['pretty', 'Pretty'], ['sorted', 'Pretty + sorted keys']])}</label>` + textControls(false))
+      + `<span class="copies"><button class="btn" data-copy="sharedMd" data-label="Copy as Markdown"${sharedList().length ? '' : ' disabled'}>Copy as Markdown</button>${pairBtn('shared', 'sharedTable', !sharedList().length)}</span>`
+      : `<label>Format ${seg('sharedFmt', state.sharedFmt, [['pretty', 'Pretty'], ['sorted', 'Pretty + sorted keys']])}</label>` + textControls(false) + pairBtn('shared'))
     + '</div>';
   if (state.sharedView === 'text') {
     const [x, y] = intersect(R.va, R.vb, R.o);
@@ -977,7 +1007,8 @@ function renderOnly() {
       : `<div class="empty">Nothing is only in ${side}.</div>`;
     return `<section><h3><span class="side ${side.toLowerCase()}">${side}</span>${title} <span class="n" style="color:var(--muted);font-weight:400">${list.length}</span></h3>${body}</section>`;
   };
-  return '<div class="note">When a whole object is missing, it\u2019s listed once at its top-level path rather than property by property.</div>'
+  const any = R.counts.added + R.counts.removed > 0;
+  return `<div class="subbar"><span style="color:var(--muted)">When a whole object is missing, it\u2019s listed once at its top-level path rather than property by property.</span>${pairBtn('only', 'only', !any)}</div>`
     + `<div class="cols">${col('removed', 'A', 'Only in A')}${col('added', 'B', 'Only in B')}</div>`;
 }
 
@@ -1133,7 +1164,8 @@ out.addEventListener('click', e => {
   if (skip) { state.expanded.add(+skip.dataset.run); render(); return; }
   const btn = e.target.closest('[data-copy]');
   if (btn) {
-    const txt = btn.dataset.copy === 'patch' ? JSON.stringify(R.patch, null, 2) : sharedMarkdown();
+    const k = btn.dataset.copy;
+    const txt = k === 'patch' ? JSON.stringify(R.patch, null, 2) : k === 'sharedMd' ? sharedMarkdown() : JSON.stringify(PAIR[k.slice(5)](), null, 2);
     const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = btn.dataset.label, 1400); };
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(done).catch(() => {
       const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select();
