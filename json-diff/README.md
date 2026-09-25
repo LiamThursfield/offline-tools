@@ -19,6 +19,7 @@ Open [`json-diff.html`](json-diff.html) in any modern browser.
 | **Shared properties** | Paths present in both documents, as a table or a line diff. **Copy as Markdown** copies the table as a GitHub-flavoured Markdown table. |
 | **Only in A / only in B** | Paths that exist on one side only. |
 | **JSON Patch** | RFC 6902 operations that turn A into B. |
+| **Merged** | A deep-merged with B on top. **Copy merged JSON** copies it. Where both have a key, B's value wins. Objects merge at every level. Arrays and other values from B replace A's whole value. Keys stay in A's order, and B's new keys go at the end, unless *Pretty + sorted keys* is on. Field filters are applied. |
 
 The structural tabs need valid JSON on both sides.
 
@@ -98,7 +99,7 @@ Segments: `.name` or `["any key"]` for a key, `[3]` for an index, `*` or `[*]` f
 
 **Saves** in the header (or ⌘/Ctrl+S) opens *Saved comparisons*. Give the comparison a name and save it, or load or delete an earlier one.
 
-- **What's saved:** both inputs and their file names, every field filter (including ones switched off), the array, case and number options, and view settings (tab, line diff format and layout, context, wrap, shared-properties view, change-type chips and path search).
+- **What's saved:** both inputs and their file names, every field filter (including ones switched off), the array, case and number options, and view settings (tab, line diff format and layout, context, wrap, shared-properties view, merged format, change-type chips and path search).
 - **Overwriting:** names are unique, ignoring case and extra spaces. Typing an existing name shows a warning, and the button becomes **Overwrite…**. You then have to confirm with **Yes, overwrite**. Saving over the comparison you currently have open just updates it.
 - **Unsaved changes:** the comparison you have open is shown under the heading. It's marked *unsaved changes* once the inputs, filters or options differ from the saved copy. View settings don't count as changes.
 - **Guarding your work:** loading asks first if your current work isn't saved, and deleting always asks first.

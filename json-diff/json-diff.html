@@ -453,6 +453,7 @@ dialog#saves::backdrop{background:color-mix(in oklab,var(--bg) 70%,transparent);
     <button class="tab" role="tab" data-tab="shared">Shared properties<span class="n" id="nShared"></span></button>
     <button class="tab" role="tab" data-tab="only">Only in A / only in B<span class="n" id="nOnly"></span></button>
     <button class="tab" role="tab" data-tab="patch">JSON Patch<span class="n" id="nPatch"></span></button>
+    <button class="tab" role="tab" data-tab="merged" title="A with B merged on top">Merged</button>
   </div>
   <div class="out" id="out"></div>
   <!-- shared:footer.html -->
@@ -682,6 +683,16 @@ function jsonPatch(a, b, ptr = '', ops = []) {
   return ops;
 }
 
+/* Deep merge: B wins on any key both have. Objects merge recursively; arrays and other values from B replace A's.
+   Keeps A's key order, then B's new keys. fromEntries so a "__proto__" key stays a plain property. */
+function deepMerge(a, b) {
+  if (!isObj(a) || !isObj(b)) return b;
+  return Object.fromEntries([
+    ...Object.keys(a).map(k => [k, hasOwn(b, k) ? deepMerge(a[k], b[k]) : a[k]]),
+    ...Object.keys(b).filter(k => !hasOwn(a, k)).map(k => [k, b[k]]),
+  ]);
+}
+
 function fmtPath(path) {
   let s = '$';
   for (const seg of path) {
@@ -803,7 +814,7 @@ function countMatches(pats, paths) {
   }
   return n;
 }
-if (typeof module !== 'undefined') module.exports = { diffLines, structDiff, intersect, jsonPatch, fmtPath, parseJSON, sortKeys, parsePatterns, filterFields, toPattern, listPaths, countMatches };
+if (typeof module !== 'undefined') module.exports = { diffLines, structDiff, intersect, jsonPatch, deepMerge, fmtPath, parseJSON, sortKeys, parsePatterns, filterFields, toPattern, listPaths, countMatches };
 </script>
 
 <!-- ===== UI ===== -->
@@ -814,7 +825,7 @@ const preview = (v, n = 90) => { const s = v === undefined ? 'undefined' : JSON.
 
 const state = {
   tab: 'text', textFmt: 'pretty', textView: 'unified', context: 3, full: false, wrap: true,
-  sharedView: 'table', sharedOnlyDiff: false, sharedFmt: 'sorted', filters: { added: true, removed: true, changed: true, type: true }, search: '',
+  sharedView: 'table', sharedOnlyDiff: false, sharedFmt: 'sorted', mergedFmt: 'pretty', filters: { added: true, removed: true, changed: true, type: true }, search: '',
   expanded: new Set(),
 };
 let R = null; // computed results
@@ -894,12 +905,12 @@ function renderSummary() {
 }
 
 function renderTabs() {
-  const jsonOnly = ['changes', 'shared', 'only', 'patch'];
+  const jsonOnly = ['changes', 'shared', 'only', 'patch', 'merged'];
   if (!R.json && jsonOnly.includes(state.tab)) state.tab = 'text';
   document.querySelectorAll('.tab').forEach(t => {
     t.setAttribute('aria-selected', t.dataset.tab === state.tab);
     t.disabled = !R.json && jsonOnly.includes(t.dataset.tab);
-    t.title = t.disabled ? 'Needs valid JSON on both sides' : '';
+    t.title = t.disabled ? 'Needs valid JSON on both sides' : t.dataset.tab === 'merged' ? 'A with B merged on top' : '';
   });
   const c = R.json ? R.counts : null;
   $('#nChanges').textContent = c ? c.added + c.removed + c.changed + c.type : '';
@@ -1085,6 +1096,14 @@ function renderPatch() {
     + (R.patch.length ? `<pre class="patch">${esc(txt)}</pre>` : '<div class="empty">No operations needed. A already equals B.</div>');
 }
 
+const mergedText = () => JSON.stringify(sortedIf(state.mergedFmt === 'sorted', deepMerge(R.va, R.vb)), null, 2);
+function renderMerged() {
+  return `<div class="subbar"><button class="btn primary" data-copy="merged" data-label="Copy merged JSON">Copy merged JSON</button>`
+    + `<label>Format ${seg('mergedFmt', state.mergedFmt, [['pretty', 'Pretty'], ['sorted', 'Pretty + sorted keys']])}</label>`
+    + `<span style="color:var(--muted)">A with B on top. Where both have a key, B\u2019s value wins. Objects merge at every level. Arrays and other values from B replace A\u2019s whole value.${R.filtered ? ' Field filters are applied.' : ''}</span></div>`
+    + `<pre class="patch">${esc(mergedText())}</pre>`;
+}
+
 function render() {
   renderSummary(); renderTabs(); updateCurrent();
   const out = $('#out');
@@ -1093,7 +1112,7 @@ function render() {
     out.innerHTML = '<div class="note">One side looks like JSON but doesn\u2019t parse. Fix the error shown under that box to unlock the structural views. Until then, here\u2019s a plain line diff.</div>' + renderText();
     return;
   }
-  out.innerHTML = ({ text: renderText, changes: renderChanges, shared: renderShared, only: renderOnly, patch: renderPatch })[state.tab]();
+  out.innerHTML = ({ text: renderText, changes: renderChanges, shared: renderShared, only: renderOnly, patch: renderPatch, merged: renderMerged })[state.tab]();
 }
 
 /* ---------- events ---------- */
@@ -1232,7 +1251,7 @@ out.addEventListener('click', e => {
   const btn = e.target.closest('[data-copy]');
   if (btn) {
     const k = btn.dataset.copy;
-    const txt = k === 'patch' ? JSON.stringify(R.patch, null, 2) : k === 'sharedMd' ? sharedMarkdown() : JSON.stringify(PAIR[k.slice(5)](), null, 2);
+    const txt = k === 'patch' ? JSON.stringify(R.patch, null, 2) : k === 'merged' ? mergedText() : k === 'sharedMd' ? sharedMarkdown() : JSON.stringify(PAIR[k.slice(5)](), null, 2);
     const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = btn.dataset.label, 1400); };
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(done).catch(() => {
       const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select();
@@ -1279,7 +1298,7 @@ $('#sample').onclick = () => {
 
 /* ---------- saved comparisons (localStorage) ---------- */
 const SAVES_KEY = 'json-diff.saves', SAVE_VERSION = 1;
-const VIEW_KEYS = ['tab', 'textFmt', 'textView', 'context', 'full', 'wrap', 'sharedView', 'sharedOnlyDiff', 'sharedFmt', 'search'];
+const VIEW_KEYS = ['tab', 'textFmt', 'textView', 'context', 'full', 'wrap', 'sharedView', 'sharedOnlyDiff', 'sharedFmt', 'mergedFmt', 'search'];
 let current = null;          // { id, name, sig } of the save that's open, if any
 let confirmOverwrite = null; // id of the save the user has been warned about
 let pending = null;          // { id, act: 'load' | 'delete' } awaiting inline confirmation
