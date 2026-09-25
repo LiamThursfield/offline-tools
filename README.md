@@ -6,7 +6,7 @@ Small, self-contained browser tools that work without an internet connection. Ea
 
 | Tool | What it does |
 | --- | --- |
-| [JSON diff](json-diff/json-diff.html) | Compare two JSON documents (or any text): line diff, every structural change, shared properties (copyable as a Markdown table), what's only in A or B, and an RFC 6902 JSON Patch. |
+| [JSON diff](json-diff/json-diff.html) | Compare two JSON documents (or any text): line diff, every structural change, shared properties (copyable as a Markdown table), what's only in A or B, and an RFC 6902 JSON Patch. Ignore fields or compare only some of them using path patterns such as `updatedAt` or `items[*].id`. |
 
 ## Using a tool
 
