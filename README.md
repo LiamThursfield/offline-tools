@@ -6,7 +6,7 @@ Small, self-contained browser tools that work without an internet connection. Ea
 
 | Tool | What it does |
 | --- | --- |
-| [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch and field filtering. |
+| [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch and combinable field filters. |
 
 ## Using a tool
 

@@ -31,9 +31,22 @@ The structural tabs need valid JSON on both sides.
 - **Ignore case in strings**: treats `"Foo"` and `"foo"` as equal.
 - **Treat "1" and 1 as equal**: a string and a number with the same text count as equal.
 
-## Field filter
+## Field filters
 
-**Fields → ignore** leaves matching fields out of the comparison. **Fields → only compare** compares only the matching fields. Enter patterns separated by commas:
+Use **+ Only compare** and **+ Ignore** to add as many filters as you need. Each filter holds one or more patterns separated by commas. Filters combine like this:
+
+1. If there are any **Only compare** filters, a field is kept when it matches **any** of them.
+2. **Ignore** filters then remove fields from what's left.
+
+For example, *Only compare* `x, y, z` + *Only compare* `a%` + *Ignore* `b%` compares `x`, `y`, `z` and every key starting with `a`, minus any key starting with `b` inside them.
+
+- **Match count:** each filter shows how many fields it matches across A and B, and says **no matches** when nothing does, which usually means a typo. Fields nested inside a matched field aren't counted again.
+- **Turning filters on and off:** the checkbox turns a single filter off without deleting it. **Turn off** in the summary line turns off all of them.
+- **Changing and removing:** the *Only compare* / *Ignore* toggle switches a filter's type, and **×** removes it.
+- **Keyboard:** press Enter in a filter to add another filter of the same type.
+- **Syntax help:** **Pattern syntax** opens a quick reference.
+
+### Patterns
 
 | Pattern | Matches |
 | --- | --- |
@@ -48,9 +61,9 @@ The structural tabs need valid JSON on both sides.
 
 Segments: `.name` or `["any key"]` for a key, `[3]` for an index, `*` or `[*]` for any single key or index, and `**` for any number of levels. Inside a key name, `%` matches any run of characters, like SQL `LIKE` (case-sensitive). Quoted keys are always literal, so `["50%"]` matches a key named `50%`.
 
-- **Where it applies:** the filter is applied to both documents before comparing, so every view reflects it. With the line diff set to *As written*, both sides are re-formatted, because the original text can't be filtered.
-- **One-click ignore:** hover over a row in *All changes*, *Only in A / B* or the *Shared properties* table and click **ignore** to add that path. Paths from key-matched arrays become `[*]`, so the field is ignored on every matched object.
-- **Only compare mode:** array elements that are objects or arrays but contain no match are kept as `{}` / `[]`, so positions still line up. With *match objects by key*, the key field is always kept.
+- **Where it applies:** filters are applied to both documents before comparing, so every view reflects it. With the line diff set to *As written*, both sides are re-formatted, because the original text can't be filtered.
+- **One-click ignore:** hover over a row in *All changes*, *Only in A / B* or the *Shared properties* table and click **ignore**. This adds that path to your last active *Ignore* filter, or creates one if there isn't one. Paths from key-matched arrays become `[*]`, so the field is ignored on every matched object.
+- **Only compare filters:** array elements that are objects or arrays but contain no match are kept as `{}` / `[]`, so positions still line up. With *match objects by key*, the key field is always kept.
 
 ## Theme
 

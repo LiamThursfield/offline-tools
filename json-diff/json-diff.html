@@ -101,7 +101,7 @@ header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6
   background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
 .logo b{color:var(--accent-text);font-weight:600}
-header .spacer{flex:1}
+.actions{display:flex;gap:2px;margin-left:auto}
 .nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
 .nav:hover{background:var(--hover);color:var(--accent-text)}
 .theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
@@ -141,8 +141,34 @@ textarea::placeholder{color:var(--muted);opacity:.8}
 select,input[type=text],input[type=number]{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px}
 .controls input[type=number],.subbar input[type=number]{width:4.6em}
 .controls input[type=text]{width:7em}
-.controls .fields{flex:1 1 360px}
-.controls .fields input[type=text]{flex:1;min-width:10em;width:auto;font-family:var(--mono);font-size:.84rem}
+
+/* field filters */
+.filters{margin:2px 4px 16px}
+.filters-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.filters-title{font-weight:600;font-size:.9rem;margin-right:4px}
+.btn.add{padding:3px 12px;font-size:.82rem}
+.help{position:relative;margin-left:auto;font-size:.82rem}
+.help summary{cursor:pointer;color:var(--muted);list-style:none;text-decoration:underline dotted;text-underline-offset:3px}
+.help summary::-webkit-details-marker{display:none}
+.help[open] summary{color:var(--accent-text)}
+.help-pop{position:absolute;z-index:5;top:calc(100% + 8px);right:0;width:min(440px,calc(100vw - 32px));background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 14px}
+.help-pop p{margin:0 0 6px;color:var(--muted)}
+.help-pop table{border-collapse:collapse;width:100%}
+.help-pop td{padding:4px 0;vertical-align:top;border-top:1px solid var(--line)}
+.help-pop td:first-child{padding-right:14px;white-space:nowrap}
+.help code,.filters-hint code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+#rules{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+#rules:empty{display:none}
+.rule{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:6px 6px 6px 12px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:calc(var(--radius) - 2px);transition:opacity .15s}
+.rule.exclude{border-left-color:var(--del)}
+.rule.exclude .seg button[aria-pressed=true]{background:var(--del);color:var(--panel)}
+.rule.off{opacity:.5}
+.rule .rule-input{flex:1 1 16em;min-width:10em;font-family:var(--mono);font-size:.84rem}
+.rule-count{font-size:.78rem;color:var(--muted);min-width:6.5em;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rule-count.warn{color:var(--chg);font-weight:600}
+.rule-x{border:0;background:none;width:30px;height:30px;border-radius:var(--pill);color:var(--muted);font-size:1.15rem;line-height:1}
+.rule-x:hover{background:var(--hover);color:var(--del)}
+.filters-hint{margin:8px 2px 0;font-size:.8rem;color:var(--muted)}
 .filter-on{color:var(--accent-text);font-weight:600}
 .linkish{border:0;background:none;padding:0;color:var(--accent-text);text-decoration:underline;font-weight:600}
 .ign{margin-left:8px;border:1px solid var(--line);background:none;border-radius:var(--pill);padding:0 8px;font:600 .7rem var(--sans);color:var(--muted);opacity:0;vertical-align:1px;transition:opacity .15s}
@@ -229,7 +255,18 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
   .wrap{padding:12px 12px 40px}
   header{position:static;border-radius:var(--radius);padding:8px 10px 8px 16px}
   .intro{margin:22px 2px 16px}
+  .rule{gap:6px 6px;padding-left:10px}
+  .rule .rule-input{order:5;flex-basis:100%}
+  .rule-count{margin-left:auto;min-width:0}
+  .rule .seg button{padding:2px 9px}
   textarea{height:180px;min-height:140px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 10px;font-size:.88rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -238,11 +275,12 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
 <div class="wrap">
   <header>
     <span class="logo"><b>JSON</b>.diff</span>
-    <span class="spacer"></span>
-    <button class="nav" id="swap" title="Swap A and B">Swap A ⇄ B</button>
-    <button class="nav" id="sample">Load example</button>
-    <button class="nav" id="clear">Clear</button>
-    <label class="theme-pick">Theme <select id="theme"></select></label>
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="swap" title="Swap A and B">Swap A ⇄ B</button>
+      <button class="nav" id="sample">Load example</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
   </header>
 
   <div class="intro">
@@ -289,12 +327,33 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
     <label id="keyWrap" hidden>key field <input type="text" id="arrKey" value="id"></label>
     <label><input type="checkbox" id="ignoreCase"> Ignore case in strings</label>
     <label><input type="checkbox" id="numLoose"> Treat "1" and 1 as equal</label>
-    <label class="fields">Fields
-      <select id="fieldMode"><option value="exclude">ignore</option><option value="include">only compare</option></select>
-      <input type="text" id="fieldPats" spellcheck="false" placeholder="e.g. updatedAt, %At, $.meta, items[*].id"
-        title="Comma-separated. Starts with $ = from the root, otherwise matches at any depth. [*] or * = any key/index, ** = any depth, % inside a name = any characters (like SQL LIKE).">
-    </label>
   </div>
+
+  <section class="filters" aria-label="Field filters">
+    <div class="filters-head">
+      <span class="filters-title">Field filters</span>
+      <button type="button" class="btn add" data-add="include">+ Only compare</button>
+      <button type="button" class="btn add" data-add="exclude">+ Ignore</button>
+      <details class="help">
+        <summary>Pattern syntax</summary>
+        <div class="help-pop">
+          <p>Separate patterns with commas. Without a leading <code>$</code>, a pattern matches at any depth.</p>
+          <table>
+            <tr><td><code>updatedAt</code></td><td>that key, anywhere</td></tr>
+            <tr><td><code>$.meta</code></td><td><code>meta</code> at the root only</td></tr>
+            <tr><td><code>%At</code></td><td>keys ending in “At”; <code>%</code> = any characters, like SQL <code>LIKE</code></td></tr>
+            <tr><td><code>%price%</code></td><td>keys containing “price”</td></tr>
+            <tr><td><code>items[*].id</code></td><td><code>id</code> in every <code>items</code> element</td></tr>
+            <tr><td><code>$.tags[0]</code></td><td>a single array element</td></tr>
+            <tr><td><code>$.**.debug</code></td><td><code>debug</code> at any depth under the root</td></tr>
+            <tr><td><code>["a.b"]</code></td><td>a key with special characters (always literal)</td></tr>
+          </table>
+        </div>
+      </details>
+    </div>
+    <div id="rules"></div>
+    <p class="filters-hint" id="rulesHint" hidden></p>
+  </section>
 
   <div class="summary" id="summary"></div>
 
@@ -535,19 +594,28 @@ function matchSegs(ps, path, i = 0, j = 0) {
   if (ps[i] === '**') { for (let k = j; k <= path.length; k++) if (matchSegs(ps, path, i + 1, k)) return true; return false; }
   return j < path.length && (ps[i] === '*' || (ps[i].re ? ps[i].re.test(String(path[j])) : String(ps[i].k) === String(path[j]))) && matchSegs(ps, path, i + 1, j + 1);
 }
-/* mode 'exclude': drop matching fields. mode 'include': keep only matching fields (and what's needed to reach them).
-   keepKey: in include mode, objects inside arrays keep this field so "match objects by key" still works. */
-function filterFields(value, pats, mode, keepKey) {
-  if (!pats.length) return value;
-  const hit = path => pats.some(p => matchSegs(p, path));
-  if (mode === 'exclude') {
-    const ex = (v, path) => {
-      if (Array.isArray(v)) { const out = []; v.forEach((e, i) => { if (!hit([...path, i])) out.push(ex(e, [...path, i])); }); return out; }
-      if (isObj(v)) { const out = {}; for (const k of Object.keys(v)) if (!hit([...path, k])) out[k] = ex(v[k], [...path, k]); return out; }
-      return v;
-    };
-    return ex(value, []);
-  }
+/* rules = { include: [pattern…], exclude: [pattern…] }.
+   If there are include patterns, only fields matching any of them are kept (plus what's needed to reach them);
+   exclude patterns are then removed from what's left.
+   keepKey: objects inside arrays keep this field when filtering by include, so "match objects by key" still works. */
+function filterFields(value, rules, keepKey) {
+  const inc = rules.include || [], exc = rules.exclude || [];
+  if (inc.length) value = onlyFields(value, inc, keepKey);
+  if (exc.length) value = dropFields(value, exc);
+  return value;
+}
+const hitAny = (pats, path) => pats.some(p => matchSegs(p, path));
+function dropFields(value, pats) {
+  const hit = path => hitAny(pats, path);
+  const ex = (v, path) => {
+    if (Array.isArray(v)) { const out = []; v.forEach((e, i) => { if (!hit([...path, i])) out.push(ex(e, [...path, i])); }); return out; }
+    if (isObj(v)) { const out = {}; for (const k of Object.keys(v)) if (!hit([...path, k])) out[k] = ex(v[k], [...path, k]); return out; }
+    return v;
+  };
+  return ex(value, []);
+}
+function onlyFields(value, pats, keepKey) {
+  const hit = path => hitAny(pats, path);
   const inc = (v, path) => {   // -> undefined when nothing under v is kept
     if (path.length && hit(path)) return v;
     if (Array.isArray(v)) {
@@ -577,7 +645,28 @@ function toPattern(path) {
   return '$' + path.map(seg => typeof seg === 'number' ? '[' + seg + ']' : typeof seg === 'object' ? '[*]'
     : /^[A-Za-z_$][\w$]*$/.test(seg) ? '.' + seg : '[' + JSON.stringify(seg) + ']').join('');
 }
-if (typeof module !== 'undefined') module.exports = { diffLines, structDiff, intersect, jsonPatch, fmtPath, parseJSON, sortKeys, parsePatterns, filterFields, toPattern };
+/* every path in a document (not the root), keyed by JSON string; used to show how many fields a filter matches */
+function listPaths(v, out = new Map(), path = [], cap = 50000) {
+  if (out.size >= cap) return out;
+  if (path.length) out.set(JSON.stringify(path), path);
+  if (Array.isArray(v)) v.forEach((e, i) => listPaths(e, out, [...path, i], cap));
+  else if (isObj(v)) for (const k of Object.keys(v)) listPaths(v[k], out, [...path, k], cap);
+  return out;
+}
+/* number of matched fields, not counting anything inside a field that already matched */
+function countMatches(pats, paths) {
+  if (!pats.length) return 0;
+  const hit = new Set(); let n = 0;
+  for (const [key, path] of paths) {
+    if (!hitAny(pats, path)) continue;
+    hit.add(key);
+    let nested = false;
+    for (let d = 1; d < path.length && !nested; d++) nested = hit.has(JSON.stringify(path.slice(0, d)));
+    if (!nested) n++;
+  }
+  return n;
+}
+if (typeof module !== 'undefined') module.exports = { diffLines, structDiff, intersect, jsonPatch, fmtPath, parseJSON, sortKeys, parsePatterns, filterFields, toPattern, listPaths, countMatches };
 </script>
 
 <!-- ===== UI ===== -->
@@ -593,9 +682,19 @@ const state = {
 };
 let R = null; // computed results
 
+/* field filter rules: { id, mode: 'include' | 'exclude', text, on } */
+const rules = [];
+let ruleSeq = 0;
+const PLACEHOLDER = { include: 'e.g. name, price%, $.address', exclude: 'e.g. updatedAt, %At, $.meta' };
+function activeRules() {
+  const r = { include: [], exclude: [] };
+  for (const x of rules) if (x.on) r[x.mode].push(...parsePatterns(x.text));
+  return r;
+}
+
 function opts() {
   return { arrMode: $('#arrMode').value, arrKey: $('#arrKey').value.trim(), ignoreCase: $('#ignoreCase').checked, numLoose: $('#numLoose').checked,
-    fieldMode: $('#fieldMode').value, fieldPats: parsePatterns($('#fieldPats').value) };
+    fields: activeRules() };
 }
 
 function setStatus(side, p, text) {
@@ -612,11 +711,12 @@ function compute() {
   const pa = parseJSON(ta), pb = parseJSON(tb);
   setStatus('A', pa, ta); setStatus('B', pb, tb);
   const json = pa.ok && pb.ok, o = opts();
-  R = { json, ta, tb, pa, pb, o, empty: pa.empty && pb.empty, filtered: json && o.fieldPats.length > 0 };
+  R = { json, ta, tb, pa, pb, o, empty: pa.empty && pb.empty, filtered: json && (o.fields.include.length + o.fields.exclude.length) > 0 };
   if (json) {
     const keepKey = o.arrMode === 'key' ? o.arrKey : '';
-    R.va = filterFields(pa.value, o.fieldPats, o.fieldMode, keepKey);
-    R.vb = filterFields(pb.value, o.fieldPats, o.fieldMode, keepKey);
+    R.paths = listPaths(pb.value, listPaths(pa.value));
+    R.va = filterFields(pa.value, o.fields, keepKey);
+    R.vb = filterFields(pb.value, o.fields, keepKey);
     R.entries = structDiff(R.va, R.vb, o);
     R.patch = jsonPatch(R.va, R.vb);
     const c = { added: 0, removed: 0, changed: 0, type: 0, equal: 0 };
@@ -624,7 +724,7 @@ function compute() {
     R.counts = c;
   }
   state.expanded.clear();
-  render();
+  render(); updateRuleCounts();
 }
 
 function textPair() {
@@ -649,7 +749,7 @@ function renderSummary() {
     <span class="c-chg"><b>${c.changed}</b> changed</span><span class="c-typ"><b>${c.type}</b> type changes</span>
     <span><b>${c.equal}</b> identical values</span>
     <span class="meter" title="${pct}% of compared values are identical"><i style="width:${pct}%"></i></span><span>${pct}% identical</span>`
-    + (R.filtered ? `<span class="filter-on">${R.o.fieldMode === 'include' ? 'Only comparing' : 'Ignoring'} ${R.o.fieldPats.length} field pattern${R.o.fieldPats.length > 1 ? 's' : ''} · <button type="button" class="linkish" id="clearFields">clear</button></span>` : '');
+    + (R.filtered ? `<span class="filter-on">Field filters on · <button type="button" class="linkish" id="clearFields">turn off</button></span>` : '');
 }
 
 function renderTabs() {
@@ -752,9 +852,8 @@ function valueCell(e) {
   const extra = e.kind === 'type' ? ` <span class="arrow">(${typeOf(e.a)} → ${typeOf(e.b)})</span>` : '';
   return `<div class="vals"><span class="v a">${esc(preview(e.a, 70))}</span><span class="arrow">→</span><span class="v b">${esc(preview(e.b, 70))}</span>${extra}</div>`;
 }
-/* "ignore" shortcut on a result row; hidden while an "only compare" list is in use */
-const ignoreBtn = path => R.o.fieldMode === 'include' && R.filtered ? ''
-  : `<button type="button" class="ign" data-ignore="${esc(toPattern(path))}" title="Ignore ${esc(toPattern(path))}">ignore</button>`;
+/* "ignore" shortcut on a result row */
+const ignoreBtn = path => `<button type="button" class="ign" data-ignore="${esc(toPattern(path))}" title="Ignore ${esc(toPattern(path))}">ignore</button>`;
 const LABEL = { added: 'added', removed: 'removed', changed: 'changed', type: 'type change', equal: 'same' };
 
 function renderChanges() {
@@ -865,16 +964,85 @@ themeSel.innerHTML = THEMES.map(t => `<option value="${t.id}">${esc(t.label)}</o
 themeSel.value = savedTheme();
 themeSel.onchange = () => { const id = applyTheme(themeSel.value); try { localStorage.setItem(THEME_KEY, id); } catch {} };
 $('#arrMode').onchange = () => { $('#keyWrap').hidden = $('#arrMode').value !== 'key'; compute(); };
-['#arrKey', '#fieldPats'].forEach(s => $(s).addEventListener('input', schedule));
-$('#fieldMode').onchange = compute;
-function ignoreField(pattern) {
-  const inp = $('#fieldPats');
-  if (!parsePatterns(inp.value).length) $('#fieldMode').value = 'exclude';
-  const cur = inp.value.split(',').map(x => x.trim()).filter(Boolean);
-  if (!cur.includes(pattern)) inp.value = [...cur, pattern].join(', ');
-  compute();
+['#arrKey'].forEach(s => $(s).addEventListener('input', schedule));
+
+/* ---------- field filter rules ---------- */
+function renderRules() {
+  $('#rules').innerHTML = rules.map(r => `
+    <div class="rule ${r.mode}${r.on ? '' : ' off'}" data-id="${r.id}">
+      <input type="checkbox" data-rule="on" ${r.on ? 'checked' : ''} title="Turn this filter on or off" aria-label="Filter enabled">
+      <span class="seg" role="group" aria-label="Filter type">
+        <button type="button" data-rule="mode" data-v="include" aria-pressed="${r.mode === 'include'}">Only compare</button>
+        <button type="button" data-rule="mode" data-v="exclude" aria-pressed="${r.mode === 'exclude'}">Ignore</button>
+      </span>
+      <input type="text" class="rule-input" data-rule="text" value="${esc(r.text)}" placeholder="${PLACEHOLDER[r.mode]}" spellcheck="false" autocomplete="off" aria-label="Field patterns, comma-separated">
+      <span class="rule-count" aria-live="polite"></span>
+      <button type="button" class="rule-x" data-rule="remove" title="Remove filter" aria-label="Remove filter">×</button>
+    </div>`).join('');
+  const inc = rules.some(r => r.on && r.mode === 'include'), exc = rules.some(r => r.on && r.mode === 'exclude');
+  const hint = $('#rulesHint');
+  hint.hidden = !rules.length;
+  hint.innerHTML = inc && exc ? 'Fields matching <b>any</b> “Only compare” filter are kept, then “Ignore” filters remove fields from those.'
+    : inc ? 'Only fields matching <b>any</b> of these filters are compared. Everything else is left out.'
+    : exc ? 'Matching fields are left out of the comparison on both sides.'
+    : 'All filters are turned off.';
+  updateRuleCounts();
 }
-$('#summary').addEventListener('click', e => { if (e.target.id === 'clearFields') { $('#fieldPats').value = ''; compute(); } });
+function updateRuleCounts() {
+  document.querySelectorAll('.rule').forEach(el => {
+    const r = rules.find(x => x.id === +el.dataset.id), out = el.querySelector('.rule-count');
+    const pats = parsePatterns(r.text);
+    if (!R || !R.json || !pats.length) { out.textContent = ''; out.className = 'rule-count'; out.title = ''; return; }
+    const n = countMatches(pats, R.paths);
+    out.textContent = n ? `${n} field${n > 1 ? 's' : ''}` : 'no matches';
+    out.className = 'rule-count' + (n ? '' : ' warn');
+    out.title = n ? `Matches ${n} field${n > 1 ? 's' : ''} across A and B` : 'Nothing in A or B matches these patterns';
+  });
+}
+function addRule(mode, text = '', focus = true) {
+  rules.push({ id: ++ruleSeq, mode, text, on: true });
+  renderRules(); compute();
+  if (focus) $(`.rule[data-id="${ruleSeq}"] .rule-input`).focus();
+}
+/* "ignore" on a result row: add to the last enabled Ignore filter, or start one */
+function ignoreField(pattern) {
+  const r = rules.filter(x => x.on && x.mode === 'exclude').pop();
+  if (!r) return addRule('exclude', pattern, false);
+  const cur = r.text.split(',').map(x => x.trim()).filter(Boolean);
+  if (!cur.includes(pattern)) r.text = [...cur, pattern].join(', ');
+  renderRules(); compute();
+}
+document.querySelectorAll('[data-add]').forEach(b => b.onclick = () => addRule(b.dataset.add));
+const rulesEl = $('#rules'), ruleOf = el => rules.find(x => x.id === +el.closest('.rule').dataset.id);
+rulesEl.addEventListener('click', e => {
+  const b = e.target.closest('button[data-rule]'); if (!b) return;
+  const r = ruleOf(b);
+  if (b.dataset.rule === 'remove') {
+    const i = rules.indexOf(r); rules.splice(i, 1); renderRules(); compute();
+    const next = rulesEl.querySelectorAll('.rule-input')[Math.min(i, rules.length - 1)];
+    (next || $('[data-add="include"]')).focus();
+  } else if (b.dataset.rule === 'mode' && r.mode !== b.dataset.v) {
+    r.mode = b.dataset.v; renderRules(); compute();
+    rulesEl.querySelector(`.rule[data-id="${r.id}"] .rule-input`).focus();
+  }
+});
+rulesEl.addEventListener('input', e => { if (e.target.dataset.rule === 'text') { ruleOf(e.target).text = e.target.value; schedule(); } });
+rulesEl.addEventListener('change', e => {
+  if (e.target.dataset.rule !== 'on') return;
+  const r = ruleOf(e.target); r.on = e.target.checked;
+  renderRules(); compute();
+  rulesEl.querySelector(`.rule[data-id="${r.id}"] [data-rule=on]`).focus();
+});
+rulesEl.addEventListener('keydown', e => {
+  // Enter in a filter adds another of the same kind
+  if (e.target.dataset.rule === 'text' && e.key === 'Enter') { e.preventDefault(); addRule(ruleOf(e.target).mode); }
+});
+const help = $('.help');
+document.addEventListener('click', e => { if (help.open && !help.contains(e.target)) help.open = false; });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && help.open) { help.open = false; help.querySelector('summary').focus(); } });
+$('#summary').addEventListener('click', e => {
+  if (e.target.id === 'clearFields') { rules.forEach(r => r.on = false); renderRules(); compute(); }
+});
 ['#ignoreCase', '#numLoose'].forEach(s => $(s).addEventListener('change', compute));
 
 $('#tabs').addEventListener('click', e => { const t = e.target.closest('.tab'); if (t && !t.disabled) { state.tab = t.dataset.tab; render(); } });
