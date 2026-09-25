@@ -43,8 +43,10 @@ The structural tabs need valid JSON on both sides.
 | `$.tags[0]` | the first element of the root `tags` array |
 | `$["a\|b"]` | a key with special characters |
 | `$.**.debug` | `debug` at any depth below the root |
+| `%At` | any key ending in `At` (`updatedAt`, `createdAt`, …) at any depth |
+| `%price%` | any key containing `price` |
 
-Segments: `.name` or `["any key"]` for a key, `[3]` for an index, `*` or `[*]` for any single key or index, and `**` for any number of levels.
+Segments: `.name` or `["any key"]` for a key, `[3]` for an index, `*` or `[*]` for any single key or index, and `**` for any number of levels. Inside a key name, `%` matches any run of characters, like SQL `LIKE` (case-sensitive). Quoted keys are always literal, so `["50%"]` matches a key named `50%`.
 
 - **Where it applies:** the filter is applied to both documents before comparing, so every view reflects it. With the line diff set to *As written*, both sides are re-formatted, because the original text can't be filtered.
 - **One-click ignore:** hover over a row in *All changes*, *Only in A / B* or the *Shared properties* table and click **ignore** to add that path. Paths from key-matched arrays become `[*]`, so the field is ignored on every matched object.

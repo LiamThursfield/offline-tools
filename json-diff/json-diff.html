@@ -92,6 +92,7 @@ button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
 button{cursor:pointer}
 input[type=checkbox]{accent-color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input[type=text]:focus-visible,input[type=number]:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
 .wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
 
 /* header: pill nav like lxst.digital */
@@ -290,8 +291,8 @@ pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;m
     <label><input type="checkbox" id="numLoose"> Treat "1" and 1 as equal</label>
     <label class="fields">Fields
       <select id="fieldMode"><option value="exclude">ignore</option><option value="include">only compare</option></select>
-      <input type="text" id="fieldPats" spellcheck="false" placeholder="e.g. updatedAt, $.meta, items[*].id"
-        title="Comma-separated. Starts with $ = from the root, otherwise matches at any depth. [*] or * = any key/index, ** = any depth.">
+      <input type="text" id="fieldPats" spellcheck="false" placeholder="e.g. updatedAt, %At, $.meta, items[*].id"
+        title="Comma-separated. Starts with $ = from the root, otherwise matches at any depth. [*] or * = any key/index, ** = any depth, % inside a name = any characters (like SQL LIKE).">
     </label>
   </div>
 
@@ -509,7 +510,11 @@ function parseJSON(text) {
 /* ---------- field filter ----------
    Patterns are comma/newline separated. "$" anchors at the root; without it a pattern matches at any depth.
    Segments: .name  ["any key"]  [3]  [*] or .* (any one key/index)  .** (any number of levels).
-   e.g.  updatedAt   $.meta   items[*].id   $.**.debug */
+   % inside a name matches any run of characters, like SQL LIKE (quoted ["…"] keys are always literal).
+   e.g.  updatedAt   $.meta   items[*].id   $.**.debug   %At   %price% */
+const nameSeg = v => v === '*' || v === '**' ? v
+  : v.includes('%') ? { k: v, re: new RegExp('^' + v.split('%').map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('[\\s\\S]*') + '$') }
+  : { k: v };
 function parsePattern(src) {
   src = src.trim(); if (!src) return null;
   let i = 0; const segs = [], anchored = src[0] === '$';
@@ -518,9 +523,8 @@ function parsePattern(src) {
     const rest = src.slice(i); let m;
     if (rest[0] === '.') { i++; continue; }
     if ((m = rest.match(/^\["((?:[^"\\]|\\.)*)"\]/))) { segs.push({ k: JSON.parse('"' + m[1] + '"') }); i += m[0].length; continue; }
-    if ((m = rest.match(/^\[([^\]]*)\]?/))) { const v = m[1].trim(); segs.push(v === '*' ? '*' : v === '**' ? '**' : { k: v }); i += m[0].length; continue; }
-    m = rest.match(/^[^.[]+/); const v = m[0].trim();
-    segs.push(v === '*' ? '*' : v === '**' ? '**' : { k: v }); i += m[0].length;
+    if ((m = rest.match(/^\[([^\]]*)\]?/))) { segs.push(nameSeg(m[1].trim())); i += m[0].length; continue; }
+    m = rest.match(/^[^.[]+/); segs.push(nameSeg(m[0].trim())); i += m[0].length;
   }
   if (!segs.length) return null;
   return anchored ? segs : ['**', ...segs];
@@ -529,7 +533,7 @@ function parsePatterns(text) { return String(text || '').split(/[,\n]/).map(pars
 function matchSegs(ps, path, i = 0, j = 0) {
   if (i === ps.length) return j === path.length;
   if (ps[i] === '**') { for (let k = j; k <= path.length; k++) if (matchSegs(ps, path, i + 1, k)) return true; return false; }
-  return j < path.length && (ps[i] === '*' || String(ps[i].k) === String(path[j])) && matchSegs(ps, path, i + 1, j + 1);
+  return j < path.length && (ps[i] === '*' || (ps[i].re ? ps[i].re.test(String(path[j])) : String(ps[i].k) === String(path[j]))) && matchSegs(ps, path, i + 1, j + 1);
 }
 /* mode 'exclude': drop matching fields. mode 'include': keep only matching fields (and what's needed to reach them).
    keepKey: in include mode, objects inside arrays keep this field so "match objects by key" still works. */
