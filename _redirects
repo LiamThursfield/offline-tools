@@ -1,0 +1,6 @@
+# Cloudflare Pages: serve each tool at a short URL (e.g. /bpm-tapper) while
+# keeping the descriptively named HTML file for offline use. One pair per tool.
+/bpm-tapper   /bpm-tapper/bpm-tapper   200
+/bpm-tapper/  /bpm-tapper/bpm-tapper   200
+/json-diff    /json-diff/json-diff     200
+/json-diff/   /json-diff/json-diff     200

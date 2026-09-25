@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Offline tools</title>
+<meta name="description" content="Small, self-contained browser tools that work without an internet connection.">
+<script>
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in the CSS.
+   "auto" follows the OS light/dark setting using the two ids named below. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+];
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  document.documentElement.dataset.theme = t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id;
+  return t.id;
+}
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+</script>
+<style>
+/* ===== Themes =====
+   Same theme blocks as the tools. To add a theme: copy a block, give it a new
+   data-theme id, and add a matching entry to THEMES in the <head> script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* derived tokens: shared by every theme */
+:root{
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+select{font:inherit;color:inherit;letter-spacing:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 20px 60px}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+
+.tools{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.tool{position:relative;display:flex;flex-direction:column;gap:8px;height:100%;padding:18px 20px 20px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);transition:border-color .2s}
+.tool:hover{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.tool:focus-within{border-color:var(--accent)}
+.tool .mark{font-size:1.2rem}
+.tool .mark b{color:var(--accent-text);font-weight:600}
+.tool h2{margin:0;font-size:1.05rem;font-weight:700}
+.tool h2 a{text-decoration:none}
+.tool h2 a::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.tool h2 a:focus-visible{outline:none}
+.tool p{margin:0;color:var(--muted);font-size:.92rem}
+.tool .go{margin-top:auto;padding-top:6px;color:var(--accent-text);font-weight:600;font-size:.88rem}
+
+footer{margin:40px 4px 0;color:var(--muted);font-size:.85rem}
+footer a{color:var(--accent-text);text-decoration:none}
+footer a:hover{text-decoration:underline}
+kbd{font:600 .82em var(--mono);letter-spacing:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel);color:var(--ink)}
+
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:static;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  .tp-label{display:none}
+  .theme-pick{padding:0 2px 0 4px}
+  .tools{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo"><b>LXST</b>.tools</span>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tools</span>
+    <h1>Small tools that run in your browser</h1>
+    <p>Each tool is a single HTML file that works with no internet connection. Nothing is uploaded; your data stays on your machine.</p>
+  </div>
+
+  <main>
+    <!-- One card per tool. href points at the file so it works when opened locally;
+         the script below swaps in the clean URL (data-path) when served over http(s). -->
+    <ul class="tools">
+      <li class="tool">
+        <span class="mark" aria-hidden="true"><b>BPM</b>.tap</span>
+        <h2><a href="bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper">BPM tapper</a></h2>
+        <p>Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter.</p>
+        <span class="go" aria-hidden="true">Open →</span>
+      </li>
+      <li class="tool">
+        <span class="mark" aria-hidden="true"><b>JSON</b>.diff</span>
+        <h2><a href="json-diff/json-diff.html" data-path="/json-diff">JSON diff</a></h2>
+        <p>Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch, combinable field filters and saved comparisons.</p>
+        <span class="go" aria-hidden="true">Open →</span>
+      </li>
+    </ul>
+  </main>
+
+  <footer>
+    Made by <a href="https://lxst.digital/">LXST.digital</a>. To use a tool offline, open it and save the page (<kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>S</kbd>).
+  </footer>
+</div>
+<script>
+const themeSel = document.getElementById('theme');
+themeSel.innerHTML = THEMES.map(t => `<option value="${t.id}">${t.label}</option>`).join('');
+themeSel.value = savedTheme();
+themeSel.onchange = () => { const id = applyTheme(themeSel.value); try { localStorage.setItem(THEME_KEY, id); } catch {} };
+
+if (/^https?:$/.test(location.protocol))
+  document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+</script>
+</body>
+</html>

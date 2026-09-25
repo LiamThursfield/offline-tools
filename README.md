@@ -1,6 +1,8 @@
 # Offline tools
 
-Small, self-contained browser tools that work without an internet connection. Each tool is a single HTML file, so there's nothing to install or build and nothing to host. Open the file in a browser and it works. Your data stays on your machine.
+Small, self-contained browser tools that work without an internet connection. Each tool is a single HTML file, so there's nothing to install or build. Open the file in a browser and it works. Your data stays on your machine.
+
+The tools are also hosted at [tools.lxst.digital](https://tools.lxst.digital/).
 
 ## Tools
 
@@ -11,17 +13,32 @@ Small, self-contained browser tools that work without an internet connection. Ea
 
 ## Using a tool
 
-Open the tool's `.html` file in any modern browser, by double-clicking it or dragging it into a browser window. No server is needed.
+Open the tool's `.html` file in any modern browser, by double-clicking it or dragging it into a browser window. No server is needed. `index.html` at the root links to every tool.
 
 ## Adding a tool
 
 Each tool follows the same conventions so the collection stays easy to use and maintain:
 
-- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file and a `README.md` covering the tool's features and usage. Add a row to the table above linking to the folder.
+- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file and a `README.md` covering the tool's features and usage. Add a row to the table above linking to the folder, a card to `index.html`, and a pair of rewrites to `_redirects` (see [Deployment](#deployment)).
 - **Fully self-contained.** Inline all CSS and JS. No CDNs, web fonts, external requests or build step. The file has to keep working with no network.
 - **No uploads.** Process all data in the browser. `localStorage` is for preferences such as the theme, and for user content only when the user explicitly saves it (for example JSON diff's saved comparisons). Never store user content silently.
 - **Keep logic separate from the UI.** Put the core logic in its own `<script>` as pure functions with no DOM access, so it can be tested on its own (JSON diff exports it via `module.exports` when loaded in Node).
 - **Responsive and accessible.** Make it usable at phone width, operable by keyboard and readable in both light and dark themes.
+
+## Deployment
+
+The repo root is deployed as-is to [Cloudflare Pages](https://pages.cloudflare.com/) at [tools.lxst.digital](https://tools.lxst.digital/), with no build step. Every push to `main` redeploys, and other branches get preview URLs.
+
+`_redirects` serves each tool at a short URL. For example, `/bpm-tapper` and `/bpm-tapper/` both serve `bpm-tapper/bpm-tapper.html`. A new tool needs the same two lines:
+
+```
+/my-tool   /my-tool/my-tool   200
+/my-tool/  /my-tool/my-tool   200
+```
+
+The rewrite target has no `.html` because Pages redirects `.html` URLs to their extensionless form. On the index page, links point at the `.html` file so they work when opened locally, and a small script swaps in the short URL (`data-path`) when the page is served over http(s).
+
+To preview the deployed routing locally, run `npx wrangler pages dev .` and open http://localhost:8788.
 
 ## Theming
 
