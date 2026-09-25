@@ -24,6 +24,27 @@ Each tool follows the same conventions so the collection stays easy to use and m
 - **No uploads.** Process all data in the browser. `localStorage` is for preferences such as the theme, and for user content only when the user explicitly saves it (for example JSON diff's saved comparisons). Never store user content silently.
 - **Keep logic separate from the UI.** Put the core logic in its own `<script>` as pure functions with no DOM access, so it can be tested on its own (JSON diff exports it via `module.exports` when loaded in Node).
 - **Responsive and accessible.** Make it usable at phone width, operable by keyboard and readable in both light and dark themes.
+- **Shared header and footer.** Include the [shared snippets](#shared-snippets): the back link in the header and the footer at the end of `.wrap`. Copying the markers from an existing tool is the easiest way.
+
+## Shared snippets
+
+Some pieces are the same on every page: the back link to the index, the footer and their CSS. They live in `shared/`, and `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
+
+```html
+<!-- shared:footer.html -->
+…replaced on every sync…
+<!-- /shared:footer.html -->
+```
+
+CSS snippets use `/* shared:chrome.css */ … /* /shared:chrome.css */`. A page only gets the snippets it has markers for. For example, `index.html` has no back link.
+
+After editing anything in `shared/`, run:
+
+```
+node scripts/sync-shared.mjs
+```
+
+and commit the updated pages. `--check` reports pages that are out of date without changing them. Don't edit the content between markers by hand, because the next sync overwrites it.
 
 ## Deployment
 

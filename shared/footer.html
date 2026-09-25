@@ -1,0 +1,7 @@
+<footer class="site-foot">
+  <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. Save a tool's page (Ctrl/⌘+S) to use it offline.</p>
+</footer>
+<script>
+/* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+</script>

@@ -6,3 +6,5 @@
 .gitignore
 .assetsignore
 wrangler.jsonc
+shared
+scripts

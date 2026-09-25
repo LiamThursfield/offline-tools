@@ -101,6 +101,17 @@ header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6
   background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
 .logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.brand{display:flex;align-items:center;gap:8px}
+.home{display:inline-grid;place-items:center;flex:none;width:34px;height:34px;margin-left:-12px;border-radius:var(--pill);color:var(--muted);transition:background .3s,color .3s}
+.home:hover{background:var(--hover);color:var(--accent-text)}
+.home svg{width:18px;height:18px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.home{margin-left:-8px}.site-foot{margin-top:28px}}
+/* /shared:chrome.css */
 .actions{display:flex;gap:2px;margin-left:auto}
 .nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
 .nav:hover{background:var(--hover);color:var(--accent-text)}
@@ -324,7 +335,12 @@ dialog#saves::backdrop{background:color-mix(in oklab,var(--bg) 70%,transparent);
 <body>
 <div class="wrap">
   <header>
-    <span class="logo"><b>JSON</b>.diff</span>
+    <span class="brand">
+      <!-- shared:home.html -->
+      <a class="home" href="../index.html" data-path="/" aria-label="All tools" title="All tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <!-- /shared:home.html -->
+      <span class="logo"><b>JSON</b>.diff</span>
+    </span>
     <nav class="actions" aria-label="Actions">
       <button class="nav" id="swap" title="Swap A and B">Swap A ⇄ B</button>
       <button class="nav" id="sample">Load example</button>
@@ -417,6 +433,15 @@ dialog#saves::backdrop{background:color-mix(in oklab,var(--bg) 70%,transparent);
     <button class="tab" role="tab" data-tab="patch">JSON Patch<span class="n" id="nPatch"></span></button>
   </div>
   <div class="out" id="out"></div>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. Save a tool's page (Ctrl/⌘+S) to use it offline.</p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+  </script>
+  <!-- /shared:footer.html -->
 </div>
 
 <dialog id="saves" aria-labelledby="savesTitle">
