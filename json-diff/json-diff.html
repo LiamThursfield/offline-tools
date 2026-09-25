@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JSON diff</title>
+<script>
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in the CSS.
+   "auto" follows the OS light/dark setting using the two ids named below. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+];
+const THEME_KEY = 'json-diff.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  document.documentElement.dataset.theme = t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id;
+  return t.id;
+}
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+</script>
+<style>
+/* ===== Themes =====
+   Each theme sets only the base tokens below; everything else (diff tints, hunk rows,
+   focus rings) is derived from them further down. To add a theme: copy a block, give it
+   a new data-theme id, and add a matching entry to THEMES in the <head> script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --del-strong:color-mix(in oklab,var(--del) var(--tint-strong),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --ins-strong:color-mix(in oklab,var(--ins) var(--tint-strong),var(--panel));
+  --chg-bg:color-mix(in oklab,var(--chg) var(--tint),var(--panel));
+  --typ-bg:color-mix(in oklab,var(--typ) var(--tint),var(--panel));
+  --hunk:color-mix(in oklab,var(--accent) 9%,var(--panel));
+  --hunk-ink:color-mix(in oklab,var(--accent-text) 75%,var(--ink));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+header .spacer{flex:1}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover{background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover:not(:disabled){color:var(--accent-ink);background:color-mix(in oklab,var(--accent) 88%,var(--bg))}
+
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.pane:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane.drag{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.side{font-family:var(--mono);font-weight:700;border-radius:var(--pill);padding:0 9px;font-size:.85rem}
+.side.a{background:var(--del-bg);color:var(--del)}.side.b{background:var(--ins-bg);color:var(--ins)}
+.fname{color:var(--muted);font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:40%}
+.pane-head .spacer{flex:1}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px}
+.status.ok{color:var(--ins);background:var(--ins-bg)}.status.bad{color:var(--del);background:var(--del-bg)}.status.text{color:var(--muted);background:var(--surface)}
+.pane-head .btn{padding:2px 11px;font-size:.8rem}
+textarea{width:100%;min-height:210px;height:260px;resize:vertical;border:0;background:transparent;padding:12px 14px;font:13px/1.55 var(--mono);color:var(--ink);outline:none;white-space:pre;overflow:auto;tab-size:2}
+textarea::placeholder{color:var(--muted);opacity:.8}
+.err{color:var(--del);font-size:.82rem;padding:6px 12px;border-top:1px solid var(--line);font-family:var(--mono)}
+.err:empty{display:none}
+
+.controls{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;margin:18px 4px 10px;font-size:.9rem}
+.controls label,.subbar label{display:inline-flex;align-items:center;gap:6px}
+select,input[type=text],input[type=number]{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px}
+.controls input[type=number],.subbar input[type=number]{width:4.6em}
+.controls input[type=text]{width:7em}
+
+.summary{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin:0 4px 14px;font-size:.9rem;color:var(--muted)}
+.summary b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.summary .c-add b{color:var(--ins)}.summary .c-rem b{color:var(--del)}.summary .c-chg b{color:var(--chg)}.summary .c-typ b{color:var(--typ)}
+.meter{flex:0 0 140px;height:8px;border-radius:var(--pill);background:var(--del-strong);overflow:hidden;align-self:center}
+.meter i{display:block;height:100%;background:var(--ins);border-radius:inherit}
+
+.tabs{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:var(--pill);background:var(--panel);overflow-x:auto;width:max-content;max-width:100%}
+.tab{border:0;background:none;padding:7px 15px;border-radius:var(--pill);color:var(--muted);font-weight:600;font-size:.9rem;white-space:nowrap;transition:background .2s,color .2s}
+.tab:hover:not(:disabled){color:var(--ink);background:var(--hover)}
+.tab[aria-selected=true]{color:var(--accent-text);background:color-mix(in oklab,var(--accent) 13%,transparent)}
+.tab:disabled{opacity:.4;cursor:not-allowed}
+.tab .n{font-size:.76rem;opacity:.75;margin-left:6px;font-weight:500}
+
+.out{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-height:180px;overflow:hidden}
+.subbar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:.88rem}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.84rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.note{padding:10px 14px;color:var(--muted);font-size:.88rem}
+.empty{padding:44px 16px;text-align:center;color:var(--muted)}
+
+/* text diff */
+.scroll{overflow-x:auto}
+table.diff{border-collapse:collapse;width:100%;font:12.5px/1.6 var(--mono);letter-spacing:0}
+table.diff td{padding:0 8px;vertical-align:top}
+table.diff td.ln{width:1%;min-width:3.2em;text-align:right;color:var(--muted);user-select:none;opacity:.7}
+table.diff td.sg{width:1%;user-select:none;padding:0 4px;color:var(--muted)}
+table.diff td.code{white-space:pre}
+.wrapon table.diff td.code{white-space:pre-wrap;word-break:break-all}
+table.diff.split{table-layout:fixed}
+table.diff.split col.lnc{width:3.8em}
+table.diff tr.del td,table.diff td.del{background:var(--del-bg)}
+table.diff tr.ins td,table.diff td.ins{background:var(--ins-bg)}
+table.diff tr.del td.sg{color:var(--del)} table.diff tr.ins td.sg{color:var(--ins)}
+table.diff td.void{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--surface) 5px 10px)}
+table.diff mark{background:none;border-radius:3px}
+table.diff .del mark,table.diff tr.del mark{background:var(--del-strong);color:inherit}
+table.diff .ins mark,table.diff tr.ins mark{background:var(--ins-strong);color:inherit}
+table.diff tr.hunk td{background:var(--hunk);color:var(--hunk-ink);padding-top:3px;padding-bottom:3px}
+table.diff tr.skip td{background:var(--hunk);color:var(--hunk-ink);text-align:center;cursor:pointer;font-family:var(--sans);font-weight:600;font-size:.82rem;padding:4px}
+table.diff tr.skip:hover td{text-decoration:underline}
+
+/* change lists */
+.list{list-style:none;margin:0;padding:0}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:9px 14px;border-bottom:1px solid var(--line);align-items:baseline}
+.row:last-child{border-bottom:0}
+.badge{font-size:.68rem;border-radius:var(--pill);padding:2px 9px;font-weight:700;white-space:nowrap;text-transform:uppercase;letter-spacing:.06em}
+.k-added{color:var(--ins);background:var(--ins-bg)}.k-removed{color:var(--del);background:var(--del-bg)}
+.k-changed{color:var(--chg);background:var(--chg-bg)}.k-type{color:var(--typ);background:var(--typ-bg)}.k-equal{color:var(--muted);background:var(--surface)}
+.path{font-family:var(--mono);font-size:.86rem;word-break:break-all;letter-spacing:0}
+.vals{grid-column:2;font-family:var(--mono);font-size:.82rem;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;min-width:0;letter-spacing:0}
+.v{border-radius:5px;padding:0 6px;word-break:break-all;max-width:100%}
+.v.a{background:var(--del-bg)}.v.b{background:var(--ins-bg)}.arrow{color:var(--muted)}
+.chip{border:1px solid transparent;border-radius:var(--pill);padding:2px 12px;font-size:.8rem;font-weight:700}
+.chip[aria-pressed=false]{opacity:.4;border-color:var(--line);background:none;color:var(--muted)}
+details.val{grid-column:2;font-family:var(--mono);font-size:.82rem;letter-spacing:0}
+details.val summary{cursor:pointer;color:var(--muted);word-break:break-all}
+details.val pre{margin:6px 0 0;padding:10px;background:var(--surface);border-radius:calc(var(--radius) - 4px);overflow:auto;max-height:320px}
+
+.cols{display:grid;grid-template-columns:1fr 1fr}
+.cols>section{min-width:0}
+.cols>section+section{border-left:1px solid var(--line)}
+.cols h3{margin:0;padding:10px 14px;font-size:.92rem;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
+
+table.grid{border-collapse:collapse;width:100%;font-size:.84rem}
+table.grid th{text-align:left;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;padding:9px 12px;border-bottom:1px solid var(--line);color:var(--muted);position:sticky;top:0;background:var(--panel)}
+table.grid td{padding:6px 12px;border-bottom:1px solid var(--line);font-family:var(--mono);vertical-align:top;word-break:break-all;letter-spacing:0}
+table.grid td.st{font-family:var(--sans);white-space:nowrap}
+table.grid tr.diffrow td.va{background:var(--del-bg)} table.grid tr.diffrow td.vb{background:var(--ins-bg)}
+
+pre.patch{margin:0;padding:14px 16px;font:12.5px/1.6 var(--mono);overflow:auto;max-height:70vh}
+
+@media (max-width:800px){
+  .inputs,.cols{grid-template-columns:1fr}
+  .cols>section+section{border-left:0;border-top:1px solid var(--line)}
+  .wrap{padding:12px 12px 40px}
+  header{position:static;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+  textarea{height:180px;min-height:140px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo"><b>JSON</b>.diff</span>
+    <span class="spacer"></span>
+    <button class="nav" id="swap" title="Swap A and B">Swap A ⇄ B</button>
+    <button class="nav" id="sample">Load example</button>
+    <button class="nav" id="clear">Clear</button>
+    <label class="theme-pick">Theme <select id="theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Compare JSON</h1>
+    <p>Paste or drop two files. Everything runs in your browser; nothing is uploaded.</p>
+  </div>
+
+  <div class="inputs">
+    <div class="pane" id="paneA">
+      <div class="pane-head">
+        <span class="side a">A</span><span class="fname" id="fnameA">original</span>
+        <span class="spacer"></span><span class="status text" id="statA">empty</span>
+        <button class="btn" data-open="A">Open file</button>
+        <button class="btn" data-fmt="A" data-mode="pretty" title="Indent JSON with 2 spaces">Prettify</button>
+        <button class="btn" data-fmt="A" data-mode="sort" title="Sort keys alphabetically at every level, then prettify">Sort keys</button>
+        <input type="file" id="fileA" accept=".json,.md,.txt,.markdown,.jsonc,application/json,text/*" hidden>
+      </div>
+      <textarea id="inA" spellcheck="false" placeholder="Paste JSON (or any text) here, or drop a file onto this box"></textarea>
+      <div class="err" id="errA"></div>
+    </div>
+    <div class="pane" id="paneB">
+      <div class="pane-head">
+        <span class="side b">B</span><span class="fname" id="fnameB">changed</span>
+        <span class="spacer"></span><span class="status text" id="statB">empty</span>
+        <button class="btn" data-open="B">Open file</button>
+        <button class="btn" data-fmt="B" data-mode="pretty" title="Indent JSON with 2 spaces">Prettify</button>
+        <button class="btn" data-fmt="B" data-mode="sort" title="Sort keys alphabetically at every level, then prettify">Sort keys</button>
+        <input type="file" id="fileB" accept=".json,.md,.txt,.markdown,.jsonc,application/json,text/*" hidden>
+      </div>
+      <textarea id="inB" spellcheck="false" placeholder="Paste JSON (or any text) here, or drop a file onto this box"></textarea>
+      <div class="err" id="errB"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label>Arrays
+      <select id="arrMode">
+        <option value="index">compare by position</option>
+        <option value="key">match objects by key</option>
+        <option value="unordered">ignore order</option>
+      </select>
+    </label>
+    <label id="keyWrap" hidden>key field <input type="text" id="arrKey" value="id"></label>
+    <label><input type="checkbox" id="ignoreCase"> Ignore case in strings</label>
+    <label><input type="checkbox" id="numLoose"> Treat "1" and 1 as equal</label>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-tab="text" aria-selected="true">Line diff</button>
+    <button class="tab" role="tab" data-tab="changes">All changes<span class="n" id="nChanges"></span></button>
+    <button class="tab" role="tab" data-tab="shared">Shared properties<span class="n" id="nShared"></span></button>
+    <button class="tab" role="tab" data-tab="only">Only in A / only in B<span class="n" id="nOnly"></span></button>
+    <button class="tab" role="tab" data-tab="patch">JSON Patch<span class="n" id="nPatch"></span></button>
+  </div>
+  <div class="out" id="out"></div>
+</div>
+
+<!-- ===== Core diff logic (pure functions, no DOM) ===== -->
+<script id="core">
+const hasOwn = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+const typeOf = v => v === null ? 'null' : Array.isArray(v) ? 'array' : typeof v;
+
+function sortKeys(v) {
+  if (Array.isArray(v)) return v.map(sortKeys);
+  if (isObj(v)) { const o = {}; for (const k of Object.keys(v).sort()) o[k] = sortKeys(v[k]); return o; }
+  return v;
+}
+const canon = v => JSON.stringify(sortKeys(v));
+
+/* ---------- Myers line diff ---------- */
+function myersCore(a, b) {
+  const n = a.length, m = b.length, max = n + m, off = max + 1;
+  const v = new Int32Array(2 * max + 3);
+  const trace = [];
+  outer:
+  for (let d = 0; d <= max; d++) {
+    trace.push(v.slice());
+    for (let k = -d; k <= d; k += 2) {
+      let x = (k === -d || (k !== d && v[off + k - 1] < v[off + k + 1])) ? v[off + k + 1] : v[off + k - 1] + 1;
+      let y = x - k;
+      while (x < n && y < m && a[x] === b[y]) { x++; y++; }
+      v[off + k] = x;
+      if (x >= n && y >= m) break outer;
+    }
+  }
+  const ops = [];
+  let x = n, y = m;
+  for (let d = trace.length - 1; d >= 0; d--) {
+    const tv = trace[d], k = x - y;
+    const pk = (k === -d || (k !== d && tv[off + k - 1] < tv[off + k + 1])) ? k + 1 : k - 1;
+    const px = tv[off + pk], py = px - pk;
+    while (x > px && y > py) { ops.push(['=', x - 1, y - 1]); x--; y--; }
+    if (d > 0) { if (x === px) ops.push(['+', -1, y - 1]); else ops.push(['-', x - 1, -1]); }
+    x = px; y = py;
+  }
+  return ops.reverse();
+}
+
+function diffLines(aText, bText) {
+  const A = aText.split('\n'), B = bText.split('\n');
+  const ids = new Map(); const id = s => { let i = ids.get(s); if (i === undefined) { i = ids.size; ids.set(s, i); } return i; };
+  const ia = A.map(id), ib = B.map(id);
+  // trim common prefix / suffix for speed
+  let p = 0; while (p < ia.length && p < ib.length && ia[p] === ib[p]) p++;
+  let s = 0; while (s < ia.length - p && s < ib.length - p && ia[ia.length - 1 - s] === ib[ib.length - 1 - s]) s++;
+  const ops = [];
+  for (let i = 0; i < p; i++) ops.push(['=', i, i]);
+  for (const [t, x, y] of myersCore(ia.slice(p, ia.length - s), ib.slice(p, ib.length - s)))
+    ops.push([t, x < 0 ? -1 : x + p, y < 0 ? -1 : y + p]);
+  for (let i = s; i > 0; i--) ops.push(['=', ia.length - i, ib.length - i]);
+  // group into blocks: {eq:[[ai,bi],...]} or {del:[ai..], ins:[bi..]}
+  const blocks = [];
+  for (const [t, x, y] of ops) {
+    let last = blocks[blocks.length - 1];
+    if (t === '=') { if (!last || !last.eq) blocks.push(last = { eq: [] }); last.eq.push([x, y]); }
+    else { if (!last || last.eq) blocks.push(last = { del: [], ins: [] }); (t === '-' ? last.del : last.ins).push(t === '-' ? x : y); }
+  }
+  let adds = 0, dels = 0; for (const b of blocks) if (!b.eq) { adds += b.ins.length; dels += b.del.length; }
+  return { A, B, blocks, adds, dels };
+}
+
+/* ---------- structural diff ---------- */
+function primEqual(a, b, o) {
+  if (a === b) return true;
+  if (o.ignoreCase && typeof a === 'string' && typeof b === 'string') return a.toLowerCase() === b.toLowerCase();
+  if (o.numLoose && (typeof a === 'number' || typeof b === 'number') && (typeof a === 'string' || typeof b === 'string'))
+    return String(a) === String(b);
+  return false;
+}
+function looseType(a, b, o) {
+  const ta = typeOf(a), tb = typeOf(b);
+  if (ta === tb) return true;
+  return !!o.numLoose && ((ta === 'number' && tb === 'string') || (ta === 'string' && tb === 'number'));
+}
+function keyable(arr, key) {
+  if (!key || !arr.every(e => isObj(e) && hasOwn(e, key))) return false;
+  return new Set(arr.map(e => canon(e[key]))).size === arr.length;
+}
+function structDiff(a, b, o) { const out = []; walk(a, b, [], out, o); return out; }
+function walk(a, b, path, out, o) {
+  if (!looseType(a, b, o)) { out.push({ kind: 'type', path, a, b }); return; }
+  const t = typeOf(a);
+  if (t === 'object') {
+    const ka = Object.keys(a), kb = Object.keys(b);
+    if (!ka.length && !kb.length) { out.push({ kind: 'equal', path, a, b }); return; }
+    for (const k of ka) hasOwn(b, k) ? walk(a[k], b[k], [...path, k], out, o) : out.push({ kind: 'removed', path: [...path, k], a: a[k] });
+    for (const k of kb) if (!hasOwn(a, k)) out.push({ kind: 'added', path: [...path, k], b: b[k] });
+    return;
+  }
+  if (t === 'array') {
+    if (!a.length && !b.length) { out.push({ kind: 'equal', path, a, b }); return; }
+    if (o.arrMode === 'key' && keyable(a, o.arrKey) && keyable(b, o.arrKey)) {
+      const mb = new Map(b.map(e => [canon(e[o.arrKey]), e])), seen = new Set();
+      for (const ea of a) {
+        const kv = canon(ea[o.arrKey]), seg = { key: o.arrKey, val: ea[o.arrKey] };
+        if (mb.has(kv)) { seen.add(kv); walk(ea, mb.get(kv), [...path, seg], out, o); }
+        else out.push({ kind: 'removed', path: [...path, seg], a: ea });
+      }
+      for (const eb of b) if (!seen.has(canon(eb[o.arrKey]))) out.push({ kind: 'added', path: [...path, { key: o.arrKey, val: eb[o.arrKey] }], b: eb });
+      return;
+    }
+    if (o.arrMode === 'unordered') {
+      const pool = new Map();
+      b.forEach((e, j) => { const c = canon(e); (pool.get(c) || pool.set(c, []).get(c)).push(j); });
+      const usedB = new Set();
+      a.forEach((e, i) => {
+        const js = pool.get(canon(e));
+        if (js && js.length) { const j = js.shift(); usedB.add(j); out.push({ kind: 'equal', path: [...path, i], a: e, b: b[j] }); }
+        else out.push({ kind: 'removed', path: [...path, i], a: e });
+      });
+      b.forEach((e, j) => { if (!usedB.has(j)) out.push({ kind: 'added', path: [...path, j], b: e, bIndex: true }); });
+      return;
+    }
+    const n = Math.max(a.length, b.length);
+    for (let i = 0; i < n; i++) {
+      if (i < a.length && i < b.length) walk(a[i], b[i], [...path, i], out, o);
+      else if (i < a.length) out.push({ kind: 'removed', path: [...path, i], a: a[i] });
+      else out.push({ kind: 'added', path: [...path, i], b: b[i] });
+    }
+    return;
+  }
+  out.push({ kind: primEqual(a, b, o) ? 'equal' : 'changed', path, a, b });
+}
+
+/* shared subset: keep only paths present in both, aligned so a text diff shows value differences */
+function intersect(a, b, o) {
+  if (!looseType(a, b, o)) return [a, b];
+  const t = typeOf(a);
+  if (t === 'object') {
+    const x = {}, y = {};
+    for (const k of Object.keys(a)) if (hasOwn(b, k)) { const [p, q] = intersect(a[k], b[k], o); x[k] = p; y[k] = q; }
+    return [x, y];
+  }
+  if (t === 'array') {
+    if (o.arrMode === 'key' && keyable(a, o.arrKey) && keyable(b, o.arrKey)) {
+      const mb = new Map(b.map(e => [canon(e[o.arrKey]), e])), x = [], y = [];
+      for (const ea of a) { const eb = mb.get(canon(ea[o.arrKey])); if (eb !== undefined) { const [p, q] = intersect(ea, eb, o); x.push(p); y.push(q); } }
+      return [x, y];
+    }
+    if (o.arrMode === 'unordered') {
+      const pool = new Map(); b.forEach(e => { const c = canon(e); pool.set(c, (pool.get(c) || 0) + 1); });
+      const x = []; for (const e of a) { const c = canon(e); if (pool.get(c)) { pool.set(c, pool.get(c) - 1); x.push(e); } }
+      return [x, x.slice()];
+    }
+    const n = Math.min(a.length, b.length), x = [], y = [];
+    for (let i = 0; i < n; i++) { const [p, q] = intersect(a[i], b[i], o); x.push(p); y.push(q); }
+    return [x, y];
+  }
+  return [a, b];
+}
+
+/* RFC 6902 JSON Patch (A -> B), position-based for arrays */
+const ptrEsc = k => String(k).replace(/~/g, '~0').replace(/\//g, '~1');
+function jsonPatch(a, b, ptr = '', ops = []) {
+  const ta = typeOf(a), tb = typeOf(b);
+  if (ta !== tb) { ops.push({ op: 'replace', path: ptr, value: b }); return ops; }
+  if (ta === 'object') {
+    for (const k of Object.keys(a)) hasOwn(b, k) ? jsonPatch(a[k], b[k], ptr + '/' + ptrEsc(k), ops) : ops.push({ op: 'remove', path: ptr + '/' + ptrEsc(k) });
+    for (const k of Object.keys(b)) if (!hasOwn(a, k)) ops.push({ op: 'add', path: ptr + '/' + ptrEsc(k), value: b[k] });
+    return ops;
+  }
+  if (ta === 'array') {
+    const n = Math.min(a.length, b.length);
+    for (let i = 0; i < n; i++) jsonPatch(a[i], b[i], ptr + '/' + i, ops);
+    for (let i = a.length - 1; i >= n; i--) ops.push({ op: 'remove', path: ptr + '/' + i });
+    for (let i = n; i < b.length; i++) ops.push({ op: 'add', path: ptr + '/' + i, value: b[i] });
+    return ops;
+  }
+  if (a !== b) ops.push({ op: 'replace', path: ptr, value: b });
+  return ops;
+}
+
+function fmtPath(path) {
+  let s = '$';
+  for (const seg of path) {
+    if (typeof seg === 'number') s += '[' + seg + ']';
+    else if (typeof seg === 'object') s += '[' + seg.key + '=' + JSON.stringify(seg.val) + ']';
+    else if (/^[A-Za-z_$][\w$]*$/.test(seg)) s += '.' + seg;
+    else s += '[' + JSON.stringify(seg) + ']';
+  }
+  return s;
+}
+
+function parseJSON(text) {
+  if (!text.trim()) return { empty: true };
+  try { return { ok: true, value: JSON.parse(text) }; }
+  catch (e) {
+    let msg = e.message, m = msg.match(/position (\d+)/);
+    if (m && !/line \d+/.test(msg)) {
+      const pos = +m[1], before = text.slice(0, pos), line = before.split('\n').length, col = pos - before.lastIndexOf('\n');
+      msg += ` (line ${line}, column ${col})`;
+    }
+    return { ok: false, error: msg };
+  }
+}
+if (typeof module !== 'undefined') module.exports = { diffLines, structDiff, intersect, jsonPatch, fmtPath, parseJSON, sortKeys };
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const preview = (v, n = 90) => { const s = v === undefined ? 'undefined' : JSON.stringify(v); return s.length > n ? s.slice(0, n - 1) + '…' : s; };
+
+const state = {
+  tab: 'text', textFmt: 'pretty', textView: 'unified', context: 3, full: false, wrap: true,
+  sharedView: 'table', sharedOnlyDiff: false, sharedFmt: 'sorted', filters: { added: true, removed: true, changed: true, type: true }, search: '',
+  expanded: new Set(),
+};
+let R = null; // computed results
+
+function opts() {
+  return { arrMode: $('#arrMode').value, arrKey: $('#arrKey').value.trim(), ignoreCase: $('#ignoreCase').checked, numLoose: $('#numLoose').checked };
+}
+
+function setStatus(side, p, text) {
+  const st = $('#stat' + side), er = $('#err' + side);
+  document.querySelectorAll(`[data-fmt="${side}"]`).forEach(b => { b.disabled = !p.ok; });
+  if (p.empty) { st.className = 'status text'; st.textContent = 'empty'; er.textContent = ''; }
+  else if (p.ok) { st.className = 'status ok'; st.textContent = 'valid JSON'; er.textContent = ''; }
+  else if (/^\s*[\[{]/.test(text)) { st.className = 'status bad'; st.textContent = 'invalid JSON'; er.textContent = p.error; }
+  else { st.className = 'status text'; st.textContent = 'plain text'; er.textContent = ''; }
+}
+
+function compute() {
+  const ta = $('#inA').value, tb = $('#inB').value;
+  const pa = parseJSON(ta), pb = parseJSON(tb);
+  setStatus('A', pa, ta); setStatus('B', pb, tb);
+  const json = pa.ok && pb.ok, o = opts();
+  R = { json, ta, tb, pa, pb, o, empty: pa.empty && pb.empty };
+  if (json) {
+    R.entries = structDiff(pa.value, pb.value, o);
+    R.patch = jsonPatch(pa.value, pb.value);
+    const c = { added: 0, removed: 0, changed: 0, type: 0, equal: 0 };
+    for (const e of R.entries) c[e.kind]++;
+    R.counts = c;
+  }
+  state.expanded.clear();
+  render();
+}
+
+function textPair() {
+  if (!R.json || state.textFmt === 'raw') return [R.ta, R.tb];
+  const sorted = state.textFmt === 'sorted';
+  const f = v => JSON.stringify(sorted ? sortKeys(v) : v, null, 2);
+  return [f(R.pa.value), f(R.pb.value)];
+}
+
+/* ---------- rendering ---------- */
+function renderSummary() {
+  const el = $('#summary');
+  if (R.empty) { el.innerHTML = 'Paste or open two files to compare them. Anything that isn\u2019t valid JSON is compared line by line, so Markdown and plain text work too.'; return; }
+  if (!R.json) {
+    const d = diffLines(R.ta, R.tb);
+    el.innerHTML = `<span>Comparing as text</span><span class="c-add"><b>+${d.adds}</b> lines</span><span class="c-rem"><b>−${d.dels}</b> lines</span>`;
+    return;
+  }
+  const c = R.counts, total = c.added + c.removed + c.changed + c.type + c.equal;
+  const pct = total ? Math.round(c.equal / total * 100) : 100;
+  el.innerHTML = `<span class="c-add"><b>${c.added}</b> added</span><span class="c-rem"><b>${c.removed}</b> removed</span>
+    <span class="c-chg"><b>${c.changed}</b> changed</span><span class="c-typ"><b>${c.type}</b> type changes</span>
+    <span><b>${c.equal}</b> identical values</span>
+    <span class="meter" title="${pct}% of compared values are identical"><i style="width:${pct}%"></i></span><span>${pct}% identical</span>`;
+}
+
+function renderTabs() {
+  const jsonOnly = ['changes', 'shared', 'only', 'patch'];
+  if (!R.json && jsonOnly.includes(state.tab)) state.tab = 'text';
+  document.querySelectorAll('.tab').forEach(t => {
+    t.setAttribute('aria-selected', t.dataset.tab === state.tab);
+    t.disabled = !R.json && jsonOnly.includes(t.dataset.tab);
+    t.title = t.disabled ? 'Needs valid JSON on both sides' : '';
+  });
+  const c = R.json ? R.counts : null;
+  $('#nChanges').textContent = c ? c.added + c.removed + c.changed + c.type : '';
+  $('#nShared').textContent = c ? c.equal + c.changed + c.type : '';
+  $('#nOnly').textContent = c ? `${c.removed} / ${c.added}` : '';
+  $('#nPatch').textContent = c ? R.patch.length : '';
+}
+
+function seg(name, value, options) {
+  return `<span class="seg" data-seg="${name}">` + options.map(([v, l]) =>
+    `<button type="button" data-v="${v}" aria-pressed="${value === v}">${l}</button>`).join('') + '</span>';
+}
+
+function intraline(a, b) {
+  let p = 0; const n = Math.min(a.length, b.length);
+  while (p < n && a[p] === b[p]) p++;
+  let s = 0; while (s < n - p && a[a.length - 1 - s] === b[b.length - 1 - s]) s++;
+  const mk = (t) => {
+    const mid = t.slice(p, t.length - s);
+    return esc(t.slice(0, p)) + (mid ? '<mark>' + esc(mid) + '</mark>' : '') + esc(t.slice(t.length - s));
+  };
+  // only highlight if the lines share meaningful content
+  if (p + s < 3) return [esc(a), esc(b)];
+  return [mk(a), mk(b)];
+}
+
+function diffTableHTML(aText, bText, emptyMsg) {
+  const d = diffLines(aText, bText), { A, B, blocks } = d;
+  if (!blocks.some(b => !b.eq)) return `<div class="empty">${emptyMsg || 'No differences in this view.'}</div>`;
+  const C = state.context, split = state.textView === 'split';
+  let html = '';
+  const eqRow = (ai, bi) => split
+    ? `<tr><td class="ln">${ai + 1}</td><td class="code">${esc(A[ai])}</td><td class="ln">${bi + 1}</td><td class="code">${esc(B[bi])}</td></tr>`
+    : `<tr><td class="ln">${ai + 1}</td><td class="ln">${bi + 1}</td><td class="sg"> </td><td class="code">${esc(A[ai])}</td></tr>`;
+  const skipRow = (runIdx, n) => `<tr class="skip" data-run="${runIdx}" tabindex="0" role="button"><td colspan="4">Show ${n} unchanged line${n > 1 ? 's' : ''}</td></tr>`;
+  const hunkRow = (ai, bi) => split ? '' : `<tr class="hunk"><td colspan="4">@@ −${ai + 1} +${bi + 1} @@</td></tr>`;
+
+  blocks.forEach((blk, idx) => {
+    if (blk.eq) {
+      const L = blk.eq, hasPrev = idx > 0, hasNext = idx < blocks.length - 1;
+      const showAll = state.full || state.expanded.has(idx) || L.length <= (hasPrev ? C : 0) + (hasNext ? C : 0) + 1;
+      if (showAll) { for (const [x, y] of L) html += eqRow(x, y); return; }
+      const head = hasPrev ? C : 0, tail = hasNext ? C : 0;
+      for (let i = 0; i < head; i++) html += eqRow(...L[i]);
+      html += skipRow(idx, L.length - head - tail);
+      if (tail) html += hunkRow(...L[L.length - tail]);
+      for (let i = L.length - tail; i < L.length; i++) html += eqRow(...L[i]);
+      return;
+    }
+    if (idx === 0) html += hunkRow(blk.del[0] ?? 0, blk.ins[0] ?? 0);
+    const n = Math.max(blk.del.length, blk.ins.length), pairs = [];
+    for (let i = 0; i < n; i++) {
+      const ai = blk.del[i], bi = blk.ins[i];
+      if (ai !== undefined && bi !== undefined) pairs.push(intraline(A[ai], B[bi]));
+      else pairs.push([ai !== undefined ? esc(A[ai]) : '', bi !== undefined ? esc(B[bi]) : '']);
+    }
+    if (split) {
+      for (let i = 0; i < n; i++) {
+        const ai = blk.del[i], bi = blk.ins[i];
+        html += '<tr>' + (ai !== undefined ? `<td class="ln del">${ai + 1}</td><td class="code del">${pairs[i][0]}</td>` : '<td class="ln void"></td><td class="void"></td>')
+          + (bi !== undefined ? `<td class="ln ins">${bi + 1}</td><td class="code ins">${pairs[i][1]}</td>` : '<td class="ln void"></td><td class="void"></td>') + '</tr>';
+      }
+    } else {
+      blk.del.forEach((ai, i) => html += `<tr class="del"><td class="ln">${ai + 1}</td><td class="ln"></td><td class="sg">−</td><td class="code">${pairs[i][0]}</td></tr>`);
+      blk.ins.forEach((bi, i) => html += `<tr class="ins"><td class="ln"></td><td class="ln">${bi + 1}</td><td class="sg">+</td><td class="code">${pairs[i][1]}</td></tr>`);
+    }
+  });
+  const cols = split ? '<colgroup><col class="lnc"><col><col class="lnc"><col></colgroup>' : '';
+  return `<div class="scroll ${state.wrap ? 'wrapon' : ''}"><table class="diff ${split ? 'split' : ''}">${cols}${html}</table></div>`;
+}
+
+function textControls(showFmt) {
+  return `${seg('textView', state.textView, [['unified', 'Unified'], ['split', 'Side by side']])}
+    ${showFmt ? `<label>Format ${seg('textFmt', state.textFmt, [['raw', 'As written'], ['pretty', 'Pretty'], ['sorted', 'Pretty + sorted keys']])}</label>` : ''}
+    <label>Context <input type="number" min="0" max="50" data-ctl="context" value="${state.context}"></label>
+    <label><input type="checkbox" data-ctl="full" ${state.full ? 'checked' : ''}> Whole file</label>
+    <label><input type="checkbox" data-ctl="wrap" ${state.wrap ? 'checked' : ''}> Wrap lines</label>`;
+}
+
+function renderText() {
+  const [a, b] = textPair();
+  const note = !R.json ? '<div class="note">Not valid JSON on both sides, so this is a plain line-by-line comparison.</div>'
+    : state.textFmt === 'sorted' ? '<div class="note">Keys are sorted on both sides, so key order differences are ignored.</div>' : '';
+  return `<div class="subbar">${textControls(R.json)}</div>${note}${diffTableHTML(a, b, 'The two files are identical in this view.')}`;
+}
+
+function valueCell(e) {
+  if (e.kind === 'added') return `<details class="val"><summary>${esc(preview(e.b))}</summary><pre>${esc(JSON.stringify(e.b, null, 2))}</pre></details>`;
+  if (e.kind === 'removed') return `<details class="val"><summary>${esc(preview(e.a))}</summary><pre>${esc(JSON.stringify(e.a, null, 2))}</pre></details>`;
+  const extra = e.kind === 'type' ? ` <span class="arrow">(${typeOf(e.a)} → ${typeOf(e.b)})</span>` : '';
+  return `<div class="vals"><span class="v a">${esc(preview(e.a, 70))}</span><span class="arrow">→</span><span class="v b">${esc(preview(e.b, 70))}</span>${extra}</div>`;
+}
+const LABEL = { added: 'added', removed: 'removed', changed: 'changed', type: 'type change', equal: 'same' };
+
+function renderChanges() {
+  const q = state.search.toLowerCase();
+  const list = R.entries.filter(e => e.kind !== 'equal' && state.filters[e.kind] && (!q || fmtPath(e.path).toLowerCase().includes(q)));
+  const chips = ['added', 'removed', 'changed', 'type'].map(k =>
+    `<button type="button" class="chip k-${k}" data-filter="${k}" aria-pressed="${state.filters[k]}">${LABEL[k]} ${R.counts[k]}</button>`).join(' ');
+  const rows = list.map(e => `<li class="row"><span class="badge k-${e.kind}">${LABEL[e.kind]}</span><span class="path">${esc(fmtPath(e.path))}</span>${valueCell(e)}</li>`).join('');
+  return `<div class="subbar">${chips}<label>Filter paths <input type="text" data-ctl="search" value="${esc(state.search)}" placeholder="e.g. address"></label></div>`
+    + (rows ? `<ul class="list">${rows}</ul>` : `<div class="empty">${R.counts.added + R.counts.removed + R.counts.changed + R.counts.type ? 'Nothing matches these filters.' : 'No differences. The two documents are equivalent.'}</div>`);
+}
+
+const sharedList = () => R.entries.filter(e => ['equal', 'changed', 'type'].includes(e.kind) && (!state.sharedOnlyDiff || e.kind !== 'equal'));
+
+/* GFM table of the shared properties currently shown (respects "Only show differing values") */
+function sharedMarkdown() {
+  const code = s => {
+    s = String(s).replace(/\|/g, '\\|');
+    const ticks = '`'.repeat(Math.max(0, ...(s.match(/`+/g) || []).map(m => m.length)) + 1);
+    return ticks.length > 1 || /^`|`$/.test(s) ? `${ticks} ${s} ${ticks}` : ticks + s + ticks;
+  };
+  const val = v => code(v === undefined ? 'undefined' : JSON.stringify(v));
+  return ['| Path | A | B | Status |', '| --- | --- | --- | --- |',
+    ...sharedList().map(e => `| ${code(fmtPath(e.path))} | ${val(e.a)} | ${val(e.b)} | ${LABEL[e.kind]} |`)].join('\n');
+}
+
+function renderShared() {
+  const bar = `<div class="subbar">${seg('sharedView', state.sharedView, [['table', 'Table'], ['text', 'Line diff']])}`
+    + (state.sharedView === 'table' ? `<label><input type="checkbox" data-ctl="sharedOnlyDiff" ${state.sharedOnlyDiff ? 'checked' : ''}> Only show differing values</label>`
+      + `<button class="btn" data-copy="sharedMd" data-label="Copy as Markdown"${sharedList().length ? '' : ' disabled'}>Copy as Markdown</button>`
+      : `<label>Format ${seg('sharedFmt', state.sharedFmt, [['pretty', 'Pretty'], ['sorted', 'Pretty + sorted keys']])}</label>` + textControls(false))
+    + '</div>';
+  if (state.sharedView === 'text') {
+    const [x, y] = intersect(R.pa.value, R.pb.value, R.o);
+    const f = v => JSON.stringify(state.sharedFmt === 'sorted' ? sortKeys(v) : v, null, 2);
+    return bar + '<div class="note">Properties that exist in only one file are removed from both sides first, so this shows value changes only.</div>'
+      + diffTableHTML(f(x), f(y), 'Every property the two files share has the same value.');
+  }
+  const list = sharedList();
+  if (!list.length) return bar + `<div class="empty">${state.sharedOnlyDiff ? 'Every shared property has the same value.' : 'The files have no properties in common.'}</div>`;
+  const rows = list.map(e => `<tr class="${e.kind !== 'equal' ? 'diffrow' : ''}"><td>${esc(fmtPath(e.path))}</td><td class="va">${esc(preview(e.a, 60))}</td><td class="vb">${esc(preview(e.b, 60))}</td><td class="st"><span class="badge k-${e.kind}">${LABEL[e.kind]}</span></td></tr>`).join('');
+  return bar + `<div class="scroll"><table class="grid"><thead><tr><th>Path</th><th>A</th><th>B</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderOnly() {
+  const col = (kind, side, title) => {
+    const list = R.entries.filter(e => e.kind === kind);
+    const body = list.length
+      ? '<ul class="list">' + list.map(e => `<li class="row"><span class="badge k-${kind}">${side}</span><span class="path">${esc(fmtPath(e.path))}</span>${valueCell(e)}</li>`).join('') + '</ul>'
+      : `<div class="empty">Nothing is only in ${side}.</div>`;
+    return `<section><h3><span class="side ${side.toLowerCase()}">${side}</span>${title} <span class="n" style="color:var(--muted);font-weight:400">${list.length}</span></h3>${body}</section>`;
+  };
+  return '<div class="note">When a whole object is missing, it\u2019s listed once at its top-level path rather than property by property.</div>'
+    + `<div class="cols">${col('removed', 'A', 'Only in A')}${col('added', 'B', 'Only in B')}</div>`;
+}
+
+function renderPatch() {
+  const txt = JSON.stringify(R.patch, null, 2);
+  return `<div class="subbar"><button class="btn primary" data-copy="patch" data-label="Copy patch">Copy patch</button><span style="color:var(--muted)">RFC 6902 operations that turn A into B. Arrays are patched by position, whatever the array setting above.</span></div>`
+    + (R.patch.length ? `<pre class="patch">${esc(txt)}</pre>` : '<div class="empty">No operations needed. A already equals B.</div>');
+}
+
+function render() {
+  renderSummary(); renderTabs();
+  const out = $('#out');
+  if (R.empty) { out.innerHTML = '<div class="empty">Paste text into A and B, open files, or load the example to see how it works.</div>'; return; }
+  if ((R.pa.ok === false && /^\s*[\[{]/.test(R.ta)) || (R.pb.ok === false && /^\s*[\[{]/.test(R.tb))) {
+    out.innerHTML = '<div class="note">One side looks like JSON but doesn\u2019t parse. Fix the error shown under that box to unlock the structural views. Until then, here\u2019s a plain line diff.</div>' + renderText();
+    return;
+  }
+  out.innerHTML = ({ text: renderText, changes: renderChanges, shared: renderShared, only: renderOnly, patch: renderPatch })[state.tab]();
+}
+
+/* ---------- events ---------- */
+let timer;
+const schedule = () => { clearTimeout(timer); timer = setTimeout(compute, 220); };
+['A', 'B'].forEach(side => {
+  const ta = $('#in' + side), pane = $('#pane' + side), file = $('#file' + side);
+  ta.addEventListener('input', schedule);
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Tab' && !e.shiftKey && !e.ctrlKey && !e.metaKey) { e.preventDefault(); ta.setRangeText('  ', ta.selectionStart, ta.selectionEnd, 'end'); schedule(); }
+  });
+  const load = f => { if (!f) return; const r = new FileReader(); r.onload = () => { ta.value = r.result; $('#fname' + side).textContent = f.name; $('#fname' + side).title = f.name; compute(); }; r.readAsText(f); };
+  file.addEventListener('change', () => { load(file.files[0]); file.value = ''; });
+  pane.addEventListener('dragover', e => { e.preventDefault(); pane.classList.add('drag'); });
+  pane.addEventListener('dragleave', e => { if (!pane.contains(e.relatedTarget)) pane.classList.remove('drag'); });
+  pane.addEventListener('drop', e => { e.preventDefault(); pane.classList.remove('drag'); load(e.dataTransfer.files[0]); });
+});
+document.querySelectorAll('[data-open]').forEach(b => b.onclick = () => $('#file' + b.dataset.open).click());
+document.querySelectorAll('[data-fmt]').forEach(b => b.onclick = () => {
+  const ta = $('#in' + b.dataset.fmt), p = parseJSON(ta.value);
+  if (!p.ok) return;
+  const next = JSON.stringify(b.dataset.mode === 'sort' ? sortKeys(p.value) : p.value, null, 2);
+  if (next === ta.value) return;
+  // insertText keeps the change on the browser's undo stack, so Ctrl/Cmd+Z works
+  ta.focus(); ta.select();
+  if (!document.execCommand || !document.execCommand('insertText', false, next)) ta.value = next;
+  compute();
+});
+$('#swap').onclick = () => {
+  const a = $('#inA'), b = $('#inB'); [a.value, b.value] = [b.value, a.value];
+  const fa = $('#fnameA'), fb = $('#fnameB'); [fa.textContent, fb.textContent] = [fb.textContent, fa.textContent];
+  compute();
+};
+$('#clear').onclick = () => { $('#inA').value = $('#inB').value = ''; $('#fnameA').textContent = 'original'; $('#fnameB').textContent = 'changed'; compute(); };
+const themeSel = $('#theme');
+themeSel.innerHTML = THEMES.map(t => `<option value="${t.id}">${esc(t.label)}</option>`).join('');
+themeSel.value = savedTheme();
+themeSel.onchange = () => { const id = applyTheme(themeSel.value); try { localStorage.setItem(THEME_KEY, id); } catch {} };
+$('#arrMode').onchange = () => { $('#keyWrap').hidden = $('#arrMode').value !== 'key'; compute(); };
+['#arrKey'].forEach(s => $(s).addEventListener('input', schedule));
+['#ignoreCase', '#numLoose'].forEach(s => $(s).addEventListener('change', compute));
+
+$('#tabs').addEventListener('click', e => { const t = e.target.closest('.tab'); if (t && !t.disabled) { state.tab = t.dataset.tab; render(); } });
+
+const out = $('#out');
+out.addEventListener('click', e => {
+  const sb = e.target.closest('.seg button');
+  if (sb) { state[sb.parentElement.dataset.seg] = sb.dataset.v; state.expanded.clear(); render(); return; }
+  const chip = e.target.closest('[data-filter]');
+  if (chip) { state.filters[chip.dataset.filter] = !state.filters[chip.dataset.filter]; render(); return; }
+  const skip = e.target.closest('tr.skip');
+  if (skip) { state.expanded.add(+skip.dataset.run); render(); return; }
+  const btn = e.target.closest('[data-copy]');
+  if (btn) {
+    const txt = btn.dataset.copy === 'patch' ? JSON.stringify(R.patch, null, 2) : sharedMarkdown();
+    const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = btn.dataset.label, 1400); };
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(done).catch(() => {
+      const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); done(); } catch {} t.remove();
+    });
+  }
+});
+out.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr.skip')) { e.preventDefault(); e.target.click(); } });
+out.addEventListener('change', e => {
+  const c = e.target.dataset.ctl; if (!c) return;
+  if (e.target.type === 'checkbox') state[c] = e.target.checked;
+  else if (c === 'context') state.context = Math.max(0, Math.min(50, parseInt(e.target.value, 10) || 0));
+  render();
+});
+out.addEventListener('input', e => {
+  if (e.target.dataset.ctl === 'search') {
+    state.search = e.target.value;
+    const pos = e.target.selectionStart; render();
+    const el = out.querySelector('[data-ctl=search]'); el.focus(); el.setSelectionRange(pos, pos);
+  }
+});
+
+$('#sample').onclick = () => {
+  $('#inA').value = JSON.stringify({
+    name: "Harbour Café", version: 3, open: true, rating: 4.2,
+    address: { street: "12 Quay Lane", city: "Bristol", postcode: "BS1 4XY" },
+    tags: ["coffee", "brunch", "wifi"],
+    staff: [{ id: 1, name: "Ana", role: "barista" }, { id: 2, name: "Tom", role: "chef" }, { id: 3, name: "Priya", role: "manager" }],
+    hours: { mon: "8-16", tue: "8-16", sun: "closed" },
+    legacyCode: "HC-01"
+  }, null, 2);
+  $('#inB').value = JSON.stringify({
+    name: "Harbour Café", version: "4", open: true, rating: 4.5,
+    address: { street: "12 Quay Lane", city: "Bristol", postcode: "BS1 4XZ", country: "UK" },
+    tags: ["brunch", "coffee", "wifi", "dogs welcome"],
+    staff: [{ id: 3, name: "Priya", role: "owner" }, { id: 1, name: "Ana", role: "barista" }, { id: 4, name: "Leo", role: "chef" }],
+    hours: { mon: "8-17", tue: "8-17", sun: "9-14" },
+    payments: ["card", "cash"]
+  }, null, 2);
+  $('#fnameA').textContent = 'cafe-v3.json'; $('#fnameB').textContent = 'cafe-v4.json';
+  compute();
+};
+
+compute();
+</script>
+</body>
+</html>
