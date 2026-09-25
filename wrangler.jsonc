@@ -1,0 +1,10 @@
+// Cloudflare Workers static assets: serves the repo root as a static site (no build step).
+// Deployed by Cloudflare's Git integration with `npx wrangler deploy`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "offline-tools",
+  "compatibility_date": "2026-09-25",
+  "assets": {
+    "directory": "."
+  }
+}

@@ -27,7 +27,7 @@ Each tool follows the same conventions so the collection stays easy to use and m
 
 ## Deployment
 
-The repo root is deployed as-is to [Cloudflare Pages](https://pages.cloudflare.com/) at [tools.lxst.digital](https://tools.lxst.digital/), with no build step. Every push to `main` redeploys, and other branches get preview URLs.
+The repo root is deployed as-is to Cloudflare Workers ([static assets](https://developers.cloudflare.com/workers/static-assets/)) at [tools.lxst.digital](https://tools.lxst.digital/), with no build step. `wrangler.jsonc` configures it, and `.assetsignore` keeps repo files such as `.git` and the config itself from being served. Every push to `main` redeploys.
 
 `_redirects` serves each tool at a short URL. For example, `/bpm-tapper` and `/bpm-tapper/` both serve `bpm-tapper/bpm-tapper.html`. A new tool needs the same two lines:
 
@@ -36,9 +36,9 @@ The repo root is deployed as-is to [Cloudflare Pages](https://pages.cloudflare.c
 /my-tool/  /my-tool/my-tool   200
 ```
 
-The rewrite target has no `.html` because Pages redirects `.html` URLs to their extensionless form. On the index page, links point at the `.html` file so they work when opened locally, and a small script swaps in the short URL (`data-path`) when the page is served over http(s).
+The rewrite target has no `.html` because Cloudflare redirects `.html` URLs to their extensionless form. On the index page, links point at the `.html` file so they work when opened locally, and a small script swaps in the short URL (`data-path`) when the page is served over http(s).
 
-To preview the deployed routing locally, run `npx wrangler pages dev .` and open http://localhost:8788.
+To preview the deployed routing locally, run `npx wrangler dev` and open http://localhost:8787.
 
 ## Theming
 
