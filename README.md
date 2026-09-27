@@ -28,11 +28,11 @@ Each tool follows the same conventions so the collection stays easy to use and m
 - **No uploads.** Process all data in the browser. `localStorage` is for preferences such as the theme, and for user content only when the user explicitly saves it (for example JSON diff's saved comparisons). Never store user content silently.
 - **Keep logic separate from the UI.** Put the core logic in its own `<script>` as pure functions with no DOM access, so it can be tested on its own (JSON diff exports it via `module.exports` when loaded in Node).
 - **Responsive and accessible.** Make it usable at phone width, operable by keyboard and readable in both light and dark themes.
-- **Shared header, footer and themes.** Include the [shared snippets](#shared-snippets): `theme.js` in a `<script>` in the `<head>`, `themes.css` and `chrome.css` in the styles, `brand` in the header in place of a logo, and `footer.html` at the end of `.wrap`. Copying the markers from an existing tool is the easiest way.
+- **Shared header, footer and themes.** Include the [shared snippets](#shared-snippets): `meta` near the top of the `<head>` (in place of a `<title>`), `theme.js` in a `<script>` in the `<head>`, `themes.css` and `chrome.css` in the styles, `brand` in the header in place of a logo, and `footer.html` at the end of `.wrap`. Copying the markers from an existing tool is the easiest way.
 
 ## Shared snippets
 
-Some pieces are the same on every page: the themes, the header's back link and tool switcher, the footer, the index cards and the table above. The script `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
+Some pieces are the same on every page: the `<head>` metadata, the themes, the header's back link and tool switcher, the footer, the index cards and the table above. The script `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
 
 ```html
 <!-- shared:NAME -->
@@ -44,6 +44,7 @@ CSS and JS use `/* shared:NAME */ … /* /shared:NAME */`. A page only gets the 
 
 | Snippet | Source | Used in |
 | --- | --- | --- |
+| `meta` | Generated from `shared/tools.json` and `shared/favicon.png`: title, description, canonical URL, inline favicon, Open Graph/Twitter tags and JSON-LD | Top of every page's `<head>` |
 | `theme.js` | `shared/theme.js`: theme list, saving and applying the theme | A `<script>` at the top of every page's `<head>` |
 | `themes.css` | `shared/themes.css`: one block of base tokens per theme | Top of every page's `<style>` |
 | `chrome.css` | `shared/chrome.css` | Every page's `<style>` |
@@ -51,6 +52,7 @@ CSS and JS use `/* shared:NAME */ … /* /shared:NAME */`. A page only gets the 
 | `brand` | Generated from `shared/tools.json`: back link, logo and tool switcher | Each tool's `<header>` |
 | `tool-cards` | Generated from `shared/tools.json` | `index.html` |
 | `tool-table` | Generated from `shared/tools.json` | This README |
+| `sitemap` | Generated from `shared/tools.json` | `sitemap.xml` |
 
 After changing anything in `shared/`, run:
 
@@ -72,6 +74,10 @@ The repo root is deployed as-is to Cloudflare Workers ([static assets](https://d
 ```
 
 The rewrite target has no `.html` because Cloudflare redirects `.html` URLs to their extensionless form. On the index page, links point at the `.html` file so they work when opened locally, and a small script swaps in the short URL (`data-path`) when the page is served over http(s).
+
+### Search engines and link previews
+
+The `meta` snippet gives each page its `<title>` (`Name – summary | LXST.tools`), a description (the tool's `description` from `shared/tools.json`), a canonical short URL, Open Graph and Twitter tags pointing at `og-image.png`, and JSON-LD (`WebApplication` for tools, `WebSite` for the index). The base URL is `SITE` in `scripts/sync-shared.mjs`. The favicon is inlined as a data URI so a saved page keeps its icon; `favicon.ico` at the root is the same icon for crawlers and browsers that request it directly. `robots.txt` points at `sitemap.xml`, whose URL list the sync script keeps up to date.
 
 To preview the deployed routing locally, run `npx wrangler dev` and open http://localhost:8787.
 

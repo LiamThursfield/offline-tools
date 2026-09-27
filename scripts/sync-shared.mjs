@@ -18,8 +18,51 @@ const tools = JSON.parse(read('shared/tools.json')).sort((a, b) => a.name.locale
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const mark = t => `<b>${esc(t.mark[0])}</b>${esc(t.mark[1])}`;
 
+// Where the site is deployed; used for canonical URLs, social previews and the sitemap.
+const SITE = 'https://tools.lxst.digital';
+const SITE_NAME = 'LXST.tools';
+const url = slug => slug ? `${SITE}/${slug}` : `${SITE}/`;
+// Inlined so a page saved for offline use keeps its icon. /favicon.ico is the same icon for crawlers.
+const favicon = `data:image/png;base64,${readFileSync(join(root, 'shared/favicon.png')).toString('base64')}`;
+const listNames = names => names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+
 /* Generated snippets: (page) => text. page.slug is the tool's slug, or null for the root pages. */
 const generated = {
+  // Title, description, icon, social previews and structured data for a page's <head>.
+  meta: page => {
+    const self = tools.find(t => t.slug === page.slug);
+    const title = self ? `${self.name} – ${self.summary} | ${SITE_NAME}` : `${SITE_NAME} – Private browser tools that work without internet`;
+    const description = self
+      ? `${self.description} Works offline; nothing is uploaded.`
+      : `Free, private browser tools that work offline: ${listNames(tools.map(t => t.name))}. Everything runs in your browser; nothing is uploaded.`;
+    const creator = { '@type': 'Organization', name: 'LXST.digital', url: 'https://lxst.digital/' };
+    const ld = self
+      ? { '@context': 'https://schema.org', '@type': 'WebApplication', name: self.name, url: url(self.slug), description: self.description,
+          applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any', browserRequirements: 'Requires JavaScript',
+          isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'GBP' }, creator }
+      : { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_NAME, url: url(null), description, creator };
+    return [
+      `<title>${esc(title)}</title>`,
+      `<meta name="description" content="${esc(description)}">`,
+      `<link rel="canonical" href="${url(page.slug)}">`,
+      `<link rel="icon" type="image/png" sizes="32x32" href="${favicon}">`,
+      `<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">`,
+      `<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">`,
+      `<meta property="og:type" content="website">`,
+      `<meta property="og:site_name" content="${SITE_NAME}">`,
+      `<meta property="og:url" content="${url(page.slug)}">`,
+      `<meta property="og:title" content="${esc(self ? self.name : SITE_NAME)}">`,
+      `<meta property="og:description" content="${esc(description)}">`,
+      `<meta property="og:image" content="${SITE}/og-image.png">`,
+      `<meta property="og:image:width" content="1200">`,
+      `<meta property="og:image:height" content="630">`,
+      `<meta property="og:image:alt" content="LXST.digital">`,
+      `<meta name="twitter:card" content="summary_large_image">`,
+      `<script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`,
+    ].join('\n');
+  },
+  // URLs for sitemap.xml.
+  sitemap: () => [url(null), ...tools.map(t => url(t.slug))].map(u => `<url><loc>${u}</loc></url>`).join('\n'),
   // Back link, logo and tool switcher for a tool's header.
   brand: page => {
     const self = tools.find(t => t.slug === page.slug);
@@ -52,13 +95,14 @@ const generated = {
 };
 
 const files = Object.fromEntries(readdirSync(join(root, 'shared'))
-  .filter(f => f !== 'tools.json')
+  .filter(f => /\.(css|js|html)$/.test(f))
   .map(f => [f, () => read(join('shared', f)).trim()]));
 const snippets = { ...files, ...generated };
 
 const pages = [
   { path: 'index.html', slug: null },
   { path: 'README.md', slug: null },
+  { path: 'sitemap.xml', slug: null },
   ...tools.map(t => ({ path: join(t.slug, `${t.slug}.html`), slug: t.slug })),
 ];
 
