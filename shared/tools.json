@@ -14,7 +14,7 @@
     "name": "Gzip helper",
     "mark": [
       "GZIP",
-      ".pack"
+      ".tool"
     ],
     "summary": "Compress and decompress gzip data",
     "description": "Compress text or files to gzip, zlib or raw deflate, and decompress them from a file, Base64 or hex, with header details (file name, date, OS), checksum checks and multi-member support."
@@ -34,7 +34,7 @@
     "name": "JSON formatter",
     "mark": [
       "JSON",
-      ".fmt"
+      ".format"
     ],
     "summary": "Format, validate and explore JSON",
     "description": "Format, minify and validate JSON with exact error locations, repair common mistakes (comments, trailing commas, single quotes), browse it as a collapsible tree and query it by path."
