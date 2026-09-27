@@ -1,14 +1,11 @@
 .wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
 .brand{position:relative;display:flex;align-items:center;gap:8px}
-.home{display:inline-grid;place-items:center;flex:none;width:34px;height:34px;margin-left:-12px;border-radius:var(--pill);color:var(--muted);transition:background .3s,color .3s}
-.home:hover{background:var(--hover);color:var(--accent-text)}
-.home svg{width:18px;height:18px}
 .site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
 .site-foot p{margin:0}
 .site-foot .theme-credit{margin-top:6px}
 .site-foot a{color:var(--accent-text);text-decoration:none}
 .site-foot a:hover{text-decoration:underline}
-@media (max-width:800px){.home{margin-left:-8px}.site-foot{margin-top:28px}}
+@media (max-width:800px){.site-foot{margin-top:28px}}
 .logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
 .logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
 .logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}

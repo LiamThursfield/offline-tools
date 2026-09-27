@@ -32,7 +32,7 @@ Each tool follows the same conventions so the collection stays easy to use and m
 
 ## Shared snippets
 
-Some pieces are the same on every page: the `<head>` metadata, the themes, the header's back link and tool switcher, the footer, the index cards and the table above. The script `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
+Some pieces are the same on every page: the `<head>` metadata, the themes, the header's tool switcher, the footer, the index cards and the table above. The script `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
 
 ```html
 <!-- shared:NAME -->
@@ -49,7 +49,7 @@ CSS and JS use `/* shared:NAME */ … /* /shared:NAME */`. A page only gets the 
 | `themes.css` | `shared/themes.css`: one block of base tokens per theme | Top of every page's `<style>` |
 | `chrome.css` | `shared/chrome.css` | Every page's `<style>` |
 | `footer.html` | `shared/footer.html`, footer plus the link, theme-picker and tool-switcher script | End of `.wrap` on every page |
-| `brand` | Generated from `shared/tools.json`: back link, logo and tool switcher | Each tool's `<header>` |
+| `brand` | Generated from `shared/tools.json`: logo and tool switcher | Every page's `<header>` |
 | `tool-cards` | Generated from `shared/tools.json` | `index.html` |
 | `tool-table` | Generated from `shared/tools.json` | This README |
 | `sitemap` | Generated from `shared/tools.json` | `sitemap.xml` |

@@ -63,19 +63,20 @@ const generated = {
   },
   // URLs for sitemap.xml.
   sitemap: () => [url(null), ...tools.map(t => url(t.slug))].map(u => `<url><loc>${u}</loc></url>`).join('\n'),
-  // Back link, logo and tool switcher for a tool's header.
+  // Logo and tool switcher for a page's header. On the index page (no slug) the logo is the site's and "All tools" is current.
   brand: page => {
     const self = tools.find(t => t.slug === page.slug);
-    if (!self) throw new Error(`${page.path}: not listed in shared/tools.json`);
+    if (page.slug && !self) throw new Error(`${page.path}: not listed in shared/tools.json`);
+    const up = self ? '../' : '';
+    const current = on => on ? ' aria-current="page"' : '';
     const items = tools.map(t =>
-      `    <a href="../${t.slug}/${t.slug}.html" data-path="/${t.slug}"${t === self ? ' aria-current="page"' : ''}><span class="tm-mark">${mark(t)}</span><span class="tm-text"><span class="tm-name">${esc(t.name)}</span><span class="tm-sum">${esc(t.summary)}</span></span></a>`);
+      `    <a href="${up}${t.slug}/${t.slug}.html" data-path="/${t.slug}"${current(t === self)}><span class="tm-mark">${mark(t)}</span><span class="tm-text"><span class="tm-name">${esc(t.name)}</span><span class="tm-sum">${esc(t.summary)}</span></span></a>`);
     return [
       `<span class="brand">`,
-      `  <a class="home" href="../index.html" data-path="/" aria-label="All tools" title="All tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>`,
-      `  <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool">${mark(self)}<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`,
+      `  <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool">${self ? mark(self) : '<b>LXST</b>.tools'}<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`,
       `  <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>`,
       ...items,
-      `    <a class="tm-all" href="../index.html" data-path="/">All tools</a>`,
+      `    <a class="tm-all" href="${up}index.html" data-path="/"${current(!self)}>All tools</a>`,
       `  </nav>`,
       `</span>`,
     ].join('\n');
