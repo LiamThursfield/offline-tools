@@ -13,7 +13,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
 const read = p => readFileSync(join(root, p), 'utf8');
 
-const tools = JSON.parse(read('shared/tools.json'));
+// Listed alphabetically by name everywhere (tool switcher, index cards, README table), whatever the order in the file.
+const tools = JSON.parse(read('shared/tools.json')).sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const mark = t => `<b>${esc(t.mark[0])}</b>${esc(t.mark[1])}`;
 

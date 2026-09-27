@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gzip helper</title>
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --chg-bg:color-mix(in oklab,var(--chg) var(--tint),var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  --pane-h:clamp(320px,56vh,820px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.home{display:inline-grid;place-items:center;flex:none;width:34px;height:34px;margin-left:-12px;border-radius:var(--pill);color:var(--muted);transition:background .3s,color .3s}
+.home:hover{background:var(--hover);color:var(--accent-text)}
+.home svg{width:18px;height:18px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.home{margin-left:-8px}.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.nav:disabled{opacity:.45;cursor:not-allowed}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.linkish{border:0;background:none;padding:0;color:var(--accent-text);text-decoration:underline;font-weight:600}
+
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.seg button:hover:not(:disabled):not([aria-pressed=true]){color:var(--ink)}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.modebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:0 4px 14px}
+.modebar .seg{background:var(--panel);padding:3px}
+.modebar .seg button{padding:6px 20px;font-size:.92rem}
+.modebar small{color:var(--muted);font-size:.86rem}
+
+/* panes */
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+#inPane:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane.drag{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pane-head h2{margin:0;font-size:.92rem;font-weight:700}
+.pane-head .spacer{flex:1}
+.pane-head .btn{padding:2px 11px;font-size:.8rem}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px;white-space:nowrap}
+.status.ok{color:var(--ins);background:var(--ins-bg)}.status.bad{color:var(--del);background:var(--del-bg)}
+.status.warn{color:var(--chg);background:var(--chg-bg)}.status.text{color:var(--muted);background:var(--surface)}
+textarea{display:block;width:100%;height:var(--pane-h);min-height:200px;resize:vertical;border:0;background:transparent;padding:12px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0;color:var(--ink);outline:none;white-space:pre-wrap;overflow-wrap:anywhere;overflow:auto;tab-size:2}
+textarea::placeholder{color:var(--muted);opacity:.8}
+.pane-foot{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.pane-foot label{display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.pane-foot .lbl{font-weight:600;color:var(--ink)}
+.pane-foot small{font-size:.78rem}
+.opts{display:contents}
+
+/* loaded file, shown in place of the textarea */
+.filecard{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:var(--pane-h);min-height:200px;padding:20px;text-align:center}
+.filecard svg{width:44px;height:44px;color:var(--accent-text)}
+.fc-name{font-weight:700;font-size:1.05rem;overflow-wrap:anywhere;max-width:100%}
+.fc-meta{color:var(--muted);font-size:.88rem}
+
+/* input messages */
+.msgs:empty{display:none}
+.msg{padding:9px 14px;border-top:1px solid var(--line);font-size:.86rem}
+.msg.bad{background:var(--del-bg)}.msg.bad>b{color:var(--del)}
+.msg.warn{background:var(--chg-bg)}.msg.warn>b{color:var(--chg)}
+.msg.info{background:color-mix(in oklab,var(--accent) 8%,var(--panel))}
+.msg small{display:block;margin-top:3px;color:var(--muted);font-size:.8rem}
+.msg code{font-family:var(--mono);font-size:.92em;letter-spacing:0;word-break:break-all}
+
+/* output */
+.subbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.86rem}
+.subbar .lbl{font-weight:600}
+.note{padding:6px 14px;border-bottom:1px solid var(--line);background:var(--chg-bg);color:var(--chg);font-size:.82rem;font-weight:600}
+.note.info{background:var(--surface);color:var(--muted)}
+/* height:0 + flex:1 lets the input pane set the row height; the output scrolls inside it */
+.view{flex:1 1 auto;height:0;min-height:160px;overflow:auto}
+.out{margin:0;padding:12px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}
+.out.dump{white-space:pre;overflow-wrap:normal;min-width:max-content}
+.out.b64{word-break:break-all}
+.empty{padding:44px 16px;text-align:center;color:var(--muted)}
+.facts{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0;padding:10px 14px;border-top:1px solid var(--line);font-size:.84rem}
+.facts:empty{display:none}
+.facts div{display:flex;gap:6px;min-width:0}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;font-weight:600;overflow-wrap:anywhere;min-width:0}
+.facts code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+.facts .ok{color:var(--ins)}.facts .bad{color:var(--del)}
+.stats{justify-content:flex-start}
+.stats b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.stats .up{color:var(--chg)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1100px){
+  .panes{grid-template-columns:minmax(0,1fr)}
+  textarea,.filecard{height:36vh}
+  .view{flex:none;height:50vh}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:static;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .modebar .seg{width:100%}
+  .modebar .seg button{flex:1;padding:6px 10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <a class="home" href="../index.html" data-path="/" aria-label="All tools" title="All tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>GZIP</b>.pack<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip" aria-current="page"><span class="tm-mark"><b>GZIP</b>.pack</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.fmt</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="sample">Load example</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Compress and decompress gzip</h1>
+    <p>Compress text or a file to gzip, zlib or raw deflate, or decompress one from a file, Base64 or hex, with its header details and checksums. Everything runs in your browser; nothing is uploaded.</p>
+  </div>
+
+  <div class="modebar">
+    <span class="seg" id="modeSeg" role="group" aria-label="Mode"><button type="button" data-v="compress">Compress</button><button type="button" data-v="decompress">Decompress</button></span>
+    <small id="modeHint"></small>
+  </div>
+
+  <div class="panes">
+    <section class="pane" id="inPane" aria-labelledby="inTitle">
+      <div class="pane-head">
+        <h2 id="inTitle">Input</h2>
+        <span class="spacer"></span><span class="status text" id="status">empty</span>
+        <button class="btn" id="openFile">Open file</button>
+        <input type="file" id="file" hidden>
+      </div>
+      <textarea id="input" spellcheck="false" autocomplete="off" aria-labelledby="inTitle"></textarea>
+      <div class="filecard" id="fileCard" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+        <span class="fc-name" id="fcName"></span>
+        <span class="fc-meta" id="fcMeta"></span>
+        <button class="btn" id="fcRemove">Remove file</button>
+      </div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="pane-foot">
+        <span class="opts" id="cOpts">
+          <span class="lbl">Format</span>
+          <span class="seg" id="cFormatSeg" role="group" aria-label="Output format"><button type="button" data-v="gzip">gzip</button><button type="button" data-v="zlib">zlib</button><button type="button" data-v="raw">raw deflate</button></span>
+          <label id="nameWrap" title="Like the gzip command: the name and date are restored when it's decompressed"><input type="checkbox" id="optName"> Store file name and date</label>
+        </span>
+        <span class="opts" id="dOpts">
+          <span class="lbl">Format</span>
+          <span class="seg" id="dFormatSeg" role="group" aria-label="Input format"><button type="button" data-v="auto">Auto</button><button type="button" data-v="gzip">gzip</button><button type="button" data-v="zlib">zlib</button><button type="button" data-v="raw">raw deflate</button></span>
+        </span>
+      </div>
+    </section>
+
+    <section class="pane" id="outPane" aria-labelledby="outTitle">
+      <div class="pane-head">
+        <h2 id="outTitle">Output</h2>
+        <span class="spacer"></span>
+        <button class="btn" id="swap" title="Use the output as the input, and switch mode" disabled>Use as input</button>
+        <button class="btn" id="copyOut" disabled>Copy</button>
+        <button class="btn" id="download" disabled>Download</button>
+      </div>
+      <div class="subbar">
+        <span class="lbl">Show as</span>
+        <span class="seg" id="showSeg" role="group" aria-label="Show as"><button type="button" data-v="text">Text</button><button type="button" data-v="base64">Base64</button><button type="button" data-v="hex">Hex</button></span>
+      </div>
+      <div class="note" id="partial" hidden></div>
+      <div class="note info" id="clip" hidden></div>
+      <div class="view" id="view" tabindex="0" aria-label="Output"></div>
+      <dl class="facts" id="facts"></dl>
+      <div class="pane-foot stats" id="stats"></div>
+    </section>
+  </div>
+
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Compression uses the browser's CompressionStream with 'deflate-raw', and this code writes the
+   gzip or zlib wrapper around it, so the header (file name, date) is under our control and all
+   three formats come from one deflate stream. Decompression uses DecompressionStream, which also
+   checks the gzip CRC-32 and zlib Adler-32; the headers are parsed here to show what they hold.
+   Formats: 'gzip' (RFC 1952), 'zlib' (RFC 1950), 'raw' (bare deflate, RFC 1951). */
+const MAX_OUTPUT = 256 * 1024 * 1024;   // decompression stops here, so a gzip bomb can't exhaust memory
+const GZIP_OS = { 0: 'FAT / Windows', 1: 'Amiga', 2: 'VMS', 3: 'Unix', 4: 'VM/CMS', 5: 'Atari TOS', 6: 'HPFS / OS/2', 7: 'Classic Mac OS',
+  8: 'Z-System', 9: 'CP/M', 10: 'TOPS-20', 11: 'NTFS / Windows', 12: 'QDOS', 13: 'Acorn RISC OS', 255: 'unknown' };
+const ZLIB_LEVEL = ['fastest', 'fast', 'default', 'maximum'];
+const EXTENSIONS = { gzip: '.gz', zlib: '.zlib', raw: '.deflate' };
+const MIME = { gzip: 'application/gzip', zlib: 'application/zlib', raw: 'application/octet-stream' };
+
+let CRC_TABLE;
+function crc32(bytes, crc = 0) {
+  if (!CRC_TABLE) {
+    CRC_TABLE = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; CRC_TABLE[n] = c; }
+  }
+  crc = ~crc;
+  for (let i = 0; i < bytes.length; i++) crc = CRC_TABLE[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
+  return ~crc >>> 0;
+}
+function adler32(bytes) {
+  let a = 1, b = 0;
+  for (let i = 0; i < bytes.length;) {
+    const end = Math.min(i + 5552, bytes.length);   // largest run before the sums can overflow
+    for (; i < end; i++) { a += bytes[i]; b += a; }
+    a %= 65521; b %= 65521;
+  }
+  return ((b << 16) | a) >>> 0;
+}
+
+const u32le = (b, p) => (b[p] | b[p + 1] << 8 | b[p + 2] << 16 | b[p + 3] << 24) >>> 0;
+const u32be = (b, p) => (b[p] << 24 | b[p + 1] << 16 | b[p + 2] << 8 | b[p + 3]) >>> 0;
+const hex8 = n => n.toString(16).padStart(8, '0');
+const hexBytes = (b, n = 2) => [...b.subarray(0, n)].map(x => x.toString(16).toUpperCase().padStart(2, '0')).join(' ') || 'nothing';
+
+function concat(chunks, total = chunks.reduce((s, c) => s + c.length, 0)) {
+  const out = new Uint8Array(total);
+  let p = 0;
+  for (const c of chunks) { if (p >= total) break; out.set(c.subarray(0, total - p), p); p += c.length; }
+  return out;
+}
+
+/* 'gzip' or 'zlib' from the first bytes, or null. zlib has no magic number, only a 2-byte
+   header whose value is a multiple of 31, so a match isn't proof. */
+function detectFormat(b) {
+  if (b.length >= 2 && b[0] === 0x1f && b[1] === 0x8b) return 'gzip';
+  if (b.length >= 2 && (b[0] & 0x0f) === 8 && b[0] >> 4 <= 7 && ((b[0] << 8) | b[1]) % 31 === 0) return 'zlib';
+  return null;
+}
+
+/* The UTF-8 text of some bytes, or null if they aren't text (invalid UTF-8, or containing NUL). */
+function asText(bytes) {
+  if (bytes.includes(0)) return null;
+  try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch { return null; }
+}
+/* Header strings are Latin-1 by the spec, but the gzip command writes file names as they are, usually UTF-8. */
+const headerString = b => asText(b) ?? new TextDecoder('latin1').decode(b);
+
+/* parseGzipHeader(bytes) -> { length, flags…, mtime, xfl, os, name?, comment?, extra? } | { error } */
+function parseGzipHeader(b) {
+  const short = { error: 'The data ends inside the gzip header', truncated: true };
+  if (b.length < 2 || b[0] !== 0x1f || b[1] !== 0x8b) return { error: `Not gzip data: gzip starts with the bytes 1F 8B, but this starts with ${hexBytes(b)}` };
+  if (b.length < 10) return short;
+  if (b[2] !== 8) return { error: `Unknown compression method ${b[2]}. Gzip uses method 8 (deflate)` };
+  const flg = b[3];
+  if (flg & 0xe0) return { error: 'The gzip header has reserved flags set, so it may be corrupt or a newer format' };
+  const h = { text: !!(flg & 1), mtime: u32le(b, 4), xfl: b[8], os: b[9] };
+  let p = 10;
+  if (flg & 4) {
+    if (p + 2 > b.length) return short;
+    const xlen = b[p] | b[p + 1] << 8, end = p + 2 + xlen;
+    if (end > b.length) return short;
+    h.extra = [];
+    for (let q = p + 2; q + 4 <= end;) {
+      const len = b[q + 2] | b[q + 3] << 8;
+      h.extra.push({ id: String.fromCharCode(b[q], b[q + 1]), length: len });
+      q += 4 + len;
+    }
+    p = end;
+  }
+  for (const [bit, key] of [[8, 'name'], [16, 'comment']]) {
+    if (!(flg & bit)) continue;
+    const z = b.indexOf(0, p);
+    if (z < 0) return short;
+    h[key] = headerString(b.subarray(p, z));
+    p = z + 1;
+  }
+  if (flg & 2) { if (p + 2 > b.length) return short; h.headerCrc = true; p += 2; }
+  h.length = p;
+  return h;
+}
+
+/* parseZlibHeader(bytes) -> { window, level, dictionary } | { error } */
+function parseZlibHeader(b) {
+  if (b.length < 2) return { error: 'The data is too short to be zlib', truncated: true };
+  if ((b[0] & 0x0f) !== 8 || b[0] >> 4 > 7) return { error: `Not zlib data: its first byte should be 08 to 78 (usually 78), but it's ${hexBytes(b, 1)}` };
+  if (((b[0] << 8) | b[1]) % 31) return { error: `Not zlib data: the header check in ${hexBytes(b)} doesn't add up` };
+  const h = { window: 1 << ((b[0] >> 4) + 8), level: ZLIB_LEVEL[b[1] >> 6], dictionary: !!(b[1] & 0x20) };
+  if (h.dictionary) h.error = 'This zlib data needs a preset dictionary, which isn’t supported';
+  return h;
+}
+
+function gzipWrap(raw, input, { name = '', mtime = 0 } = {}) {
+  const nb = name ? new TextEncoder().encode(name.replace(/\0/g, '')) : null;
+  const head = [0x1f, 0x8b, 8, nb ? 8 : 0, mtime & 0xff, mtime >>> 8 & 0xff, mtime >>> 16 & 0xff, mtime >>> 24 & 0xff, 0, 255];
+  const crc = crc32(input), size = input.length >>> 0;
+  const out = new Uint8Array(10 + (nb ? nb.length + 1 : 0) + raw.length + 8);
+  out.set(head);
+  let p = 10;
+  if (nb) { out.set(nb, p); p += nb.length + 1; }
+  out.set(raw, p); p += raw.length;
+  [crc, size].forEach(v => { for (let k = 0; k < 4; k++) out[p++] = v >>> (8 * k) & 0xff; });
+  return { bytes: out, header: 10 + (nb ? nb.length + 1 : 0), check: crc };
+}
+function zlibWrap(raw, input) {
+  const a = adler32(input), out = new Uint8Array(raw.length + 6);
+  out[0] = 0x78; out[1] = 0x9c;   // deflate, 32 KB window, default level
+  out.set(raw, 2);
+  for (let k = 0; k < 4; k++) out[raw.length + 2 + k] = a >>> (24 - 8 * k) & 0xff;
+  return { bytes: out, header: 2, check: a };
+}
+
+/* Runs bytes through a transform stream. Stops after `limit` output bytes (limited: true).
+   On an error, returns what came out before it along with the error. */
+async function pump(bytes, ts, limit = Infinity) {
+  const reader = new Blob([bytes]).stream().pipeThrough(ts).getReader();
+  const chunks = [];
+  let size = 0, error = null, limited = false;
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value); size += value.length;
+      if (size > limit) { limited = true; reader.cancel().catch(() => {}); break; }
+    }
+  } catch (e) { error = e; }
+  return { bytes: concat(chunks, Math.min(size, limit)), error, limited };
+}
+
+/* compress(bytes, format, { name, mtime }) -> { format, output, deflated, header, check }
+   name and mtime (Unix seconds) go in the gzip header, as the gzip command stores them. */
+async function compress(input, format = 'gzip', opts = {}) {
+  const r = await pump(input, new CompressionStream('deflate-raw'));
+  if (r.error) throw r.error;
+  const w = format === 'gzip' ? gzipWrap(r.bytes, input, opts) : format === 'zlib' ? zlibWrap(r.bytes, input) : { bytes: r.bytes, header: 0 };
+  return { format, output: w.bytes, deflated: r.bytes.length, header: w.header, check: w.check };
+}
+
+/* decompress(bytes, format) -> { ok, format, output, members?, zlib?, warnings, limited }
+                               | { ok: false, format, error, detail?, output (recovered part), notCompressed? }
+   format 'auto' detects gzip or zlib from the header and otherwise tries raw deflate. */
+async function decompress(bytes, format = 'auto', { limit = MAX_OUTPUT } = {}) {
+  if (!bytes.length) return { ok: false, format, error: 'There’s no data to decompress', output: bytes };
+  const fmt = format === 'auto' ? detectFormat(bytes) || 'raw' : format;
+  if (fmt === 'gzip') return gunzip(bytes, limit);
+  if (fmt === 'zlib') {
+    const h = parseZlibHeader(bytes);
+    if (h.error) return { ok: false, format: fmt, error: h.error, output: new Uint8Array(0) };
+    const r = await pump(bytes, new DecompressionStream('deflate'), limit);
+    const res = { ok: !r.error, format: fmt, output: r.bytes, limited: r.limited, warnings: [], zlib: h };
+    if (!r.error && !r.limited && bytes.length >= 6) res.zlib = { ...h, adler32: u32be(bytes, bytes.length - 4), adlerOk: u32be(bytes, bytes.length - 4) === adler32(r.bytes) };
+    if (r.error) Object.assign(res, failure(r, 'zlib'));
+    return res;
+  }
+  const r = await pump(bytes, new DecompressionStream('deflate-raw'), limit);
+  if (r.error && format === 'auto') {
+    return { ok: false, format: 'raw', notCompressed: true, output: new Uint8Array(0), detail: r.error.message,
+      error: `This isn’t gzip or zlib data (they start with 1F 8B or 78, and this starts with ${hexBytes(bytes)}), and it doesn’t decompress as raw deflate either` };
+  }
+  return { ok: !r.error, format: 'raw', output: r.bytes, limited: r.limited, warnings: [], ...(r.error ? failure(r, 'raw deflate') : {}) };
+}
+
+function failure(r, what) {
+  return { error: `The ${what} data is corrupt or incomplete`, detail: r.error && r.error.message };
+}
+
+/* A gzip file can hold several members back to back (as `cat a.gz b.gz` makes); their outputs are joined.
+   DecompressionStream stops with an error at the end of the first member, so each member's end
+   is found by trying the places the next one could start, and each result is checked
+   against the member's own CRC-32 and size. */
+async function gunzip(bytes, limit) {
+  const members = [], outs = [], warnings = [];
+  let pos = 0, size = 0, limited = false;
+  while (pos < bytes.length) {
+    const rest = bytes.subarray(pos), header = parseGzipHeader(rest);
+    if (header.error) {
+      if (!members.length) return { ok: false, format: 'gzip', error: header.error, output: new Uint8Array(0) };
+      const zeros = rest.every(x => x === 0);
+      warnings.push(`${rest.length.toLocaleString()} ${zeros ? 'zero bytes' : 'bytes of other data'} after the end of the gzip data ${rest.length === 1 ? 'was' : 'were'} ignored`);
+      break;
+    }
+    const m = await gunzipMember(rest, header, limit - size, members.length > 0);
+    if (!m.ok) {
+      const out = concat([...outs, m.output]);
+      const where = members.length ? ` (member ${members.length + 1}, at byte ${pos.toLocaleString()})` : '';
+      return { ok: false, format: 'gzip', members: [...members, header], output: out, detail: m.detail,
+        error: m.error || `The gzip data is corrupt or incomplete${where}` };
+    }
+    members.push({ ...header, size: m.length, crc32: u32le(rest, m.length - 8), isize: u32le(rest, m.length - 4), crcOk: !m.limited && crc32(m.output) === u32le(rest, m.length - 8) });
+    outs.push(m.output); size += m.output.length; pos += m.length;
+    if (m.limited) { limited = true; break; }
+  }
+  return { ok: true, format: 'gzip', output: concat(outs), members, warnings, limited };
+}
+
+async function gunzipMember(rest, header, budget, later) {
+  const matches = (r, end) => !r.error && (r.limited || (crc32(r.bytes) === u32le(rest, end - 8) && (r.bytes.length >>> 0) === u32le(rest, end - 4)));
+  const tryEnd = async end => {
+    const r = await pump(rest.subarray(0, end), new DecompressionStream('gzip'), budget);
+    return matches(r, end) ? { ok: true, length: end, output: r.bytes, limited: r.limited } : r;
+  };
+  // Candidate ends: where another member starts, then where trailing zeros start, then the end.
+  const ends = [];
+  for (let k = header.length + 10; k + 3 <= rest.length && ends.length < 64; k++) {
+    if (rest[k] === 0x1f && rest[k + 1] === 0x8b && rest[k + 2] === 8) ends.push(k);
+  }
+  let z = rest.length;
+  while (z > 0 && rest[z - 1] === 0) z--;
+  // the trailer itself can end in zeros (a size under 16 MB does), so the member may end up to 8 bytes later
+  for (let k = Math.max(z, header.length + 10); k < Math.min(z + 8, rest.length); k++) ends.push(k);
+  // The first member usually is the whole input, so try that first; after that, a member usually ends at the next candidate.
+  let first = null;
+  if (!later) { first = await tryEnd(rest.length); if (first.ok || first.limited) return first; }
+  for (const end of ends) { const r = await tryEnd(end); if (r.ok) return r; }
+  if (later) { first = await tryEnd(rest.length); if (first.ok) return first; }
+  const whole = first.error ? first : await pump(rest, new DecompressionStream('gzip'), budget);
+  return { ok: false, output: whole.bytes, detail: whole.error ? whole.error.message : 'the checksum or size in the trailer doesn’t match' };
+}
+
+/* Text pasted in decompress mode: Base64 (standard or URL-safe, padding optional), a data: URL, or hex.
+   -> { bytes, encoding: 'base64' | 'base64url' | 'hex' } | { error } | { empty: true } */
+function decodeTextInput(src) {
+  let s = String(src).trim();
+  if (!s) return { empty: true };
+  const du = /^data:[^,]*;base64,/i.exec(s);
+  if (du) s = s.slice(du[0].length);
+  const compact = s.replace(/\s+/g, ''), hex = compact.replace(/^0x/i, '');
+  const isHex = !du && /^(?:[\da-fA-F]{2})+$/.test(hex);
+  const b64 = decodeBase64(compact);
+  if (isHex) {
+    const hb = fromHex(hex);
+    // "deadbeef" is valid Base64 too: prefer whichever reading gives compressed data, else hex
+    if (detectFormat(hb) || !b64.bytes || !detectFormat(b64.bytes)) return { bytes: hb, encoding: 'hex' };
+  }
+  return b64.error ? { error: b64.error } : b64;
+}
+function decodeBase64(s) {
+  const bad = s.search(/[^A-Za-z0-9+/\-_=]/);
+  if (bad >= 0) {
+    const c = s[bad], u = 'U+' + c.codePointAt(0).toString(16).toUpperCase().padStart(4, '0');
+    return { error: `This isn’t Base64 or hex: ${c > ' ' && c <= '~' ? `'${c}'` : u} can’t appear in either (character ${(bad + 1).toLocaleString()}, not counting spaces)` };
+  }
+  const body = s.replace(/=+$/, '');
+  if (body.includes('=')) return { error: 'This isn’t valid Base64: = can only appear at the end, as padding' };
+  if (body.length % 4 === 1) return { error: 'This isn’t valid Base64: its length is off by one, so a character is probably missing or extra' };
+  const bin = atob(body.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(body.length / 4) * 4, '='));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return { bytes, encoding: /[-_]/.test(body) ? 'base64url' : 'base64' };
+}
+function fromHex(h) {
+  const out = new Uint8Array(h.length / 2);
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(h.substr(i * 2, 2), 16);
+  return out;
+}
+
+function toBase64(bytes) {
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+function toHex(bytes) {
+  const t = Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0')), out = new Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) out[i] = t[bytes[i]];
+  return out.join('');
+}
+/* Classic hex dump: offset, 16 bytes in hex, then the printable ASCII. */
+function hexDump(bytes, max = bytes.length) {
+  const n = Math.min(bytes.length, max), lines = [];
+  for (let o = 0; o < n; o += 16) {
+    const row = bytes.subarray(o, Math.min(o + 16, n));
+    let h = '', a = '';
+    for (let j = 0; j < 16; j++) {
+      h += (j < row.length ? row[j].toString(16).padStart(2, '0') : '  ') + (j === 7 ? '  ' : ' ');
+      if (j < row.length) a += row[j] >= 0x20 && row[j] < 0x7f ? String.fromCharCode(row[j]) : '.';
+    }
+    lines.push(`${o.toString(16).padStart(8, '0')}  ${h} |${a}|`);
+  }
+  return lines.join('\n');
+}
+
+/* File name for decompressed output: the name stored in the gzip header, else the input's name
+   without its compression extension. */
+function decompressedName(inputName, storedName) {
+  if (storedName) return storedName.split(/[\\/]/).pop();
+  if (!inputName) return '';
+  if (/\.tgz$/i.test(inputName)) return inputName.slice(0, -4) + '.tar';
+  if (/\.svgz$/i.test(inputName)) return inputName.slice(0, -1);
+  return inputName.replace(/\.(gz|gzip|zz|zlib|deflate)$/i, '');
+}
+
+if (typeof module !== 'undefined') module.exports = { crc32, adler32, detectFormat, asText, parseGzipHeader, parseZlibHeader, gzipWrap, zlibWrap, compress, decompress, decodeTextInput, toBase64, toHex, hexDump, decompressedName, EXTENSIONS, MIME, GZIP_OS, MAX_OUTPUT };
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const plural = (n, one, many = one + 's') => `${n.toLocaleString()} ${n === 1 ? one : many}`;
+function fmtBytes(n) {
+  return n < 1024 ? plural(n, 'byte') : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+}
+const FORMAT_NAMES = { gzip: 'gzip', zlib: 'zlib', raw: 'raw deflate' };
+const ENCODING_NAMES = { base64: 'Base64', base64url: 'URL-safe Base64', hex: 'hex', file: 'file' };
+const SUPPORTED = (() => { try { new CompressionStream('deflate-raw'); new DecompressionStream('deflate-raw'); return true; } catch { return false; } })();
+
+/* ---------- settings (preferences only, saved in localStorage; input is never stored) ---------- */
+const SETTINGS_KEY = 'gzip.settings';
+const DEFAULTS = { mode: 'compress', cFormat: 'gzip', dFormat: 'auto', storeName: true, cShow: 'base64' };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+if (!['compress', 'decompress'].includes(settings.mode)) settings.mode = DEFAULTS.mode;
+if (!(settings.cFormat in FORMAT_NAMES)) settings.cFormat = DEFAULTS.cFormat;
+if (!(settings.dFormat in FORMAT_NAMES) && settings.dFormat !== 'auto') settings.dFormat = DEFAULTS.dFormat;
+if (!['base64', 'hex'].includes(settings.cShow)) settings.cShow = DEFAULTS.cShow;
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+
+const input = $('#input'), view = $('#view');
+const DISPLAY_CHARS = 1e6, DUMP_BYTES = 64 * 1024;   // the view shows this much; copy and download use everything
+let file = null;       // { name, bytes, mtime } while a file is loaded (the textarea is hidden then)
+let result = null;     // result for the current input and settings
+let dShow = null;      // how decompressed output is shown: 'text' | 'base64' | 'hex', or null to pick by content
+let cache = {};        // strings derived from result.output
+let runId = 0;
+
+/* ---------- compute ---------- */
+async function compute() {
+  const id = ++runId, mode = settings.mode;
+  let res;
+  try {
+    if (!SUPPORTED) res = { unsupported: true };
+    else if (mode === 'compress') {
+      if (!file && !input.value) res = { empty: true };
+      else {
+        const bytes = file ? file.bytes : new TextEncoder().encode(input.value);
+        busy(bytes.length);
+        const t = performance.now(), keep = file && settings.storeName;
+        const c = await compress(bytes, settings.cFormat, keep ? { name: file.name, mtime: Math.floor(file.mtime / 1000) } : {});
+        res = { ...c, input: bytes, ms: performance.now() - t };
+      }
+    } else {
+      const src = file ? { bytes: file.bytes, encoding: 'file' } : decodeTextInput(input.value);
+      if (src.empty || src.error) res = src;
+      else {
+        busy(src.bytes.length);
+        const t = performance.now(), d = await decompress(src.bytes, settings.dFormat);
+        res = { ...d, input: src.bytes, encoding: src.encoding, ms: performance.now() - t };
+      }
+    }
+  } catch (e) {
+    res = { error: `Something went wrong: ${e && e.message || e}` };
+  }
+  if (id !== runId) return;   // a newer run has started
+  result = { ...res, mode }; cache = {};
+  render();
+}
+function busy(n) { if (n > 2e6) $('#stats').textContent = 'Working…'; }
+
+let timer;
+const schedule = () => { clearTimeout(timer); timer = setTimeout(compute, input.value.length > 1e6 ? 400 : 150); };
+
+/* ---------- render ---------- */
+function render() {
+  const comp = settings.mode === 'compress';
+  $('#cOpts').hidden = !comp; $('#dOpts').hidden = comp;
+  $('#nameWrap').hidden = !(comp && file && settings.cFormat === 'gzip');
+  $('#modeHint').textContent = comp ? 'Text or a file in, gzip out.' : 'Gzip, zlib or raw deflate in: a file, Base64 or hex.';
+  input.placeholder = comp ? 'Type or paste text to compress, or drop a file onto this box'
+    : 'Paste compressed data as Base64 or hex (gzip in Base64 starts with H4sI), or drop a .gz file onto this box';
+  input.hidden = !!file; $('#fileCard').hidden = !file;
+  if (file) {
+    const fmt = detectFormat(file.bytes);
+    $('#fcName').textContent = file.name;
+    $('#fcMeta').textContent = fmtBytes(file.bytes.length) + (fmt === 'gzip' ? ' · gzip data' : '');
+  }
+  renderInput(); renderOutput();
+}
+
+function renderInput() {
+  const r = result, comp = settings.mode === 'compress', st = $('#status');
+  const [cls, label] = !r || r.empty ? ['text', 'empty'] : r.unsupported || r.error && !r.output ? ['bad', comp ? 'error' : 'invalid']
+    : comp ? ['text', file ? 'file' : 'text']
+    : !r.ok ? ['bad', `${ENCODING_NAMES[r.encoding]} · error`]
+    : [r.warnings.length || r.limited ? 'warn' : 'ok', `${r.encoding === 'file' ? '' : ENCODING_NAMES[r.encoding] + ' · '}${FORMAT_NAMES[r.format]}`];
+  st.className = 'status ' + cls; st.textContent = label;
+
+  const msgs = [];
+  if (r && r.unsupported) msgs.push(`<div class="msg bad"><b>This browser can’t compress.</b> It doesn’t support compression streams. Use a recent version of Chrome, Edge, Firefox or Safari.</div>`);
+  else if (r && r.error) {
+    msgs.push(`<div class="msg bad"><b>${r.encoding || r.format ? 'Couldn’t decompress.' : 'Can’t read the input.'}</b> ${esc(r.error)}.`
+      + (r.notCompressed ? ` <button class="linkish" data-act="toCompress">Compress it instead</button>` : '')
+      + (r.output && r.output.length ? ` The ${fmtBytes(r.output.length)} recovered before the error ${r.output.length === 1 ? 'is' : 'are'} in the output.` : '')
+      + (r.detail ? `<small>The browser said: ${esc(r.detail)}</small>` : '') + '</div>');
+  }
+  if (r && r.warnings) r.warnings.forEach(w => msgs.push(`<div class="msg warn"><b>Note:</b> ${esc(w)}.</div>`));
+  if (r && r.limited) msgs.push(`<div class="msg warn"><b>Stopped at ${fmtBytes(MAX_OUTPUT)}.</b> The decompressed data is bigger than that, so only the start is shown and saved.</div>`);
+  if (comp && r && !r.empty && looksCompressed()) {
+    msgs.push(`<div class="msg info">This looks like ${file ? 'a file that’s already compressed' : 'compressed data'}. <button class="linkish" data-act="toDecompress">Decompress it</button></div>`);
+  }
+  $('#msgs').innerHTML = msgs.join('');
+}
+
+/* Whether the compress-mode input already looks compressed (gzip, or zlib with the usual 78 header). */
+function looksCompressed() {
+  let b;
+  if (file) b = file.bytes;
+  else {
+    if (input.value.length > 5e6 || !/^\s*(H4sI|eJ|eNo|eF|eAE|1f\s*8b|78\s*(9c|da|01|5e))/i.test(input.value)) return false;
+    const d = decodeTextInput(input.value);
+    if (!d.bytes) return false;
+    b = d.bytes;
+  }
+  const f = detectFormat(b);
+  return f === 'gzip' || (f === 'zlib' && b[0] === 0x78 && asText(b) === null);
+}
+
+const getText = () => cache.text !== undefined ? cache.text : (cache.text = result.output.length > 256e6 ? null : asText(result.output));
+function showKind() {
+  if (result.mode === 'compress') return settings.cShow;
+  if (dShow && (dShow !== 'text' || getText() !== null)) return dShow;
+  return getText() !== null ? 'text' : 'hex';
+}
+/* The output as copied: text, Base64, or hex without spaces. */
+function outString(kind = showKind()) {
+  return cache[kind] ??= kind === 'text' ? getText() : kind === 'base64' ? toBase64(result.output) : toHex(result.output);
+}
+
+function renderOutput() {
+  const r = result, has = !!(r && r.output && (r.output.length || r.ok));
+  ['#copyOut', '#download', '#swap'].forEach(s => $(s).disabled = !has);
+  const partial = has && r.ok === false;
+  $('#partial').hidden = !partial;
+  $('#partial').textContent = partial ? 'Partial output: this is what was recovered before the error.' : '';
+  $('#clip').hidden = true;
+  $('#facts').innerHTML = has ? factsHtml() : '';
+  renderStats();
+
+  const segBtns = [...document.querySelectorAll('#showSeg button')];
+  if (!has) {
+    segBtns.forEach(b => { b.setAttribute('aria-pressed', 'false'); b.disabled = true; });
+    const comp = settings.mode === 'compress';
+    view.innerHTML = `<div class="empty">${!r || r.empty
+      ? (comp ? 'Type or paste text, open a file, or load the example.' : 'Paste Base64 or hex, open a compressed file, or load the example.')
+      : 'Fix the problem in the input to see the output.'}</div>`;
+    return;
+  }
+  const kind = showKind();
+  segBtns.forEach(b => {
+    b.disabled = b.dataset.v === 'text' && (r.mode === 'compress' || getText() === null);
+    b.title = b.disabled ? (r.mode === 'compress' ? 'Compressed data is binary' : 'The output isn’t UTF-8 text') : '';
+    b.setAttribute('aria-pressed', String(b.dataset.v === kind));
+  });
+  $('#copyOut').textContent = { text: 'Copy text', base64: 'Copy Base64', hex: 'Copy hex' }[kind];
+
+  const pre = document.createElement('pre');
+  pre.className = 'out' + (kind === 'hex' ? ' dump' : kind === 'base64' ? ' b64' : '');
+  let clipped = false;
+  if (kind === 'hex') { pre.textContent = hexDump(r.output, DUMP_BYTES); clipped = r.output.length > DUMP_BYTES; }
+  else { const s = outString(kind); pre.textContent = s.slice(0, DISPLAY_CHARS); clipped = s.length > DISPLAY_CHARS; }
+  if (!r.output.length) pre.textContent = '(empty)';
+  if (clipped) {
+    $('#clip').hidden = false;
+    $('#clip').textContent = `Showing the first ${kind === 'hex' ? fmtBytes(DUMP_BYTES) : DISPLAY_CHARS.toLocaleString() + ' characters'}. Copy and Download use all of it.`;
+  }
+  view.replaceChildren(pre);
+}
+
+function fact(label, value) { return `<div><dt>${esc(label)}</dt><dd>${value}</dd></div>`; }
+const check = ok => ok ? '<span class="ok">✓ matches</span>' : '<span class="bad">✗ doesn’t match</span>';
+
+function factsHtml() {
+  const r = result, f = [];
+  if (r.mode === 'compress') {
+    f.push(fact('Format', FORMAT_NAMES[r.format]));
+    if (r.format !== 'raw') f.push(fact('Wrapper', `${r.header}-byte header, ${r.format === 'gzip' ? 8 : 4}-byte trailer`));
+    f.push(fact('Deflate data', fmtBytes(r.deflated)));
+    if (r.format !== 'raw') f.push(fact(r.format === 'gzip' ? 'CRC-32' : 'Adler-32', `<code>${hex8(r.check)}</code>`));
+    f.push(fact('As Base64', plural(Math.ceil(r.output.length / 3) * 4, 'character')));
+    return f.join('');
+  }
+  if (r.encoding !== 'file') f.push(fact('Read as', ENCODING_NAMES[r.encoding]));
+  f.push(fact('Format', FORMAT_NAMES[r.format] + (r.members && r.members.length > 1 ? `, ${r.members.length} members` : '')));
+  const h = r.members && r.members[0];
+  if (h) {
+    if (h.name !== undefined) f.push(fact('File name', esc(h.name) || '(empty)'));
+    if (h.mtime) { const d = new Date(h.mtime * 1000); f.push(fact('Modified', `<span title="${d.toISOString()}">${esc(d.toLocaleString())}</span>`)); }
+    if (h.comment !== undefined) f.push(fact('Comment', esc(h.comment)));
+    f.push(fact('Made on', esc(GZIP_OS[h.os] || `OS ${h.os}`)));
+    if (h.xfl === 2 || h.xfl === 4) f.push(fact('Level', h.xfl === 2 ? 'maximum' : 'fastest'));
+    if (h.extra) f.push(fact('Extra field', h.extra.map(x => `<code>${esc(x.id)}</code>${x.id === 'BC' ? ' (BGZF)' : ''}`).join(', ') || 'empty'));
+    if (h.text) f.push(fact('Marked as', 'text'));
+    if (r.members.length === 1 && h.crc32 !== undefined) {
+      f.push(fact('CRC-32', `<code>${hex8(h.crc32)}</code> ${check(h.crcOk)}`));
+      f.push(fact('Size in trailer', `${fmtBytes(h.isize)} ${check(h.isize === (r.output.length >>> 0))}`));
+    } else if (r.ok && !r.limited) f.push(fact('CRC-32', check(r.members.every(m => m.crcOk)) + ' for every member'));
+  }
+  if (r.zlib) {
+    f.push(fact('Window', fmtBytes(r.zlib.window)));
+    f.push(fact('Level', r.zlib.level));
+    if (r.zlib.adler32 !== undefined) f.push(fact('Adler-32', `<code>${hex8(r.zlib.adler32)}</code> ${check(r.zlib.adlerOk)}`));
+  }
+  return f.join('');
+}
+
+function renderStats() {
+  const r = result, el = $('#stats');
+  if (!r || !r.output || !(r.output.length || r.ok)) { el.innerHTML = ''; return; }
+  const a = r.input.length, b = r.output.length, parts = [`<span><b>${fmtBytes(a)} → ${fmtBytes(b)}</b></span>`];
+  if (r.mode === 'compress' && a) {
+    parts.push(b <= a
+      ? `<span>${(b / a * 100).toFixed(1)}% of the original</span><span>saves ${fmtBytes(a - b)}</span>`
+      : `<span class="up">${fmtBytes(b - a)} bigger: small or already-compressed data doesn’t shrink</span>`);
+  } else if (r.mode === 'decompress' && a && b) parts.push(`<span>${(b / a).toFixed(1)}× the compressed size</span>`);
+  parts.push(`<span>${r.ms < 10 ? r.ms.toFixed(1) : Math.round(r.ms)} ms</span>`);
+  el.innerHTML = parts.join('<span aria-hidden="true">·</span>');
+}
+
+/* ---------- output actions ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function copyText(text, what) {
+  const done = () => toast(`Copied ${what}`);
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(() => {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); done(); } catch { toast('Couldn’t copy to the clipboard'); } t.remove();
+  });
+}
+$('#copyOut').onclick = () => {
+  const kind = showKind();
+  copyText(outString(kind), { text: 'text', base64: 'Base64', hex: 'hex' }[kind]);
+};
+
+function outName() {
+  const r = result;
+  if (r.mode === 'compress') return (file ? file.name : 'text.txt') + EXTENSIONS[r.format];
+  const h = r.members && r.members[0];
+  return decompressedName(file ? file.name : '', h && h.name) || (getText() !== null ? 'decompressed.txt' : 'decompressed.bin');
+}
+$('#download').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([result.output], { type: result.mode === 'compress' ? MIME[result.format] : 'application/octet-stream' }));
+  a.download = outName();
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* Round trip: the output becomes the input in the other mode. Small results go in the text box
+   (as Base64 or hex, or as text), bigger ones are loaded like a file. */
+$('#swap').onclick = () => {
+  const r = result, name = outName(), kind = showKind();
+  if (r.mode === 'compress') {
+    const asStr = r.output.length <= 1e6;
+    setMode('decompress', false);
+    setInput(asStr ? outString(kind === 'hex' ? 'hex' : 'base64') : '', asStr ? null : { name, bytes: r.output, mtime: Date.now() });
+  } else {
+    const text = getText(), asStr = text !== null && text.length <= 5e6;
+    setMode('compress', false);
+    setInput(asStr ? text : '', asStr ? null : { name, bytes: r.output, mtime: Date.now() });
+  }
+};
+
+/* ---------- input ---------- */
+function setInput(text, f = null) {
+  input.value = text; file = f; dShow = null;
+  input.scrollTop = 0;
+  clearTimeout(timer);
+  compute();
+}
+async function loadFile(f) {
+  if (!f) return;
+  const bytes = new Uint8Array(await f.arrayBuffer());
+  const fmt = detectFormat(bytes);
+  const packed = fmt === 'gzip' || (fmt === 'zlib' && bytes[0] === 0x78 && asText(bytes) === null) || /\.(gz|tgz|svgz|gzip|zz|zlib|deflate)$/i.test(f.name);
+  const mode = packed ? 'decompress' : 'compress';
+  if (mode !== settings.mode) { setMode(mode, false); toast(packed ? 'Compressed file: switched to Decompress' : 'Switched to Compress'); }
+  setInput('', { name: f.name, bytes, mtime: f.lastModified });
+}
+$('#openFile').onclick = () => $('#file').click();
+$('#file').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
+$('#fcRemove').onclick = () => { setInput(''); input.focus(); };
+const pane = $('#inPane');
+pane.addEventListener('dragover', e => { e.preventDefault(); pane.classList.add('drag'); });
+pane.addEventListener('dragleave', e => { if (!pane.contains(e.relatedTarget)) pane.classList.remove('drag'); });
+pane.addEventListener('drop', e => { e.preventDefault(); pane.classList.remove('drag'); loadFile(e.dataTransfer.files[0]); });
+input.addEventListener('input', () => { dShow = null; schedule(); });
+
+$('#msgs').addEventListener('click', e => {
+  const act = e.target.closest('[data-act]');
+  if (!act) return;
+  setMode(act.dataset.act === 'toCompress' ? 'compress' : 'decompress');
+});
+
+const EXAMPLE = `203.0.113.7 - - [27/Sep/2026:09:12:01 +0100] "GET /api/menu HTTP/1.1" 200 1843 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+203.0.113.7 - - [27/Sep/2026:09:12:01 +0100] "GET /static/app.css HTTP/1.1" 200 5120 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+203.0.113.7 - - [27/Sep/2026:09:12:02 +0100] "GET /static/app.js HTTP/1.1" 200 20482 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+198.51.100.23 - - [27/Sep/2026:09:12:05 +0100] "GET /api/menu HTTP/1.1" 200 1843 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)"
+198.51.100.23 - - [27/Sep/2026:09:12:05 +0100] "GET /static/app.css HTTP/1.1" 304 0 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)"
+198.51.100.23 - - [27/Sep/2026:09:12:06 +0100] "POST /api/orders HTTP/1.1" 201 312 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)"
+192.0.2.140 - - [27/Sep/2026:09:12:09 +0100] "GET /api/menu HTTP/1.1" 200 1843 "-" "curl/8.9.1"
+192.0.2.140 - - [27/Sep/2026:09:12:10 +0100] "GET /api/orders/1042 HTTP/1.1" 404 58 "-" "curl/8.9.1"
+203.0.113.7 - - [27/Sep/2026:09:12:14 +0100] "POST /api/orders HTTP/1.1" 201 298 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+`;
+$('#sample').onclick = async () => {
+  if (settings.mode === 'compress') return setInput(EXAMPLE);
+  // decompress: the same log, gzipped with a stored file name, as Base64
+  const c = await compress(new TextEncoder().encode(EXAMPLE), 'gzip', { name: 'access.log', mtime: Date.UTC(2026, 8, 27, 8, 12, 14) / 1000 });
+  setInput(toBase64(c.output));
+};
+$('#clear').onclick = () => { setInput(''); input.focus(); };
+
+/* ---------- controls ---------- */
+function setMode(mode, run = true) {
+  settings.mode = mode; saveSettings(); syncSegs();
+  if (run) compute();
+}
+const segs = [
+  ['#modeSeg', () => settings.mode, v => setMode(v)],
+  ['#cFormatSeg', () => settings.cFormat, v => { settings.cFormat = v; saveSettings(); compute(); }],
+  ['#dFormatSeg', () => settings.dFormat, v => { settings.dFormat = v; saveSettings(); compute(); }],
+];
+function syncSegs() {
+  for (const [sel, get] of segs) document.querySelectorAll(sel + ' button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === get())));
+}
+for (const [sel, , set] of segs) document.querySelectorAll(sel + ' button').forEach(b => b.onclick = () => { set(b.dataset.v); syncSegs(); });
+document.querySelectorAll('#showSeg button').forEach(b => b.onclick = () => {
+  if (result.mode === 'compress') { settings.cShow = b.dataset.v; saveSettings(); } else dShow = b.dataset.v;
+  renderOutput();
+});
+const optName = $('#optName');
+optName.checked = settings.storeName;
+optName.onchange = () => { settings.storeName = optName.checked; saveSettings(); compute(); };
+syncSegs();
+compute();
+</script>
+</body>
+</html>

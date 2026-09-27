@@ -10,6 +10,7 @@ The tools are also hosted at [tools.lxst.digital](https://tools.lxst.digital/).
 | Tool | What it does |
 | --- | --- |
 | [BPM tapper](bpm-tapper/) | Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter. |
+| [Gzip helper](gzip/) | Compress text or files to gzip, zlib or raw deflate, and decompress them from a file, Base64 or hex, with header details (file name, date, OS), checksum checks and multi-member support. |
 | [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch, combinable field filters and saved comparisons. |
 | [JSON formatter](json-format/) | Format, minify and validate JSON with exact error locations, repair common mistakes (comments, trailing commas, single quotes), browse it as a collapsible tree and query it by path. |
 <!-- /shared:tool-table -->
@@ -22,7 +23,7 @@ Open the tool's `.html` file in any modern browser, by double-clicking it or dra
 
 Each tool follows the same conventions so the collection stays easy to use and maintain:
 
-- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file and a `README.md` covering the tool's features and usage. Add it to `shared/tools.json` (slug, name, logo text, a short summary for the tool switcher and a description for the index), add a pair of rewrites to `_redirects` (see [Deployment](#deployment)), then run the [sync script](#shared-snippets).
+- **One folder per tool**, named in kebab-case, containing a single `<tool-name>.html` file and a `README.md` covering the tool's features and usage. Add it to `shared/tools.json` (slug, name, logo text, a short summary for the tool switcher and a description for the index; tools are listed alphabetically by name everywhere, so keep the file in that order too), add a pair of rewrites to `_redirects` in the same order (see [Deployment](#deployment)), then run the [sync script](#shared-snippets).
 - **Fully self-contained.** Inline all CSS and JS. No CDNs, web fonts, external requests or build step. The file has to keep working with no network.
 - **No uploads.** Process all data in the browser. `localStorage` is for preferences such as the theme, and for user content only when the user explicitly saves it (for example JSON diff's saved comparisons). Never store user content silently.
 - **Keep logic separate from the UI.** Put the core logic in its own `<script>` as pure functions with no DOM access, so it can be tested on its own (JSON diff exports it via `module.exports` when loaded in Node).

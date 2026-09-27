@@ -2,6 +2,8 @@
 # keeping the descriptively named HTML file for offline use. One pair per tool.
 /bpm-tapper    /bpm-tapper/bpm-tapper     200
 /bpm-tapper/   /bpm-tapper/bpm-tapper     200
+/gzip          /gzip/gzip                 200
+/gzip/         /gzip/gzip                 200
 /json-diff     /json-diff/json-diff       200
 /json-diff/    /json-diff/json-diff       200
 /json-format   /json-format/json-format   200
