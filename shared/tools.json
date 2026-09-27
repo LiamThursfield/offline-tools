@@ -70,6 +70,16 @@
     "description": "Format, minify and validate JSON with exact error locations, repair common mistakes (comments, trailing commas, single quotes), browse it as a collapsible tree and query it by path."
   },
   {
+    "slug": "regex",
+    "name": "Regex tester",
+    "mark": [
+      "REGEX",
+      ".test"
+    ],
+    "summary": "Test regular expressions and replacements",
+    "description": "Test JavaScript regular expressions with matches highlighted live as you type, capture groups (numbered and named) with their positions, a replacement preview with $1 and named group references, a plain explanation of every flag, and protection against runaway patterns."
+  },
+  {
     "slug": "timestamp",
     "name": "Timestamp converter",
     "mark": [

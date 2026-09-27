@@ -14,5 +14,7 @@
 /json-diff/    /json-diff/json-diff       200
 /json-format   /json-format/json-format   200
 /json-format/  /json-format/json-format   200
+/regex         /regex/regex               200
+/regex/        /regex/regex               200
 /timestamp     /timestamp/timestamp       200
 /timestamp/    /timestamp/timestamp       200
