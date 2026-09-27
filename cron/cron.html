@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Cron explainer – Explain cron schedules and list next runs | LXST.tools</title>
+<meta name="description" content="Explain cron expressions in plain English and list their next run times in any time zone, with Unix crontab lines, seconds fields, Quartz and AWS EventBridge syntax (L, W, # and ?), shortcuts such as @daily, and daylight-saving changes. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/cron">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/cron">
+<meta property="og:title" content="Cron explainer">
+<meta property="og:description" content="Explain cron expressions in plain English and list their next run times in any time zone, with Unix crontab lines, seconds fields, Quartz and AWS EventBridge syntax (L, W, # and ?), shortcuts such as @daily, and daylight-saving changes. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Cron explainer","url":"https://tools.lxst.digital/cron","description":"Explain cron expressions in plain English and list their next run times in any time zone, with Unix crontab lines, seconds fields, Quartz and AWS EventBridge syntax (L, W, # and ?), shortcuts such as @daily, and daylight-saving changes.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s;text-decoration:none;color:inherit}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:66ch}
+kbd{font:600 .82em var(--mono);letter-spacing:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel);color:var(--ink)}
+code{font:500 .9em var(--mono);letter-spacing:0;background:var(--surface);border-radius:5px;padding:1px 5px}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.note{margin:0;padding:10px 14px;color:var(--muted);font-size:.84rem}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:16px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* input */
+.field{display:flex;align-items:center;margin:14px 14px 0;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.field.bad{border-color:var(--del)}
+.field.bad:focus-within{box-shadow:0 0 0 3px color-mix(in oklab,var(--del) 30%,transparent)}
+.cron-in{flex:1;min-width:0;border:0;background:none;padding:13px 16px;font:500 1.3rem var(--mono);letter-spacing:.02em;word-spacing:.2em}
+.cron-in:focus-visible{box-shadow:none}
+.cron-in::placeholder{color:var(--muted);opacity:.7;word-spacing:0}
+.clear{flex:none;margin-right:6px;border:0;background:none;border-radius:var(--pill);width:30px;height:30px;color:var(--muted);font-size:1.1rem;line-height:1}
+.clear:hover{background:var(--hover);color:var(--ink)}
+
+/* the fields, one chip each */
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:6px;padding:10px 14px 0}
+.chip{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0;padding:6px 6px 5px;border:1px solid var(--line);border-radius:calc(var(--radius) - 4px);background:var(--surface)}
+.chip b{max-width:100%;font:600 1rem var(--mono);letter-spacing:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip span{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.chip.bad{border-color:var(--del);background:color-mix(in oklab,var(--del) 10%,var(--panel))}
+.chip.bad b{color:var(--del)}
+.chip.missing b{color:var(--muted)}
+
+.detect{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;padding:10px 16px 0;font-size:.86rem;color:var(--muted);min-height:2.1em}
+.badge{display:inline-flex;align-items:center;padding:1px 10px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 14%,transparent);color:var(--accent-text);font-size:.78rem;font-weight:700;white-space:nowrap}
+.badge.err{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.detect .msg{flex:1 1 20ch;overflow-wrap:anywhere}
+.detect .msg code{font-size:.85em}
+.examples{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 0;font-size:.8rem;color:var(--muted);align-items:center}
+.examples button{border:1px dashed var(--line);background:none;border-radius:var(--pill);padding:1px 10px;font:500 .78rem var(--mono);letter-spacing:0;color:var(--muted)}
+.examples button:hover{border-style:solid;border-color:var(--accent);color:var(--accent-text)}
+.opts{display:flex;flex-wrap:wrap;gap:10px 22px;padding:12px 14px 14px;margin-top:12px;border-top:1px solid var(--line)}
+.opt{display:flex;align-items:center;gap:10px;font-size:.86rem;color:var(--muted);min-width:0}
+.opt>span:first-child{white-space:nowrap}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px;max-width:100%;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 10px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+
+/* plain English */
+.english{margin:0;padding:16px 16px 4px;font-size:clamp(1.15rem,2vw,1.4rem);font-weight:600;letter-spacing:-.015em;line-height:1.35;text-wrap:pretty}
+.english.empty{color:var(--muted);font-weight:500}
+.cmd{margin:6px 16px 0;font-size:.86rem;color:var(--muted);overflow-wrap:anywhere}
+.notes{list-style:none;margin:0;padding:10px 16px 14px;display:flex;flex-direction:column;gap:6px}
+.notes li{position:relative;padding:7px 10px 7px 30px;border-radius:calc(var(--radius) - 4px);background:var(--surface);font-size:.86rem;color:var(--muted)}
+.notes li::before{content:"i";position:absolute;left:9px;top:8px;width:14px;height:14px;border-radius:50%;background:var(--muted);color:var(--panel);font:700 .66rem/14px var(--sans);text-align:center}
+.notes li.warn{background:color-mix(in oklab,var(--chg) 10%,var(--panel));color:var(--ink)}
+.notes li.warn::before{content:"!";background:var(--chg)}
+.notes li.bad{background:color-mix(in oklab,var(--del) 10%,var(--panel));color:var(--ink)}
+.notes li.bad::before{content:"!";background:var(--del)}
+
+/* field breakdown */
+.tbl-wrap{overflow-x:auto;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:.86rem}
+th,td{text-align:left;padding:8px 14px;border-bottom:1px solid var(--line);vertical-align:baseline}
+tr:last-child td{border-bottom:0}
+th{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.f{font-weight:600;white-space:nowrap}
+td.v{font:600 .92rem var(--mono);letter-spacing:0;white-space:nowrap}
+td.m{color:var(--muted);font:.8rem var(--mono);letter-spacing:0;overflow-wrap:anywhere;min-width:12ch}
+
+/* next runs */
+.run-opts{display:flex;flex-wrap:wrap;gap:10px 16px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.run-opts .opt{flex-wrap:wrap}
+.from{display:flex;gap:6px;align-items:center;min-width:0}
+.from input{min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:var(--pill);padding:3px 10px;font:500 .84rem var(--mono);letter-spacing:0;color-scheme:inherit}
+.from .btn{padding:3px 11px;font-size:.8rem}
+.runs{list-style:none;margin:0;padding:0;counter-reset:run}
+.run{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:0 10px;align-items:baseline;width:100%;padding:8px 14px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;transition:background .2s}
+.run:hover{background:var(--accent-bg)}
+.run:focus-visible{outline-offset:-2px}
+.r-n{grid-row:1/3;font:600 .76rem var(--mono);color:var(--muted);letter-spacing:0}
+.day{padding:6px 14px 5px;border-bottom:1px solid var(--line);background:var(--surface);font-size:.78rem;font-weight:700;color:var(--muted)}
+.r-when{font:600 .98rem var(--mono);letter-spacing:0;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r-rel{font-size:.8rem;color:var(--muted);white-space:nowrap;text-align:right}
+.r-sub{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:2px 10px;font-size:.76rem;color:var(--muted)}
+.r-sub .dst{color:var(--chg);font-weight:600}
+.runs-end{padding:12px 14px;color:var(--muted);font-size:.86rem}
+.runs-end.bad{color:var(--del)}
+
+/* syntax reference */
+.ref{margin-top:16px}
+.ref-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0}
+.ref-grid>div{min-width:0}
+.ref-grid>div+div{border-left:1px solid var(--line)}
+.ref h3{margin:0;padding:12px 14px 4px;font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ref td:first-child{font:600 .88rem var(--mono);letter-spacing:0;white-space:nowrap}
+.ref td{color:var(--ink)}
+.ref td small{color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);overflow-wrap:anywhere}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1000px){
+  .main{grid-template-columns:1fr}
+  .ref-grid{grid-template-columns:1fr}
+  .ref-grid>div+div{border-left:0;border-top:1px solid var(--line)}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .cron-in{font-size:1.1rem;padding:11px 12px}
+  .chips{grid-template-columns:repeat(auto-fit,minmax(50px,1fr));gap:4px;padding:10px 10px 0}
+  .chip{padding:5px 2px 4px}
+  .chip span{font-size:.6rem;letter-spacing:.02em}
+  .opt{flex-wrap:wrap}
+  th,td{padding:7px 10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>CRON</b>.tab<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../cron/cron.html" data-path="/cron" aria-current="page"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <a class="nav" href="#syntax">Syntax</a>
+      <button class="nav" id="clearBtn" title="Clear the input">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Explain a cron expression</h1>
+    <p>Paste a cron expression or a crontab line to see what it means in plain English and when it runs next. Works with Unix cron, Quartz and AWS EventBridge schedules. Everything runs in your browser.</p>
+  </div>
+
+  <div class="main">
+    <div class="col">
+      <section class="card" aria-labelledby="inTitle">
+        <div class="card-head"><h2 id="inTitle">Cron expression</h2></div>
+        <div class="field" id="field">
+          <input class="cron-in" id="input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-labelledby="inTitle" aria-describedby="detectMsg" placeholder="*/15 9-17 * * 1-5">
+          <button class="clear" id="clearX" type="button" aria-label="Clear the input" hidden>×</button>
+        </div>
+        <div class="chips" id="chips" aria-hidden="true"></div>
+        <div class="detect" id="detect" aria-live="polite"><span class="badge" id="detectBadge" hidden></span><span class="msg" id="detectMsg"></span></div>
+        <div class="examples" id="examples"><span>Try</span></div>
+        <div class="opts">
+          <div class="opt"><span id="dialectLabel">Dialect</span>
+            <span class="seg" role="group" aria-labelledby="dialectLabel" id="dialectSeg">
+              <button type="button" data-v="auto" title="Guess from the number of fields and where ? is">auto</button><button type="button" data-v="unix" title="cron and crontab, Kubernetes, GitHub Actions; with an optional seconds field (Spring, node-cron). 0 or 7 = Sunday">Unix</button><button type="button" data-v="quartz" title="Quartz Scheduler: seconds first, optional year, 1 = Sunday, ? in one day field">Quartz</button><button type="button" data-v="aws" title="AWS EventBridge: minutes to year, 1 = Sunday, ? in one day field">AWS</button>
+            </span>
+          </div>
+          <div class="opt"><span id="clockLabel">Clock</span>
+            <span class="seg" role="group" aria-labelledby="clockLabel" id="clockSeg">
+              <button type="button" data-v="24" title="17:30">24-hour</button><button type="button" data-v="12" title="5:30 PM">12-hour</button>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="meaningTitle">
+        <div class="card-head"><h2 id="meaningTitle">In plain English</h2><span class="spacer"></span><button class="btn" id="copyEnglish" type="button" disabled>Copy</button></div>
+        <p class="english" id="english" aria-live="polite"></p>
+        <p class="cmd" id="cmd" hidden></p>
+        <ul class="notes" id="notes"></ul>
+        <div class="tbl-wrap" id="fieldsWrap" hidden>
+          <table>
+            <thead><tr><th scope="col">Field</th><th scope="col">Value</th><th scope="col">Meaning</th><th scope="col">Matches</th></tr></thead>
+            <tbody id="fieldRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="runsTitle">
+      <div class="card-head"><h2 id="runsTitle">Next runs</h2><span class="spacer"></span><button class="btn" id="copyRuns" type="button" title="Copy the times as ISO 8601" disabled>Copy all</button></div>
+      <div class="run-opts">
+        <label class="opt"><span>Time zone</span> <select id="zone"></select></label>
+        <label class="opt"><span>Show</span> <select id="count"><option>5</option><option>10</option><option>20</option><option>50</option><option>100</option><option>250</option></select></label>
+        <div class="opt"><span id="fromLabel">From</span>
+          <span class="from"><input id="from" type="datetime-local" step="1" aria-labelledby="fromLabel"><button class="btn" id="fromNow" type="button" title="Start from the current time">Now</button></span>
+        </div>
+      </div>
+      <ol class="runs" id="runs"></ol>
+      <p class="runs-end" id="runsEnd" hidden></p>
+      <p class="note" id="runsNote"></p>
+    </section>
+  </div>
+
+  <section class="card ref" id="syntax" aria-labelledby="syntaxTitle">
+    <div class="card-head"><h2 id="syntaxTitle">Syntax</h2></div>
+    <div class="ref-grid">
+      <div>
+        <h3>Fields</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th scope="col">Dialect</th><th scope="col">Fields, in order</th></tr></thead>
+            <tbody>
+              <tr><td>Unix</td><td>minute hour day-of-month month day-of-week<br><small>An extra seconds field can go first (Spring, node-cron). A crontab line’s command follows the fields.</small></td></tr>
+              <tr><td>Quartz</td><td>second minute hour day-of-month month day-of-week [year]</td></tr>
+              <tr><td>AWS</td><td>minute hour day-of-month month day-of-week year<br><small>Written as <code>cron(…)</code> in EventBridge.</small></td></tr>
+            </tbody>
+          </table>
+          <table>
+            <thead><tr><th scope="col">Field</th><th scope="col">Values</th></tr></thead>
+            <tbody>
+              <tr><td>second, minute</td><td>0–59</td></tr>
+              <tr><td>hour</td><td>0–23</td></tr>
+              <tr><td>day of month</td><td>1–31</td></tr>
+              <tr><td>month</td><td>1–12 or JAN–DEC</td></tr>
+              <tr><td>day of week</td><td>SUN–SAT; Unix 0–7 (0 and 7 are Sunday); Quartz and AWS 1–7 (1 is Sunday)</td></tr>
+              <tr><td>year</td><td>1970–2099 (Quartz), 1970–2199 (AWS)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3>Special characters</h3>
+        <div class="tbl-wrap">
+          <table>
+            <tbody>
+              <tr><td>*</td><td>Every value</td></tr>
+              <tr><td>,</td><td>A list: <code>1,15</code></td></tr>
+              <tr><td>-</td><td>A range: <code>9-17</code>, <code>MON-FRI</code></td></tr>
+              <tr><td>/</td><td>A step: <code>*/15</code> every 15, <code>5/15</code> every 15 from 5, <code>9-17/2</code></td></tr>
+              <tr><td>?</td><td>No value, in one of the day fields (Quartz and AWS need it)</td></tr>
+              <tr><td>L</td><td>Last: <code>L</code> the last day of the month, <code>L-2</code> two days before it, <code>5L</code> the last Friday (Unix numbering; <code>6L</code> in Quartz)</td></tr>
+              <tr><td>W</td><td>Nearest weekday: <code>15W</code>, and <code>LW</code> for the last weekday of the month</td></tr>
+              <tr><td>#</td><td>Nth weekday of the month: <code>MON#1</code> the first Monday</td></tr>
+              <tr><td>@daily</td><td>Shortcuts: <code>@yearly</code>, <code>@monthly</code>, <code>@weekly</code>, <code>@daily</code>, <code>@hourly</code> and <code>@reboot</code></td></tr>
+            </tbody>
+          </table>
+          <p class="note">L, W, # and ? aren’t in standard crontab. In Unix cron, when both day fields are set, a day matches if either does.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core cron logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Parsing: an expression becomes { dialect, fields: { second?, minute, hour, dom, month, dow, year? }, … }.
+   Each field keeps its source text, its parts (for describing) and the set of values it matches.
+   Days of the week are stored 0 = Sunday … 6 = Saturday whatever the dialect counts from. */
+const DAY = 864e5;
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MON3 = MONTH_NAMES.map(m => m.slice(0, 3).toUpperCase());
+const DAY3 = DAY_NAMES.map(d => d.slice(0, 3).toUpperCase());
+const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0]; // Monday first when listing days
+
+const FIELDS = {
+  second: { label: 'Second', min: 0, max: 59 },
+  minute: { label: 'Minute', min: 0, max: 59 },
+  hour: { label: 'Hour', min: 0, max: 23 },
+  dom: { label: 'Day of month', min: 1, max: 31 },
+  month: { label: 'Month', min: 1, max: 12 },
+  dow: { label: 'Day of week', min: 0, max: 6 },
+  year: { label: 'Year', min: 1970, max: 2199 },
+};
+
+/* How each dialect numbers days of the week, and which fields it has. */
+const DIALECTS = {
+  unix: { name: 'Unix', dowMin: 0, dowMax: 7, fields: [['minute', 'hour', 'dom', 'month', 'dow'], ['second', 'minute', 'hour', 'dom', 'month', 'dow']] },
+  quartz: { name: 'Quartz', dowMin: 1, dowMax: 7, yearMax: 2099, fields: [['second', 'minute', 'hour', 'dom', 'month', 'dow'], ['second', 'minute', 'hour', 'dom', 'month', 'dow', 'year']] },
+  aws: { name: 'AWS', dowMin: 1, dowMax: 7, yearMax: 2199, fields: [['minute', 'hour', 'dom', 'month', 'dow', 'year']] },
+};
+
+const MACROS = {
+  '@yearly': '0 0 1 1 *', '@annually': '0 0 1 1 *', '@monthly': '0 0 1 * *', '@weekly': '0 0 * * 0',
+  '@daily': '0 0 * * *', '@midnight': '0 0 * * *', '@hourly': '0 * * * *',
+};
+
+/* Whether a word could be a cron field (so that a crontab line's command isn't read as one). */
+const FIELD_PART = /^(?:\*|\?|L(?:-\d+)?|LW|\d+W|(?:\d+|[A-Z]{3})(?:-(?:\d+|[A-Z]{3}))?|(?:\d+|[A-Z]{3})(?:L|#\d+))(?:\/\d+)?$/i;
+const looksLikeField = t => t.split(',').every(p => FIELD_PART.test(p) && (p.match(/[A-Z]{3}/gi) || []).every(w => MON3.includes(w.toUpperCase()) || DAY3.includes(w.toUpperCase())));
+
+class CronError extends Error {
+  constructor(message, field) { super(message); this.field = field; }
+}
+
+/* A value in a field: a number, or a month or day name. Returns the number as the dialect writes it. */
+function parseValue(txt, key, d, fieldIdx) {
+  const f = FIELDS[key];
+  let v;
+  if (/^\d+$/.test(txt)) v = +txt;
+  else {
+    const up = txt.toUpperCase();
+    if (key === 'month') v = MON3.findIndex(m => up === m || MONTH_NAMES[MON3.indexOf(m)].toUpperCase() === up) + 1 || NaN;
+    else if (key === 'dow') { const i = DAY3.findIndex((m, j) => up === m || DAY_NAMES[j].toUpperCase() === up); v = i < 0 ? NaN : i + d.dowMin; }
+    else v = NaN;
+    if (Number.isNaN(v)) {
+      const what = key === 'month' ? 'month name' : key === 'dow' ? 'day name' : 'number';
+      throw new CronError(`“${txt}” isn’t a ${what}${key === 'month' || key === 'dow' ? '' : ` (${f.label.toLowerCase()} must be a number)`}.`, fieldIdx);
+    }
+  }
+  const [lo, hi] = rawRange(key, d);
+  if (v < lo || v > hi) throw new CronError(`${f.label} ${v} is out of range. It goes from ${lo} to ${hi}${key === 'dow' ? d.dowMin ? ' (1 = Sunday)' : ' (0 and 7 = Sunday)' : ''}.`, fieldIdx);
+  return v;
+}
+function rawRange(key, d) {
+  if (key === 'dow') return [d.dowMin, d.dowMax];
+  if (key === 'year') return [1970, d.yearMax || 2199];
+  return [FIELDS[key].min, FIELDS[key].max];
+}
+/* Dialect's day number → 0 = Sunday. */
+const normDow = (v, d) => ((v - d.dowMin) % 7 + 7) % 7;
+
+/* Parses one field. Returns { key, text, parts, values:Set, star, any, specials:[] }. */
+function parseField(text, key, d, idx) {
+  const f = FIELDS[key], [lo, hi] = rawRange(key, d);
+  const out = { key, text, parts: [], values: new Set(), star: text[0] === '*', any: false, specials: [] };
+  const add = v => out.values.add(key === 'dow' ? normDow(v, d) : v);
+  for (const part of text.split(',')) {
+    const up = part.toUpperCase();
+    if (part === '') throw new CronError(`${f.label} has an empty item. Check for a doubled or trailing comma.`, idx);
+    if (part === '?') {
+      if (key !== 'dom' && key !== 'dow') throw new CronError(`? only works in the day-of-month and day-of-week fields.`, idx);
+      if (text !== '?') throw new CronError(`? has to be on its own.`, idx);
+      out.any = true; out.star = true; out.parts.push({ t: 'all' });
+      for (let v = lo; v <= hi; v++) add(v);
+      continue;
+    }
+    let m;
+    if (key === 'dom' && (m = /^L(?:-(\d+))?$/.exec(up))) {
+      const n = m[1] ? +m[1] : 0;
+      if (n > 30) throw new CronError(`L-${n} goes back further than a month has days.`, idx);
+      out.specials.push({ t: 'last', n }); out.parts.push({ t: 'last', n }); continue;
+    }
+    if (key === 'dom' && up === 'LW') { out.specials.push({ t: 'lastWeekday' }); out.parts.push({ t: 'lastWeekday' }); continue; }
+    if (key === 'dom' && (m = /^(\d+)W$/.exec(up))) {
+      const n = +m[1];
+      if (n < 1 || n > 31) throw new CronError(`${n}W: day ${n} is out of range (1 to 31).`, idx);
+      out.specials.push({ t: 'nearestWeekday', n }); out.parts.push({ t: 'nearestWeekday', n }); continue;
+    }
+    if (key === 'dow' && up === 'L') {
+      if (d === DIALECTS.unix) throw new CronError('L on its own in day of week means Saturday in Quartz and AWS. Use 5L for the last Friday of the month, or pick a dialect.', idx);
+      add(7); out.parts.push({ t: 'range', a: 7, b: 7, step: 1 }); continue;
+    }
+    if (key === 'dow' && (m = /^(\w+?)L$/.exec(up)) && !/^(SAT|SUN|MON|TUE|WED|THU|FRI)$/.test(up)) {
+      const v = normDow(parseValue(m[1], key, d, idx), d);
+      out.specials.push({ t: 'lastDow', d: v }); out.parts.push({ t: 'lastDow', d: v }); continue;
+    }
+    if (key === 'dow' && (m = /^(\w+)#(\d+)$/.exec(up))) {
+      const v = normDow(parseValue(m[1], key, d, idx), d), n = +m[2];
+      if (n < 1 || n > 5) throw new CronError(`#${n}: a month has at most 5 of each weekday, so use #1 to #5.`, idx);
+      out.specials.push({ t: 'nth', d: v, n }); out.parts.push({ t: 'nth', d: v, n }); continue;
+    }
+    if (/^H(\W|$)/i.test(part)) throw new CronError('H (a hashed value) is Jenkins-only syntax and isn’t supported here.', idx);
+    m = /^(\*|\w+)(?:-(\w+))?(?:\/(\d+))?$/.exec(part);
+    if (!m) {
+      if (/[LW#]/i.test(part)) throw new CronError(`“${part}” isn’t valid in the ${f.label.toLowerCase()} field. L, W and # only work in the day fields.`, idx);
+      throw new CronError(`“${part}” isn’t a valid ${f.label.toLowerCase()}. Use a number, a range (1-5), a list (1,3,5), * or a step (*/15).`, idx);
+    }
+    const [, A, B, S] = m;
+    if (A === '*' && B) throw new CronError(`“${part}”: * can’t start a range.`, idx);
+    const step = S === undefined ? 1 : +S;
+    if (step < 1) throw new CronError(`A step of 0 never moves on. Use 1 or more.`, idx);
+    const a = A === '*' ? lo : parseValue(A, key, d, idx);
+    let b = B !== undefined ? parseValue(B, key, d, idx) : S !== undefined || A === '*' ? hi : a;
+    const wrap = b < a;
+    if (wrap && d === DIALECTS.unix) throw new CronError(`The range ${A}-${B} goes backwards. Unix cron can’t wrap around; split it, for example ${a}-${hi},${lo}-${b}.`, idx);
+    // A wrapping range (Quartz: 22-2) counts on from the end back round to the start.
+    const span = hi - lo + 1, end = wrap ? b + span : b;
+    for (let v = a; v <= end; v += step) add(v > hi ? v - span : v);
+    out.parts.push({ t: 'range', a, b, step, star: A === '*', single: B === undefined && S === undefined, wrap, open: B === undefined && S !== undefined && A !== '*' });
+  }
+  return out;
+}
+
+/* Strips the things people paste around an expression, and finds its dialect, zone and command.
+   Returns { expr, tokens, dialect, guessed, zone?, command?, macro?, reboot? } or throws CronError. */
+function tokenize(input, dialect = 'auto') {
+  let s = String(input).trim();
+  const r = {};
+  s = s.replace(/^-?\s*(cron|schedule)\s*:\s*/i, '').trim();              // YAML: `- cron: '0 9 * * 1'`
+  s = s.replace(/^(['"`])(.*)\1$/, '$2').trim();
+  const aws = /^cron\((.*)\)$/i.exec(s);                                   // AWS: cron(0 12 * * ? *)
+  if (aws) { s = aws[1].trim(); r.awsWrapped = true; }
+  const tz = /^(?:CRON_TZ|TZ)=(\S+)\s+/.exec(s);
+  if (tz) { r.zone = tz[1]; s = s.slice(tz[0].length); }
+  if (!s) return { empty: true };
+  if (s[0] === '#') throw new CronError('That’s a comment line.', -1);
+  if (s[0] === '@') {
+    const [word, ...rest] = s.split(/\s+/), w = word.toLowerCase();
+    if (rest.length) r.command = rest.join(' ');
+    if (w === '@reboot') return { ...r, reboot: true, macro: w, dialect: 'unix', tokens: [] };
+    if (!MACROS[w]) throw new CronError(`${word} isn’t a known shortcut. Try @yearly, @monthly, @weekly, @daily or @hourly.`, -1);
+    r.macro = w; s = MACROS[w];
+    if (dialect !== 'auto' && dialect !== 'unix') throw new CronError(`${word} is a Unix cron shortcut; ${DIALECTS[dialect].name} doesn’t have it.`, -1);
+    dialect = 'unix';
+  }
+  let tokens = s.split(/\s+/);
+  const q = i => tokens[i] === '?';
+  if (dialect === 'auto') {
+    r.guessed = true;
+    if (r.awsWrapped) dialect = 'aws';
+    else if (tokens.length >= 7 && tokens.slice(0, 7).every(looksLikeField) && (tokens.length === 7 || q(3) || q(5))) dialect = 'quartz';
+    else if (tokens.length === 6 && (q(2) || q(4))) dialect = 'aws';
+    else if (tokens.length === 6 && (q(3) || q(5))) dialect = 'quartz';
+    else dialect = 'unix';
+  }
+  const d = DIALECTS[dialect];
+  const counts = d.fields.map(f => f.length);
+  // Unix lines can carry a command after the fields (a crontab line); the other dialects can't.
+  let n = tokens.length;
+  if (dialect === 'unix' && n > 5) {
+    n = looksLikeField(tokens[5]) ? 6 : 5;
+    if (n < tokens.length) { r.command = tokens.slice(n).join(' '); tokens = tokens.slice(0, n); }
+  }
+  if (!counts.includes(tokens.length)) {
+    const want = counts.join(' or ');
+    throw new CronError(`${d.name} cron needs ${want} fields, separated by spaces; this has ${tokens.length}.${tokens.length < counts[0] ? ` Missing: ${d.fields[0].slice(tokens.length).map(k => FIELDS[k].label.toLowerCase()).join(', ')}.` : ''}`, -1);
+  }
+  return { ...r, dialect, tokens, keys: d.fields[counts.indexOf(tokens.length)] };
+}
+
+/* Parses an expression. Returns { ok: true, … } or { error, field } (field: index of the bad field, -1 for the whole thing). */
+function parseCron(input, { dialect = 'auto' } = {}) {
+  try {
+    const t = tokenize(input, dialect);
+    if (t.empty) return { empty: true };
+    const d = DIALECTS[t.dialect];
+    if (t.reboot) return { ok: true, ...t, fields: {}, notes: [] };
+    const fields = {};
+    t.keys.forEach((k, i) => { fields[k] = parseField(t.tokens[i], k, d, i); fields[k].index = i; });
+    const idx = k => fields[k].index;
+    if (t.dialect !== 'unix') {
+      if (fields.dom.any === fields.dow.any) throw new CronError(fields.dom.any
+        ? `${d.name} needs a value in one of the day fields; both are ?.`
+        : `${d.name} needs ? in either day of month or day of week (the one you’re not using). For example, * * ? for “every day”.`, idx(fields.dow.any ? 'dom' : 'dow'));
+    }
+    const hasSpecial = fields.dom.specials.length || fields.dow.specials.length;
+    // Unix (Vixie) rule: if either day field starts with *, both must match; otherwise either may.
+    const dayMode = t.dialect !== 'unix' ? (fields.dom.any ? 'dow' : 'dom')
+      : fields.dom.star || fields.dow.star ? 'and' : 'or';
+    const c = { ok: true, ...t, fields, dayMode, seconds: !!fields.second };
+    c.notes = notesFor(c, hasSpecial);
+    return c;
+  } catch (e) {
+    if (e instanceof CronError) return { error: e.message, field: e.field };
+    throw e;
+  }
+}
+
+/* ---------- matching ---------- */
+function dim(y, mo) { return mo === 2 ? (isLeap(y) ? 29 : 28) : [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][mo - 1]; }
+const isLeap = y => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+function special(s, y, mo, d, wd) {
+  const last = dim(y, mo);
+  switch (s.t) {
+    case 'last': return d === last - s.n;
+    case 'lastWeekday': { const lw = (wd + (last - d)) % 7; return d === last - (lw === 6 ? 1 : lw === 0 ? 2 : 0); }
+    case 'nearestWeekday': {
+      if (s.n > last) return false;
+      const w = ((wd + s.n - d) % 7 + 7) % 7; // weekday of day n
+      const t = w === 6 ? (s.n === 1 ? 3 : s.n - 1) : w === 0 ? (s.n === last ? s.n - 2 : s.n + 1) : s.n;
+      return d === t;
+    }
+    case 'lastDow': return wd === s.d && d + 7 > last;
+    case 'nth': return wd === s.d && Math.ceil(d / 7) === s.n;
+  }
+  return false;
+}
+const fieldHits = (f, y, mo, d, wd) => f.values.has(f.key === 'dow' ? wd : d) || f.specials.some(s => special(s, y, mo, d, wd));
+function dayMatches(c, y, mo, d, wd) {
+  const F = c.fields;
+  if (!F.month.values.has(mo) || (F.year && !F.year.values.has(y))) return false;
+  switch (c.dayMode) {
+    case 'dom': return fieldHits(F.dom, y, mo, d, wd);
+    case 'dow': return fieldHits(F.dow, y, mo, d, wd);
+    case 'and': return fieldHits(F.dom, y, mo, d, wd) && fieldHits(F.dow, y, mo, d, wd);
+    case 'or': return fieldHits(F.dom, y, mo, d, wd) || fieldHits(F.dow, y, mo, d, wd);
+  }
+}
+
+/* ---------- time zones ---------- */
+const LOCAL_ZONE = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { return 'UTC'; } })();
+const partsFmt = new Map();
+function partsFormatter(zone) {
+  let f = partsFmt.get(zone);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+    partsFmt.set(zone, f);
+  }
+  return f;
+}
+function isValidZone(zone) { try { partsFormatter(zone); return true; } catch { return false; } }
+function canonicalZone(zone) { return new Intl.DateTimeFormat('en-US', { timeZone: zone }).resolvedOptions().timeZone; }
+function wallParts(ms, zone) {
+  const p = {};
+  for (const { type, value } of partsFormatter(zone).formatToParts(ms)) p[type] = +value;
+  return { y: p.year, mo: p.month, d: p.day, h: p.hour % 24, mi: p.minute, s: p.second };
+}
+/* Offset of a zone from UTC at an instant, in seconds (east is positive). */
+function offsetSec(ms, zone) {
+  const w = wallParts(ms, zone), base = Math.floor(ms / 1000) * 1000;
+  return (Date.UTC(w.y, w.mo - 1, w.d, w.h, w.mi, w.s) - base) / 1000;
+}
+
+/* A zone's offsets over one wall-clock day: { at(ms) → offset, from, to, change } where change is the
+   instant the offset changes (at most once a day in practice). */
+function dayOffsets(naiveStart, zone) {
+  const a = naiveStart - 14 * 3600e3, b = naiveStart + DAY + 12 * 3600e3;
+  const from = offsetSec(a, zone), to = offsetSec(b, zone);
+  if (from === to) return { from, to, at: () => from };
+  let lo = a, hi = b; // offset(lo) = from, offset(hi) ≠ from
+  while (hi - lo > 1000) { const mid = Math.floor((lo + hi) / 2000) * 1000; if (offsetSec(mid, zone) === from) lo = mid; else hi = mid; }
+  return { from, to, change: hi, at: t => t < hi ? from : to };
+}
+
+/* ---------- next runs ---------- */
+/* Lists the runs after `from` (ms). Wall-clock times are in `zone`. Around daylight-saving changes it
+   follows cronie (the usual Linux cron): a time the clocks skip runs once, right after the change; a
+   time that happens twice runs once. Jobs whose hour field starts with * go by real time instead,
+   so they skip the missing hour and run in both copies of a repeated one.
+   Returns { runs: [{ ms, wall, gap?, repeat? }], more: bool, reason? }. */
+function nextRuns(c, { from = Date.now(), count = 10, zone = LOCAL_ZONE, maxYears = 400 } = {}) {
+  const F = c.fields, out = [];
+  if (!c.ok || c.reboot) return { runs: out };
+  const secs = F.second ? [...F.second.values].sort((a, b) => a - b) : [0];
+  const mins = [...F.minute.values].sort((a, b) => a - b), hours = [...F.hour.values].sort((a, b) => a - b);
+  const byRealTime = F.hour.star;
+  const maxYear = F.year ? Math.max(...F.year.values) : Infinity;
+  const start = wallParts(from, zone);
+  let day = Math.floor(Date.UTC(start.y, start.mo - 1, start.d) / DAY);
+  let last = from, lastFound = day;
+  const limit = Math.round(maxYears * 365.2425);
+  while (out.length < count) {
+    const date = new Date(day * DAY), y = date.getUTCFullYear(), mo = date.getUTCMonth() + 1, d = date.getUTCDate(), wd = date.getUTCDay();
+    if (y > maxYear || y > 9999) return { runs: out, more: false, reason: 'end' };
+    if (day - lastFound > limit) return { runs: out, more: false, reason: 'limit' };
+    if (dayMatches(c, y, mo, d, wd)) {
+      const before = out.length, naive0 = day * DAY, off = dayOffsets(naive0, zone), dayRuns = [];
+      const push = (ms, wall, extra) => {
+        if (ms > last) { dayRuns.push({ ms, wall, ...extra }); if (!off.change) { last = ms; out.push(dayRuns.pop()); } }
+      };
+      outer: for (const h of hours) for (const mi of mins) for (const s of secs) {
+        if (!off.change && out.length >= count) break outer;
+        const naive = naive0 + (h * 3600 + mi * 60 + s) * 1000, wall = { y, mo, d, h, mi, s };
+        if (!off.change) { push(naive - off.from * 1000, wall); continue; }
+        const t1 = naive - off.from * 1000, t2 = naive - off.to * 1000;
+        const ok1 = off.at(t1) === off.from, ok2 = off.at(t2) === off.to;
+        if (ok1 && ok2 && t1 !== t2) {
+          push(Math.min(t1, t2), wall, { repeat: 1 });
+          if (byRealTime) push(Math.max(t1, t2), wall, { repeat: 2 });
+        } else if (ok1 || ok2) push(ok1 ? t1 : t2, wall);
+        else if (!byRealTime) push(off.change, wall, { gap: true });
+      }
+      if (off.change) {
+        dayRuns.sort((a, b) => a.ms - b.ms);
+        for (const r of dayRuns) if (r.ms > last && out.length < count) { out.push(r); last = r.ms; }
+      }
+      if (out.length > before) lastFound = day;
+    }
+    day++;
+  }
+  return { runs: out, more: true };
+}
+
+/* ---------- describing ---------- */
+const ord = n => n + (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] || 'th');
+const ORD_WORDS = ['', 'first', 'second', 'third', 'fourth', 'fifth'];
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+function joinList(items, and = 'and') {
+  return items.length <= 1 ? items.join('') : `${items.slice(0, -1).join(', ')} ${and} ${items[items.length - 1]}`;
+}
+const pad2 = n => String(n).padStart(2, '0');
+function clock(h, m, s, { h12 = false, seconds = false } = {}) {
+  const ss = seconds ? ':' + pad2(s || 0) : '';
+  if (!h12) return `${pad2(h)}:${pad2(m)}${ss}`;
+  return `${h % 12 || 12}:${pad2(m)}${ss} ${h < 12 ? 'AM' : 'PM'}`;
+}
+/* Sorted values → runs of consecutive values [[a, b], …]. */
+function runsOf(vals) {
+  const out = [];
+  for (const v of vals) { const r = out[out.length - 1]; if (r && v === r[1] + 1) r[1] = v; else out.push([v, v]); }
+  return out;
+}
+/* A set of values as text: "1, 3 and 5 to 9". Runs of 3 or more become ranges. */
+function valuesText(vals, name = String, to = ' to ') {
+  const parts = [];
+  for (const [a, b] of runsOf(vals)) {
+    if (b - a >= 2) parts.push(name(a) + to + name(b));
+    else for (let v = a; v <= b; v++) parts.push(name(v));
+  }
+  return joinList(parts);
+}
+
+/* What a field's values look like: every value, an even step, or a set. */
+function shape(f) {
+  const { min, max } = f.key === 'year' ? { min: 1970, max: 2199 } : FIELDS[f.key];
+  const vals = [...f.values].sort((a, b) => a - b);
+  if (f.specials.length) return { kind: 'values', vals };
+  if (f.any || (f.key !== 'year' && vals.length === max - min + 1)) return { kind: 'every', vals };
+  if (f.key === 'year' && f.parts.length === 1 && f.parts[0].star && f.parts[0].step === 1) return { kind: 'every', vals };
+  if (vals.length === 1) return { kind: 'one', v: vals[0], vals };
+  if (vals.length >= 2 && f.key !== 'dow') {
+    const n = vals[1] - vals[0], a = vals[0], b = vals[vals.length - 1];
+    const step = { kind: 'step', n, a, b, fromStart: a === min, toEnd: b + n > max, vals };
+    // two values only count as a step when they split the whole range evenly (0,30 → every 30 minutes)
+    if (n > 1 && vals.every((v, i) => v === a + i * n) && (vals.length > 2 || (step.fromStart && step.toEnd))) return step;
+  }
+  return { kind: 'values', vals };
+}
+
+function describeTime(c, o) {
+  const F = c.fields, S = F.second ? shape(F.second) : { kind: 'one', v: 0, vals: [0] }, M = shape(F.minute), H = shape(F.hour);
+  const secFixed = S.kind === 'one', minFixed = M.kind === 'one';
+  const showSec = !!F.second && !(secFixed && S.v === 0);
+  const t = (h, m, s) => clock(h, m, s, { h12: o.h12, seconds: showSec });
+  // A handful of times: list them.
+  const combos = S.vals.length * M.vals.length * H.vals.length;
+  if (combos <= 6 || (secFixed && minFixed && H.kind === 'values' && combos <= 12 && runsOf(H.vals).every(([a, b]) => b - a < 2))) {
+    const times = [];
+    for (const h of H.vals) for (const m of M.vals) for (const s of S.vals) times.push(t(h, m, s));
+    return `at ${joinList(times)}`;
+  }
+  const past = (m, s) => {
+    const parts = [m && plural(m, 'minute'), s && plural(s, 'second')].filter(Boolean);
+    return parts.length ? `at ${parts.join(' and ')} past` : 'on the hour';
+  };
+  const hourWord = n => n === 2 ? 'every other hour' : `every ${ord(n)} hour`;
+  if (secFixed && minFixed) {
+    const m = M.v, s = S.v;
+    if (H.kind === 'every') return `every hour, ${past(m, s)}`;
+    if (H.kind === 'step' && H.fromStart && H.toEnd) return `every ${H.n} hours, ${past(m, s)}`;
+    if (H.kind === 'step') return `every ${H.n} hours from ${t(H.a, m, s)} to ${t(H.b, m, s)}`;
+    const r = runsOf(H.vals);
+    if (r.length === 1) return `every hour from ${t(r[0][0], m, s)} to ${t(r[0][1], m, s)}`;
+    return `every hour, ${past(m, s)}, during hours ${valuesText(H.vals)}`;
+  }
+  const parts = [];
+  // seconds
+  if (!secFixed) {
+    if (S.kind === 'every') parts.push('every second');
+    else if (S.kind === 'step' && S.fromStart && S.toEnd) parts.push(`every ${S.n} seconds`);
+    else if (S.kind === 'step' && S.toEnd) parts.push(`every ${S.n} seconds, starting at ${plural(S.a, 'second')} past the minute`);
+    else if (S.kind === 'step') parts.push(`every ${S.n} seconds from ${S.a} to ${S.b} seconds past the minute`);
+    else if (runsOf(S.vals).length === 1) parts.push(`every second from ${S.vals[0]} to ${S.vals.at(-1)} seconds past the minute`);
+    else parts.push(`at ${valuesText(S.vals)} seconds past the minute`);
+  }
+  // minutes
+  const lead = parts.length === 0;
+  if (M.kind === 'every') { if (lead) parts.push('every minute'); }
+  else if (M.kind === 'step' && M.fromStart && M.toEnd) parts.push(`every ${M.n} minutes`);
+  else if (M.kind === 'step' && M.toEnd) parts.push(`every ${M.n} minutes, starting at ${plural(M.a, 'minute')} past the hour`);
+  else if (M.kind === 'step') parts.push(`every ${M.n} minutes from ${M.a} to ${M.b} minutes past the hour`);
+  else if (M.kind === 'one') parts.push(H.kind === 'one' ? `from ${t(H.v, M.v, 0)} to ${clock(H.v, M.v, 59, { h12: o.h12, seconds: true })}` : `during minute ${M.v} past the hour`);
+  else if (runsOf(M.vals).length === 1) parts.push(`${lead ? 'every minute' : 'during minutes'} ${M.vals[0]} to ${M.vals.at(-1)} past the hour`);
+  else parts.push(`at ${valuesText(M.vals)} minutes past the hour`);
+  if (showSec && secFixed) parts.push(`at ${plural(S.v, 'second')} past${M.kind === 'every' || M.kind === 'step' ? '' : ' the minute'}`);
+  if (M.kind === 'one' && H.kind === 'one') return parts.join(', ');
+  // hours
+  const end = h => clock(h, 59, 0, o);
+  if (H.kind === 'every') {}
+  else if (H.kind === 'step' && H.fromStart && H.toEnd) parts.push(`in ${hourWord(H.n)}`);
+  else if (H.kind === 'step') parts.push(`in ${hourWord(H.n)} from ${t(H.a, 0, 0)} to ${end(H.b)}`);
+  else {
+    const r = runsOf(H.vals);
+    if (r.length === 1) parts.push(`between ${t(r[0][0], 0, 0)} and ${end(r[0][1])}`);
+    else if (r.length <= 4) parts.push(`during ${joinList(r.map(([a, b]) => `${clock(a, 0, 0, o)}–${end(b)}`))}`);
+    else parts.push(`during hours ${valuesText(H.vals)}`);
+  }
+  return parts.join(', ');
+}
+
+const dayName = (d, pl) => DAY_NAMES[d] + (pl ? 's' : '');
+function describeDom(f) {
+  const s = shape(f), items = [];
+  if (s.kind === 'every') return '';
+  if (s.kind === 'step' && !f.specials.length) {
+    const every = s.n === 2 ? 'every other day' : `every ${ord(s.n)} day`;
+    if (s.fromStart && s.toEnd) return `on ${every} of the month`;
+    return `on ${every} of the month from the ${ord(s.a)} to the ${ord(s.b)}`;
+  }
+  if (s.vals.length) {
+    const r = runsOf(s.vals);
+    if (r.length === 1 && r[0][1] - r[0][0] >= 2 && !f.specials.length) return `from the ${ord(r[0][0])} to the ${ord(r[0][1])} of the month`;
+    items.push('the ' + valuesText(s.vals, ord));
+  }
+  for (const sp of f.specials) {
+    if (sp.t === 'last') items.push(sp.n ? `the ${ord(sp.n + 1)}-to-last day` : 'the last day');
+    if (sp.t === 'lastWeekday') items.push('the last weekday');
+    if (sp.t === 'nearestWeekday') items.push(`the weekday nearest the ${ord(sp.n)}`);
+  }
+  return `on ${joinList(items)} of the month`;
+}
+function describeDow(f, pl = true) {
+  const s = shape(f), items = [];
+  if (s.kind === 'every') return '';
+  const set = s.vals.join();
+  if (!f.specials.length && set === '1,2,3,4,5') return pl ? 'on weekdays' : 'a weekday';
+  if (!f.specials.length && set === '0,6') return pl ? 'at weekends' : 'a Saturday or Sunday';
+  if (s.vals.length) {
+    const ordered = WEEK_ORDER.filter(d => f.values.has(d)), pos = d => WEEK_ORDER.indexOf(d);
+    const runs = runsOf(ordered.map(pos)).map(([a, b]) => [WEEK_ORDER[a], WEEK_ORDER[b]]);
+    const ranged = runs.some(([a, b]) => pos(b) - pos(a) >= 2);
+    for (const [a, b] of runs) {
+      if (pos(b) - pos(a) >= 2) items.push(`${dayName(a)} to ${dayName(b)}`);
+      else for (let i = pos(a); i <= pos(b); i++) items.push(dayName(WEEK_ORDER[i], pl && !ranged));
+    }
+  }
+  for (const sp of f.specials) {
+    if (sp.t === 'lastDow') items.push(`the last ${dayName(sp.d)} of the month`);
+    if (sp.t === 'nth') items.push(`the ${ORD_WORDS[sp.n]} ${dayName(sp.d)} of the month`);
+  }
+  const txt = joinList(items, pl ? 'and' : 'or');
+  if (!pl) return /^[A-Z]/.test(txt) ? 'a ' + txt : txt;
+  return / to /.test(items[0]) ? txt : 'on ' + txt; // "Monday to Friday", "on Mondays and Fridays"
+
+}
+function describeMonth(f) {
+  const s = shape(f);
+  if (s.kind === 'every') return '';
+  return 'in ' + valuesText(s.vals, v => MONTH_NAMES[v - 1]);
+}
+function describeYear(f) {
+  const s = shape(f);
+  if (s.kind === 'every') return '';
+  if (s.kind === 'step' && s.vals.length > 4) return `every ${s.n} years from ${s.a} to ${s.b}`;
+  return 'in ' + valuesText(s.vals);
+}
+
+/* The whole expression in plain English. o: { h12 } */
+function describe(c, o = {}) {
+  if (!c.ok) return '';
+  if (c.reboot) return 'Once, when cron starts (usually when the machine boots).';
+  const F = c.fields, parts = [describeTime(c, o)];
+  const dom = describeDom(F.dom), dow = describeDow(F.dow);
+  if (c.dayMode === 'dom') parts.push(dom);
+  else if (c.dayMode === 'dow') parts.push(dow);
+  else if (c.dayMode === 'or') parts.push(dom && dow ? `${dom}, and also ${dow}` : dom || dow);
+  else if (c.dayMode === 'and') parts.push(dom && dow ? `${dom}, but only if it’s ${describeDow(F.dow, false)}` : dom || dow);
+  parts.push(describeMonth(F.month));
+  if (F.year) parts.push(describeYear(F.year));
+  const txt = parts.filter(Boolean).join(', ');
+  return txt[0].toUpperCase() + txt.slice(1);
+}
+
+/* One field on its own, for the breakdown table. */
+function describeField(c, key, o = {}) {
+  const f = c.fields[key], s = shape(f);
+  if (f.any) return 'Not used (?): the other day field decides';
+  if (s.kind === 'every') return key === 'year' ? 'Any year' : `Every ${FIELDS[key].label.toLowerCase()}`;
+  const unit = { second: 'second', minute: 'minute', hour: 'hour' }[key];
+  if (unit) {
+    if (s.kind === 'step') return `Every ${s.n} ${unit}s${s.fromStart && s.toEnd ? '' : ` from ${s.a} to ${s.b}`}`;
+    return `${unit[0].toUpperCase() + unit.slice(1)}${s.vals.length > 1 ? 's' : ''} ${valuesText(s.vals)}`;
+  }
+  const d = key === 'dom' ? describeDom(f) : key === 'dow' ? describeDow(f) : key === 'month' ? describeMonth(f) : describeYear(f);
+  return d[0].toUpperCase() + d.slice(1);
+}
+/* A field's matching values, compactly: "0, 15, 30, 45", "Mon–Fri". */
+function valuesShort(c, key) {
+  const f = c.fields[key], vals = [...f.values].sort((a, b) => a - b);
+  if (f.any) return '–';
+  const name = key === 'month' ? v => MONTH_NAMES[v - 1].slice(0, 3) : key === 'dow' ? v => DAY_NAMES[v].slice(0, 3) : String;
+  const list = key === 'dow' ? WEEK_ORDER.filter(d => f.values.has(d)).map(name).join(', ') : valuesText(vals, name, '–').replace(/ and /, ', ');
+  const extra = f.specials.map(s => s.t === 'last' ? (s.n ? `L-${s.n}` : 'L') : s.t === 'lastWeekday' ? 'LW' : s.t === 'nearestWeekday' ? `${s.n}W` : s.t === 'lastDow' ? `last ${name(s.d)}` : `${name(s.d)} #${s.n}`);
+  return [vals.length ? list : '', ...extra].filter(Boolean).join(', ');
+}
+
+/* Warnings and explanations that go under the description. */
+function notesFor(c, hasSpecial) {
+  const F = c.fields, notes = [];
+  const text = F.dom.text + F.dow.text;
+  if (c.dialect === 'unix') {
+    if (c.dayMode === 'or') notes.push({ k: 'or', t: 'Both day fields are set, so cron runs on days that match either of them, not only on days that match both. This catches a lot of people out.' });
+    if (c.dayMode === 'and' && !F.dom.any && !F.dow.any && shape(F.dom).kind !== 'every' && shape(F.dow).kind !== 'every') notes.push({ k: 'and', t: `One day field starts with *, so both have to match. That’s Vixie cron’s rule (also cronie on Linux); some crons run when either matches.` });
+    const sp = [...F.dom.specials, ...F.dow.specials].map(s => s.t);
+    const ext = [
+      sp.some(t => t === 'last' || t === 'lastWeekday' || t === 'lastDow') && 'L',
+      sp.some(t => t === 'lastWeekday' || t === 'nearestWeekday') && 'W',
+      sp.includes('nth') && '#', /\?/.test(text) && '?', c.seconds && 'a seconds field'].filter(Boolean);
+    if (ext.length) notes.push({ k: 'ext', t: `Standard crontab doesn’t support ${joinList(ext, 'or')}. Libraries such as Spring and croner do.` });
+    if (c.guessed && c.seconds) notes.push({ k: 'guess', t: 'Six fields, so the first is read as seconds (as in Spring and node-cron). If it’s Quartz, pick Quartz, since it counts days of the week from 1 = Sunday.' });
+  }
+  if (c.dialect !== 'unix' && c.guessed && /\d/.test(F.dow.text.replace(/#\d+/, ''))) notes.push({ k: 'guess', t: `Read as ${DIALECTS[c.dialect].name}, where days of the week go from 1 = Sunday to 7 = Saturday. If that’s wrong, pick the dialect.` });
+  if (c.dialect === 'aws') notes.push({ k: 'aws', t: 'EventBridge rules run in UTC. EventBridge Scheduler lets you choose a time zone.' });
+  const domVals = [...F.dom.values];
+  if (!F.dom.star && !F.dom.specials.length && domVals.length && Math.min(...domVals) > 28) {
+    const months = [...F.month.values].filter(m => domVals.some(d => d <= dim(2000, m)));
+    notes.push({ k: 'short', t: months.length ? `Months without a ${joinList(domVals.sort((a, b) => a - b).map(ord), 'or')} are skipped${c.dialect === 'unix' ? '' : '. Use L for the last day of the month'}.` : 'None of the chosen months have that day, so this never runs.' });
+  }
+  return notes;
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  DIALECTS, FIELDS, MACROS, parseCron, tokenize, parseField, dayMatches, nextRuns, describe, describeField, valuesShort,
+  LOCAL_ZONE, isValidZone, canonicalZone, wallParts, offsetSec, clock, ord, shape,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'cron.settings';
+const DEFAULTS = { dialect: 'auto', clock: '24', zone: 'local', count: 10 };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+if (!['auto', 'unix', 'quartz', 'aws'].includes(settings.dialect)) settings.dialect = 'auto';
+if (settings.zone !== 'local' && !isValidZone(settings.zone)) settings.zone = 'local';
+if (![5, 10, 20, 50, 100, 250].includes(+settings.count)) settings.count = 10;
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+const h12 = () => settings.clock === '12';
+
+const ALL_ZONES = (() => {
+  let z = [];
+  try { z = Intl.supportedValuesOf('timeZone'); } catch {}
+  return [...new Set(['UTC', ...z])];
+})();
+
+/* ---------- state ---------- */
+const input = $('#input');
+let current = { empty: true };
+let fromMs = null; // null: from now
+let runs = [];
+
+function reparse() {
+  current = parseCron(input.value, { dialect: settings.dialect });
+  render();
+}
+function setInput(text) { input.value = text; reparse(); }
+
+/* The zone runs are shown in: CRON_TZ= in the expression wins over the picker. */
+function zoneInfo() {
+  if (current.ok && current.zone) {
+    if (isValidZone(current.zone)) return { zone: canonicalZone(current.zone), fromExpr: true };
+    return { zone: settings.zone === 'local' ? LOCAL_ZONE : settings.zone, bad: current.zone };
+  }
+  return { zone: settings.zone === 'local' ? LOCAL_ZONE : settings.zone };
+}
+
+/* ---------- formatting ---------- */
+const WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const pad = (n, w = 2) => String(n).padStart(w, '0');
+const dateStr = w => `${WD[new Date(Date.UTC(w.y, w.mo - 1, w.d)).getUTCDay()]} ${w.d} ${MO[w.mo - 1]} ${w.y}`;
+function offsetStr(sec) {
+  const a = Math.abs(sec);
+  return (sec < 0 ? '-' : '+') + pad(Math.floor(a / 3600)) + ':' + pad(Math.floor(a % 3600 / 60));
+}
+function isoIn(ms, zone) {
+  const w = wallParts(ms, zone), off = offsetSec(ms, zone);
+  return `${pad(w.y, 4)}-${pad(w.mo)}-${pad(w.d)}T${pad(w.h)}:${pad(w.mi)}:${pad(w.s)}${zone === 'UTC' ? 'Z' : off ? offsetStr(off) : '+00:00'}`;
+}
+/* "3 h 20 min", the largest two units. */
+function span(ms) {
+  let s = Math.round(Math.abs(ms) / 1000);
+  if (s < 60) return `${s} s`;
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60); s %= 60;
+  const parts = [[d, d === 1 ? 'day' : 'days'], [h, 'h'], [m, 'min'], [s, 's']];
+  const i = parts.findIndex(p => p[0]);
+  return parts.slice(i, i + 2).filter(p => p[0]).map(([n, u]) => `${n.toLocaleString('en')} ${u}`).join(' ');
+}
+const rel = (ms, now) => ms - now < 1000 ? 'now' : `in ${span(ms - now)}`;
+
+/* ---------- render ---------- */
+const CHIP_LABELS = { second: 'Second', minute: 'Minute', hour: 'Hour', dom: 'Day', month: 'Month', dow: 'Weekday', year: 'Year' };
+const EXAMPLE_FIELDS = { unix: ['minute', 'hour', 'dom', 'month', 'dow'], quartz: DIALECTS.quartz.fields[0], aws: DIALECTS.aws.fields[0] };
+
+function render() {
+  const c = current, ok = !!c.ok;
+  $('#clearX').hidden = !input.value;
+  $('#field').classList.toggle('bad', !!c.error);
+  input.setAttribute('aria-invalid', String(!!c.error));
+
+  // chips
+  let chips = [];
+  if (ok && !c.reboot) chips = c.keys.map((k, i) => ({ k, v: c.tokens[i] }));
+  else if (c.error) {
+    const toks = input.value.trim().split(/\s+/);
+    const keys = settings.dialect === 'auto' ? EXAMPLE_FIELDS.unix : EXAMPLE_FIELDS[settings.dialect];
+    if (c.field >= 0) chips = toks.slice(0, Math.max(keys.length, c.field + 1)).map((v, i) => ({ k: keys[i] || '', v, bad: i === c.field }));
+  } else if (c.empty) chips = EXAMPLE_FIELDS[settings.dialect === 'auto' ? 'unix' : settings.dialect].map(k => ({ k, v: '·', missing: true }));
+  $('#chips').innerHTML = chips.map(ch => `<div class="chip${ch.bad ? ' bad' : ''}${ch.missing ? ' missing' : ''}"><b>${esc(ch.v)}</b><span>${esc(CHIP_LABELS[ch.k] || '')}</span></div>`).join('');
+
+  // detection line
+  const badge = $('#detectBadge'), msg = $('#detectMsg');
+  badge.hidden = !!c.empty;
+  badge.classList.toggle('err', !!c.error);
+  badge.textContent = c.error ? 'Not valid' : ok ? (c.macro ? c.macro : `${DIALECTS[c.dialect].name} · ${c.tokens.length} fields`) : '';
+  const bits = [];
+  if (ok && c.macro && !c.reboot) bits.push(`Same as <code>${esc(MACROS[c.macro])}</code>.`);
+  if (ok && c.guessed && !c.macro && c.dialect !== 'unix') bits.push(c.awsWrapped ? 'Read as AWS, from cron(…).' : `Read as ${DIALECTS[c.dialect].name}, from ${c.tokens.length === 7 ? 'the number of fields' : 'where the ? is'}.`);
+  const zi = zoneInfo();
+  if (zi.fromExpr) bits.push(`Time zone ${esc(zi.zone)}, from the expression.`);
+  if (zi.bad) bits.push(`“${esc(zi.bad)}” isn’t a time zone this browser knows.`);
+  msg.innerHTML = c.empty ? 'Type or paste a cron expression, or pick an example.' : c.error ? esc(c.error) : bits.join(' ');
+
+  // English
+  const en = $('#english');
+  en.classList.toggle('empty', !ok);
+  en.textContent = ok ? describe(c, { h12: h12() }) : c.error ? 'Fix the expression to see what it means.' : 'Nothing to explain yet.';
+  $('#copyEnglish').disabled = !ok;
+  $('#cmd').hidden = !(ok && c.command);
+  if (ok && c.command) $('#cmd').innerHTML = `Runs the command <code>${esc(c.command)}</code>`;
+
+  // notes
+  const notes = ok ? [...c.notes] : [];
+  const kind = { or: 'warn', short: 'warn', ext: '', guess: '', aws: '', and: '' };
+  $('#notes').innerHTML = notes.map(n => `<li class="${n.k === 'short' && /never/.test(n.t) ? 'bad' : kind[n.k] || ''}">${esc(n.t)}</li>`).join('');
+  $('#notes').hidden = !notes.length;
+
+  // field table
+  $('#fieldsWrap').hidden = !ok || c.reboot;
+  if (ok && !c.reboot) {
+    $('#fieldRows').innerHTML = c.keys.map((k, i) => `<tr><td class="f">${esc(FIELDS[k].label)}</td><td class="v">${esc(c.tokens[i])}</td><td>${esc(describeField(c, k, { h12: h12() }))}</td><td class="m">${esc(valuesShort(c, k))}</td></tr>`).join('');
+  }
+  renderZoneSelect();
+  computeRuns();
+}
+
+/* ---------- next runs ---------- */
+function computeRuns() {
+  const c = current, { zone } = zoneInfo();
+  const from = fromMs ?? Date.now();
+  const res = c.ok && !c.reboot ? nextRuns(c, { from, count: +settings.count, zone }) : { runs: [] };
+  runs = res.runs;
+  const secs = !!(c.ok && c.seconds);
+  let prev = null, prevMs = null;
+  $('#runs').innerHTML = runs.map((r, i) => {
+    const w = wallParts(r.ms, zone), date = dateStr(w), head = date === prev ? '' : `<li class="day">${esc(date)}</li>`;
+    const time = clock(w.h, w.mi, w.s, { h12: h12(), seconds: secs });
+    const sub = [];
+    if (prevMs !== null) sub.push(`+${span(r.ms - prevMs)}`);
+    if (r.gap) sub.push(`<span class="dst">${esc(clock(r.wall.h, r.wall.mi, r.wall.s, { h12: h12(), seconds: secs }))} is skipped as the clocks go forward, so it runs straight after the change</span>`);
+    if (r.repeat) sub.push(`<span class="dst">${r.repeat === 2 ? 'After the clocks go back' : c.fields.hour.star ? 'Before the clocks go back' : `${esc(time)} happens twice as the clocks go back; runs the first time only`}</span>`);
+    const html = `${head}<li><button class="run" type="button" data-i="${i}" title="Copy as ISO 8601" aria-label="${esc(`${date} ${time}`)}, copy as ISO 8601">
+      <span class="r-n">${i + 1}</span><span class="r-when">${esc(time)}</span><span class="r-rel" data-ms="${r.ms}"></span>
+      ${sub.length ? `<span class="r-sub">${sub.join('')}</span>` : ''}</button></li>`;
+    prev = date; prevMs = r.ms;
+    return html;
+  }).join('');
+  updateRelative();
+  $('#copyRuns').disabled = !runs.length;
+
+  const end = $('#runsEnd');
+  let endMsg = '', bad = false;
+  if (c.reboot) endMsg = '@reboot runs when cron starts, not at a set time.';
+  else if (c.ok && !runs.length) { bad = true; endMsg = res.reason === 'end' ? 'Never runs after this date: the year field has ended.' : 'Never runs: no matching time in the next 400 years.'; }
+  else if (c.ok && !res.more) endMsg = res.reason === 'end' ? 'No more runs: the year field ends there.' : 'No more runs in the 400 years after the last one.';
+  else if (!c.ok) endMsg = c.error ? 'Fix the expression to see when it runs.' : 'Runs will appear here.';
+  end.hidden = !endMsg; end.textContent = endMsg; end.classList.toggle('bad', bad);
+
+  const zi = zoneInfo();
+  $('#runsNote').textContent = c.ok && !c.reboot
+    ? `Times in ${zi.zone}${zi.zone === LOCAL_ZONE ? ' (yours)' : ''}. Click a run to copy it. When the clocks change, runs follow cronie, the usual Linux cron.`
+    : '';
+  $('#runsNote').hidden = !$('#runsNote').textContent;
+}
+function updateRelative() {
+  const now = Date.now();
+  document.querySelectorAll('#runs .r-rel').forEach(el => {
+    const ms = +el.dataset.ms;
+    el.textContent = fromMs === null ? rel(ms, now) : ms >= now ? rel(ms, now) : `${span(now - ms)} ago`;
+  });
+}
+$('#runs').addEventListener('click', e => {
+  const b = e.target.closest('.run'); if (!b) return;
+  copyText(isoIn(runs[+b.dataset.i].ms, zoneInfo().zone));
+});
+$('#copyRuns').onclick = () => { const z = zoneInfo().zone; copyText(runs.map(r => isoIn(r.ms, z)).join('\n'), `Copied ${runs.length} run${runs.length === 1 ? '' : 's'}`); };
+$('#copyEnglish').onclick = () => copyText($('#english').textContent);
+
+/* ---------- zone, count, from ---------- */
+function renderZoneSelect() {
+  const sel = $('#zone'), zi = zoneInfo();
+  if (!sel.options.length) {
+    const opt = z => `<option value="${esc(z)}">${esc(z)}</option>`;
+    sel.innerHTML = `<option value="local">Your zone (${esc(LOCAL_ZONE)})</option>${LOCAL_ZONE === 'UTC' ? '' : opt('UTC')}`
+      + `<optgroup label="All time zones">${ALL_ZONES.filter(z => z !== 'UTC').map(opt).join('')}</optgroup>`;
+    if (settings.zone !== 'local' && !ALL_ZONES.includes(settings.zone)) sel.insertAdjacentHTML('beforeend', opt(settings.zone));
+  }
+  sel.value = settings.zone;
+  sel.disabled = !!zi.fromExpr;
+  sel.title = zi.fromExpr ? 'Set by CRON_TZ or TZ in the expression' : '';
+}
+$('#zone').onchange = e => { settings.zone = e.target.value; saveSettings(); syncFromInput(); computeRuns(); };
+$('#count').value = String(settings.count);
+$('#count').onchange = e => { settings.count = +e.target.value; saveSettings(); computeRuns(); };
+
+/* "From" is a wall-clock time in the runs' zone; empty means now. */
+const fromIn = $('#from');
+function syncFromInput() {
+  if (fromMs === null) { fromIn.value = ''; return; }
+  const w = wallParts(fromMs, zoneInfo().zone);
+  fromIn.value = `${pad(w.y, 4)}-${pad(w.mo)}-${pad(w.d)}T${pad(w.h)}:${pad(w.mi)}:${pad(w.s)}`;
+}
+fromIn.addEventListener('change', () => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/.exec(fromIn.value);
+  if (!m) { fromMs = null; computeRuns(); return; }
+  const zone = zoneInfo().zone, naive = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0));
+  // the instant that wall time happens in the zone (the earlier one if it happens twice)
+  const cands = [naive - offsetSec(naive - DAY, zone) * 1000, naive - offsetSec(naive + DAY, zone) * 1000]
+    .filter(t => Date.UTC(...(w => [w.y, w.mo - 1, w.d, w.h, w.mi, w.s])(wallParts(t, zone))) === naive);
+  fromMs = cands.length ? Math.min(...cands) : naive - offsetSec(naive, zone) * 1000;
+  computeRuns();
+});
+$('#fromNow').onclick = () => { fromMs = null; syncFromInput(); computeRuns(); };
+
+/* ---------- dialect and clock ---------- */
+function segment(id, key, after) {
+  const btns = [...document.querySelectorAll(`#${id} button`)];
+  const sync = () => btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === settings[key])));
+  btns.forEach(b => b.onclick = () => { settings[key] = b.dataset.v; saveSettings(); sync(); after(); });
+  sync();
+}
+segment('dialectSeg', 'dialect', reparse);
+segment('clockSeg', 'clock', render);
+
+/* ---------- input ---------- */
+input.addEventListener('input', reparse);
+const clear = () => { setInput(''); input.focus(); };
+$('#clearBtn').onclick = clear;
+$('#clearX').onclick = clear;
+const EXAMPLES = ['*/15 * * * *', '0 9 * * 1-5', '30 2 1 * *', '0 */6 * * *', '0 0 1 1 *', '@weekly', '0 9 1-7 * 1', '0 0 12 ? * 6L', 'cron(0 18 ? * MON-FRI *)'];
+$('#examples').insertAdjacentHTML('beforeend', EXAMPLES.map(x => `<button type="button">${esc(x)}</button>`).join(''));
+$('#examples').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setInput(b.textContent); input.focus(); } });
+
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const el = e.target;
+  if (el.closest && el.closest('input, select, textarea, [contenteditable]')) return;
+  if (e.key === '/') { e.preventDefault(); input.focus(); input.select(); }
+});
+
+/* ---------- copy / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+async function copyText(text, done) {
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); toast(done || `Copied ${text}`); } catch { toast('Couldn’t copy to the clipboard'); }
+}
+
+/* ---------- live: relative times tick, and "from now" moves on as runs pass ---------- */
+setInterval(() => {
+  if (fromMs === null && runs.length && runs[0].ms <= Date.now()) computeRuns();
+  else updateRelative();
+}, 1000);
+
+/* ---------- start ---------- */
+setInput('*/15 9-17 * * 1-5');
+input.focus({ preventScroll: true });
+</script>
+</body>
+</html>

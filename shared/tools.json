@@ -20,6 +20,16 @@
     "description": "Convert colours between HEX, RGB, HSL, HWB, OKLCH and OKLab, adjust them with OKLCH sliders, map out-of-gamut colours into sRGB, and check text contrast against WCAG AA and AAA, with suggested fixes."
   },
   {
+    "slug": "cron",
+    "name": "Cron explainer",
+    "mark": [
+      "CRON",
+      ".tab"
+    ],
+    "summary": "Explain cron schedules and list next runs",
+    "description": "Explain cron expressions in plain English and list their next run times in any time zone, with Unix crontab lines, seconds fields, Quartz and AWS EventBridge syntax (L, W, # and ?), shortcuts such as @daily, and daylight-saving changes."
+  },
+  {
     "slug": "csv-json",
     "name": "CSV ⇄ JSON converter",
     "mark": [
