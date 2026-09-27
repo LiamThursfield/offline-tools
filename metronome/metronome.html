@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Metronome – Keep time with accents and tap tempo | LXST.tools</title>
+<meta name="description" content="A precise metronome from 20 to 300 BPM with sample-accurate Web Audio timing, 1 to 16 beats per bar, subdivisions (eighths, triplets, sixteenths), a clickable accent pattern with presets, tap tempo, three click sounds, and a bar counter. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/metronome">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/metronome">
+<meta property="og:title" content="Metronome">
+<meta property="og:description" content="A precise metronome from 20 to 300 BPM with sample-accurate Web Audio timing, 1 to 16 beats per bar, subdivisions (eighths, triplets, sixteenths), a clickable accent pattern with presets, tap tempo, three click sounds, and a bar counter. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Metronome","url":"https://tools.lxst.digital/metronome","description":"A precise metronome from 20 to 300 BPM with sample-accurate Web Audio timing, 1 to 16 beats per bar, subdivisions (eighths, triplets, sixteenths), a clickable accent pattern with presets, tap tempo, three click sounds, and a bar counter.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
+  --flash:color-mix(in oklab,var(--accent) 14%,var(--panel));
+  --flash-strong:color-mix(in oklab,var(--accent) 30%,var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+input[type=checkbox],input[type=range]{accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.nav:disabled{opacity:.45;cursor:not-allowed}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+kbd{font:600 .82em var(--mono);letter-spacing:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel);color:var(--ink)}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.card-head select{font-size:.8rem;padding:2px 9px}
+.note{margin:0;padding:10px 14px;color:var(--muted);font-size:.84rem}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px;align-items:start}
+.main-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* tempo dial */
+.dial{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 16px 24px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:background .25s}
+.dial.hit{background:var(--flash);transition:none}
+.dial.hit.strong{background:var(--flash-strong)}
+.marking{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tempo-row{display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,28px);width:100%}
+.step{flex:none;width:52px;height:52px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:1.5rem;font-weight:600;line-height:1;
+  display:grid;place-items:center;transition:border-color .2s,color .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.step:hover{border-color:var(--accent);color:var(--accent-text)}
+.bpm{width:3.2ch;min-width:0;border:0;background:none;text-align:center;padding:0;border-radius:12px;
+  font-size:clamp(4.5rem,15vw,8.5rem);font-weight:700;line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+.bpm::-webkit-inner-spin-button,.bpm::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.bpm:hover{background:var(--hover)}
+.bpm:focus-visible{outline:none;background:var(--hover);box-shadow:0 0 0 3px var(--ring)}
+.unit{font-size:.95rem;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.slider{width:min(100%,520px);margin:10px 0 4px}
+.slider input{width:100%;margin:0}
+.slider .ends{display:flex;justify-content:space-between;font:11px var(--mono);color:var(--muted);letter-spacing:0}
+.controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.play,.tap{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:132px;padding:11px 22px;border-radius:var(--pill);font-weight:700;font-size:1rem;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.play{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink)}
+.play:hover{background:color-mix(in oklab,var(--accent) 88%,var(--ink))}
+.play svg{width:16px;height:16px}
+.tap{border:1px solid var(--line);background:var(--surface);transition:border-color .2s,background .35s}
+.tap:hover{border-color:var(--accent);color:var(--accent-text)}
+.tap.hit{background:var(--flash-strong);transition:none}
+.tap-note{min-height:1.4em;margin-top:2px;font-size:.84rem;color:var(--muted);text-align:center}
+
+/* accent pattern */
+.pattern{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:8px;padding:14px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;padding:10px 4px 9px;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);
+  background:var(--surface);transition:border-color .2s,background .3s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.cell:hover{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.lv{display:flex;flex-direction:column-reverse;gap:3px;width:min(100%,38px)}
+.lv i{display:block;height:9px;border-radius:3px;background:color-mix(in oklab,var(--ink) 10%,transparent);transition:background .2s}
+.cell[data-level="1"] .lv i:nth-child(-n+1),.cell[data-level="2"] .lv i:nth-child(-n+2),.cell[data-level="3"] .lv i{background:color-mix(in oklab,var(--accent) 65%,var(--surface))}
+.cell[data-level="3"] .lv i{background:var(--accent)}
+.num{font-weight:700;font-size:.92rem;font-variant-numeric:tabular-nums;line-height:1}
+.cell[data-level="0"] .num{color:var(--muted);text-decoration:line-through}
+.subs{display:flex;gap:3px;min-height:5px}
+.subs i{width:5px;height:5px;border-radius:50%;background:color-mix(in oklab,var(--ink) 18%,transparent)}
+.cell.on{background:var(--flash-strong);border-color:var(--accent);transition:none}
+.subs i.on{background:var(--accent-text)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.stat{background:var(--panel);padding:10px 14px;min-width:0}
+.stat dt{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat dd{margin:2px 0 0;font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat dd small{font-size:.8rem;color:var(--muted);font-weight:600;margin-left:3px}
+.stat dd.muted{color:var(--muted);font-weight:500}
+
+/* options */
+.opts{display:flex;flex-direction:column}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:.9rem}
+.opt:last-child{border-bottom:0}
+.opt>span:first-child{display:flex;flex-direction:column}
+.opt small{color:var(--muted);font-size:.76rem;line-height:1.3}
+.opt input[type=range]{width:120px}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px}
+.side-col{display:flex;flex-direction:column;gap:16px}
+.keys{list-style:none;margin:0;padding:8px 14px 12px;font-size:.84rem;color:var(--muted);display:flex;flex-direction:column;gap:5px}
+.keys li{display:flex;justify-content:space-between;gap:10px}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media (max-width:800px){
+  .main{grid-template-columns:1fr}
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+  .keys-card{display:none}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .pattern{grid-template-columns:repeat(var(--cols-narrow,4),minmax(0,1fr));gap:6px;padding:12px}
+  .step{width:44px;height:44px}
+  .play,.tap{min-width:0;flex:1}
+  .controls{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>METRO</b>.nome<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../jwt/jwt.html" data-path="/jwt"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
+        <a href="../metronome/metronome.html" data-path="/metronome" aria-current="page"><span class="tm-mark"><b>METRO</b>.nome</span><span class="tm-text"><span class="tm-name">Metronome</span><span class="tm-sum">Keep time with accents and tap tempo</span></span></a>
+        <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+        <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="hdrPlay" title="Start or stop (Space)">Start</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Keep the beat</h1>
+    <p>Set a tempo, or tap it in, and shape the bar with accents and subdivisions. The clicks are generated in your browser and timed by the audio clock, so they stay steady.</p>
+  </div>
+
+  <div class="main">
+    <div class="main-col">
+      <section class="dial" id="dial" aria-label="Tempo">
+        <span class="marking" id="marking">Allegro</span>
+        <div class="tempo-row">
+          <button type="button" class="step" id="slower" aria-label="Slower by 1 BPM" title="Slower (↓, Shift for 10)">−</button>
+          <input class="bpm" id="bpm" type="number" inputmode="numeric" min="20" max="300" step="1" value="120" aria-label="Tempo in BPM">
+          <button type="button" class="step" id="faster" aria-label="Faster by 1 BPM" title="Faster (↑, Shift for 10)">+</button>
+        </div>
+        <span class="unit">BPM</span>
+        <div class="slider">
+          <input type="range" id="bpmRange" min="20" max="300" step="1" value="120" aria-label="Tempo slider">
+          <div class="ends" aria-hidden="true"><span>20</span><span>300</span></div>
+        </div>
+        <div class="controls">
+          <button type="button" class="play" id="play" aria-pressed="false"></button>
+          <button type="button" class="tap" id="tap" title="Tap tempo (T)">Tap tempo</button>
+        </div>
+        <div class="tap-note" id="tapNote" aria-live="polite"></div>
+      </section>
+
+      <dl class="stats" id="stats"></dl>
+
+      <section class="card" aria-labelledby="patTitle">
+        <div class="card-head"><h2 id="patTitle">Accents</h2><span class="spacer"></span>
+          <label class="sr-only" for="preset">Accent preset</label>
+          <select id="preset">
+            <option value="">Presets…</option>
+            <option value="first">Accent the first beat</option>
+            <option value="even">All beats equal</option>
+            <option value="backbeat">Backbeat (2 and 4)</option>
+            <option value="twos">Groups of 2</option>
+            <option value="threes">Groups of 3 (6/8, 9/8, 12/8)</option>
+          </select>
+        </div>
+        <div class="pattern" id="pattern"></div>
+        <p class="note">Click a beat to change it: normal → accent → mute → soft. Shift-click goes the other way. Muting a beat also mutes its subdivisions.</p>
+      </section>
+    </div>
+
+    <div class="side-col">
+      <section class="card" aria-labelledby="optsTitle">
+        <div class="card-head"><h2 id="optsTitle">Options</h2></div>
+        <div class="opts">
+          <label class="opt"><span>Beats per bar</span>
+            <select id="optBeats"></select>
+          </label>
+          <label class="opt"><span>Subdivision<small>Extra clicks between beats</small></span>
+            <select id="optSubdiv">
+              <option value="1">none</option>
+              <option value="2">eighths</option>
+              <option value="3">triplets</option>
+              <option value="4">sixteenths</option>
+            </select>
+          </label>
+          <label class="opt"><span>Sound</span>
+            <select id="optSound">
+              <option value="click">click</option>
+              <option value="wood">woodblock</option>
+              <option value="beep">beep</option>
+            </select>
+          </label>
+          <label class="opt"><span>Volume</span>
+            <input type="range" id="optVolume" min="0" max="100" step="1">
+          </label>
+          <label class="opt"><span>Flash on beat<small>Lights the tempo panel</small></span>
+            <input type="checkbox" id="optFlash">
+          </label>
+        </div>
+      </section>
+      <section class="card keys-card" aria-labelledby="keysTitle">
+        <div class="card-head"><h2 id="keysTitle">Keyboard</h2></div>
+        <ul class="keys">
+          <li><span>Start / stop</span><kbd>Space</kbd></li>
+          <li><span>Tap tempo</span><kbd>T</kbd></li>
+          <li><span>Tempo ±1</span><span><kbd>↑</kbd> <kbd>↓</kbd></span></li>
+          <li><span>Tempo ±10</span><span><kbd>Shift</kbd> <kbd>↑</kbd> <kbd>↓</kbd></span></li>
+          <li><span>Stop</span><kbd>Esc</kbd></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="sr-only" id="announce" aria-live="polite"></div>
+
+<!-- ===== Core metronome logic (pure functions, no DOM) ===== -->
+<script id="core">
+const MIN_BPM = 20, MAX_BPM = 300, MAX_BEATS = 16;
+/* Accent levels for a beat. Subdivision clicks use their own, quieter sound. */
+const MUTE = 0, SOFT = 1, NORMAL = 2, ACCENT = 3;
+const LEVEL_NAMES = ['muted', 'soft', 'normal', 'accent'];
+
+const clampBpm = v => Math.min(MAX_BPM, Math.max(MIN_BPM, Math.round(v)));
+/* Seconds between two clicks (beats, or subdivisions when subdiv > 1). */
+const stepSeconds = (bpm, subdiv = 1) => 60 / bpm / subdiv;
+
+/* Traditional Italian tempo markings, by upper bound. The ranges overlap in practice; these are one common reading. */
+const MARKINGS = [[25, 'Larghissimo'], [40, 'Grave'], [60, 'Largo'], [66, 'Larghetto'], [76, 'Adagio'], [108, 'Andante'],
+  [120, 'Moderato'], [156, 'Allegro'], [176, 'Vivace'], [200, 'Presto'], [Infinity, 'Prestissimo']];
+const tempoMarking = bpm => MARKINGS.find(([hi]) => bpm < hi)[1];
+
+/* What sounds at step n of a bar of beats × subdiv steps (n wraps). A muted beat mutes its subdivisions too. */
+function stepAt(n, beats, subdiv, accents) {
+  const total = beats * subdiv, i = ((n % total) + total) % total;
+  const beat = Math.floor(i / subdiv), sub = i % subdiv, level = accents[beat] ?? NORMAL;
+  return { beat, sub, level: sub && level ? SOFT : level, isSub: sub > 0 };
+}
+
+/* Click cycle: normal → accent → mute → soft → normal (dir -1 reverses). */
+const cycleLevel = (level, dir = 1) => (level + dir + 4) % 4;
+
+/* Accent patterns for a bar of `beats`. */
+function accentPreset(name, beats) {
+  return Array.from({ length: beats }, (_, i) => {
+    switch (name) {
+      case 'even': return NORMAL;
+      case 'backbeat': return i % 2 ? ACCENT : NORMAL;
+      case 'twos': return i === 0 ? ACCENT : i % 2 ? SOFT : NORMAL;
+      case 'threes': return i === 0 ? ACCENT : i % 3 ? SOFT : NORMAL;
+      default: return i === 0 ? ACCENT : NORMAL; // 'first'
+    }
+  });
+}
+/* Grow or shrink a pattern, keeping the beats that are still there. */
+const resizeAccents = (accents, beats) =>
+  Array.from({ length: beats }, (_, i) => i < accents.length ? accents[i] : i === 0 ? ACCENT : NORMAL);
+
+/* Tap tempo. Tap times are ms on any monotonic clock (e.g. event.timeStamp). */
+const mean = xs => xs.reduce((s, x) => s + x, 0) / xs.length;
+/* Beat length by least-squares fit of tap time against tap number, so one early or late tap barely moves it. */
+function fitBeat(times) {
+  const n = times.length;
+  if (n < 2) return null;
+  const mi = (n - 1) / 2, mt = mean(times);
+  let num = 0, den = 0;
+  for (let i = 0; i < n; i++) { num += (i - mi) * (times[i] - mt); den += (i - mi) ** 2; }
+  return num / den;
+}
+/* Add a tap, starting over after a pause longer than maxGap; keeps the last `keep` taps. */
+function addTap(times, t, { maxGap = 2000, keep = 8 } = {}) {
+  const fresh = times.length && t - times[times.length - 1] > maxGap ? [] : times;
+  return [...fresh, t].slice(-keep);
+}
+/* Tempo from recent taps, or null until there are two. */
+function tapBpm(times) {
+  const beat = fitBeat(times);
+  return beat > 0 ? 60000 / beat : null;
+}
+
+function fmtElapsed(sec) {
+  const s = Math.max(0, Math.floor(sec)), h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60;
+  const ss = String(s % 60).padStart(2, '0');
+  return h ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
+}
+
+if (typeof module !== 'undefined') module.exports = { MIN_BPM, MAX_BPM, MAX_BEATS, MUTE, SOFT, NORMAL, ACCENT, LEVEL_NAMES, clampBpm, stepSeconds,
+  tempoMarking, stepAt, cycleLevel, accentPreset, resizeAccents, fitBeat, addTap, tapBpm, fmtElapsed };
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'metronome.settings';
+const DEFAULTS = { bpm: 120, beats: 4, subdiv: 1, accents: accentPreset('first', 4), sound: 'click', volume: 80, flash: true };
+const settings = (() => {
+  let s;
+  try { s = { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { s = { ...DEFAULTS }; }
+  s.bpm = clampBpm(+s.bpm || DEFAULTS.bpm);
+  s.beats = Math.min(MAX_BEATS, Math.max(1, Math.round(+s.beats) || DEFAULTS.beats));
+  if (![1, 2, 3, 4].includes(s.subdiv)) s.subdiv = DEFAULTS.subdiv;
+  if (!['click', 'wood', 'beep'].includes(s.sound)) s.sound = DEFAULTS.sound;
+  s.volume = Math.min(100, Math.max(0, +s.volume)); if (isNaN(s.volume)) s.volume = DEFAULTS.volume;
+  s.accents = resizeAccents(Array.isArray(s.accents) ? s.accents.map(l => [0, 1, 2, 3].includes(l) ? l : NORMAL) : [], s.beats);
+  return s;
+})();
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+
+/* ---------- audio ---------- */
+/* Clicks are scheduled a little ahead on the audio clock (lookahead scheduling), so they
+   stay sample-accurate however busy the page is. A worker drives the scheduler because
+   its timers keep running when the tab is in the background. */
+const LOOKAHEAD = 0.12;  // seconds of audio scheduled ahead
+const TICK = 25;         // ms between scheduler runs
+let ctx, master, noiseBuf;
+let playing = false, step = 0, bar = 1, nextTime = 0, startTime = 0;
+let worker, fallbackTimer, raf, wakeLock;
+const queue = [];        // scheduled steps waiting to be shown: { time, beat, sub, bar, level }
+
+function initAudio() {
+  if (ctx) return;
+  ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+  master = ctx.createGain();
+  master.connect(ctx.destination);
+  setVolume();
+  // short burst of white noise for the woodblock
+  noiseBuf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * .08), ctx.sampleRate);
+  const d = noiseBuf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+}
+const setVolume = () => { if (master) master.gain.value = (settings.volume / 100) ** 2; };
+
+/* Pitch per click type: [accent, normal/soft, subdivision]. */
+const SOUNDS = {
+  click: { pitch: [1760, 1320, 990], dur: .035, gain: 1 },
+  wood: { pitch: [2400, 1800, 1300], dur: .05, gain: 1.6 },
+  beep: { pitch: [1000, 800, 600], dur: .08, gain: .35 },
+};
+const LEVEL_GAIN = [0, .4, .75, 1];
+
+function playClick(t, s) {
+  if (!s.level) return;
+  const snd = SOUNDS[settings.sound];
+  const freq = snd.pitch[s.isSub ? 2 : s.level === ACCENT ? 0 : 1];
+  const peak = snd.gain * (s.isSub ? .35 : LEVEL_GAIN[s.level]);
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0, t);
+  env.gain.linearRampToValueAtTime(peak, t + .001);
+  env.gain.exponentialRampToValueAtTime(.0001, t + snd.dur);
+  env.connect(master);
+  let src;
+  if (settings.sound === 'wood') {
+    src = ctx.createBufferSource(); src.buffer = noiseBuf;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = 12;
+    src.connect(bp).connect(env);
+  } else {
+    src = ctx.createOscillator();
+    src.type = settings.sound === 'beep' ? 'square' : 'triangle';
+    src.frequency.value = freq;
+    src.connect(env);
+  }
+  src.start(t); src.stop(t + snd.dur + .02);
+}
+
+function schedule() {
+  if (!playing) return;
+  const now = ctx.currentTime;
+  // after a stall (suspended device, frozen tab) carry on from now rather than play a burst of late clicks
+  if (nextTime < now - .05) nextTime = now + .02;
+  while (nextTime < now + LOOKAHEAD) {
+    const total = settings.beats * settings.subdiv;
+    if (step >= total) { step = 0; bar++; }
+    const s = stepAt(step, settings.beats, settings.subdiv, settings.accents);
+    playClick(nextTime, s);
+    queue.push({ time: nextTime, bar, ...s });
+    nextTime += stepSeconds(settings.bpm, settings.subdiv);
+    step++;
+  }
+  if (queue.length > 256) queue.splice(0, queue.length - 256); // hidden tab: nothing is drawing
+}
+
+function startTicker() {
+  try {
+    if (!worker) {
+      const src = 'let id;onmessage=e=>{clearInterval(id);if(e.data)id=setInterval(()=>postMessage(0),e.data)}';
+      worker = new Worker(URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+      worker.onmessage = schedule;
+      worker.onerror = () => { worker = null; if (playing) fallbackTimer = setInterval(schedule, TICK); };
+    }
+    worker.postMessage(TICK);
+  } catch {
+    worker = null;
+    fallbackTimer = setInterval(schedule, TICK);
+  }
+}
+function stopTicker() {
+  if (worker) worker.postMessage(0);
+  clearInterval(fallbackTimer);
+}
+
+async function start() {
+  if (playing) return;
+  try { initAudio(); } catch { $('#announce').textContent = 'This browser can’t play Web Audio.'; return; }
+  if (ctx.state !== 'running') await ctx.resume().catch(() => {});
+  playing = true;
+  step = 0; bar = 1; queue.length = 0;
+  nextTime = startTime = ctx.currentTime + .06;
+  schedule();
+  startTicker();
+  raf = requestAnimationFrame(draw);
+  try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
+  renderPlay();
+}
+function stop() {
+  if (!playing) return;
+  playing = false;
+  stopTicker();
+  cancelAnimationFrame(raf);
+  queue.length = 0;
+  wakeLock?.release().catch(() => {}); wakeLock = null;
+  showStep(null);
+  renderPlay();
+}
+const toggle = () => playing ? stop() : start();
+// the wake lock is dropped when the page is hidden; take it again on return
+document.addEventListener('visibilitychange', async () => {
+  if (playing && document.visibilityState === 'visible' && !wakeLock) try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
+});
+
+/* ---------- visuals (in step with what you hear) ---------- */
+let current = null;
+function draw() {
+  if (!playing) return;
+  const heard = ctx.currentTime - (ctx.outputLatency || ctx.baseLatency || 0);
+  let s = null;
+  while (queue.length && queue[0].time <= heard) s = queue.shift();
+  if (s) showStep(s);
+  renderStats(heard);
+  raf = requestAnimationFrame(draw);
+}
+let flashTimer;
+function showStep(s) {
+  current = s;
+  const cells = [...document.querySelectorAll('.cell')];
+  cells.forEach((c, i) => {
+    c.classList.toggle('on', !!s && s.beat === i);
+    c.querySelectorAll('.subs i').forEach((d, j) => d.classList.toggle('on', !!s && s.beat === i && s.sub === j));
+  });
+  const dial = $('#dial');
+  if (s && settings.flash && s.level && !s.isSub) {
+    dial.classList.add('hit'); dial.classList.toggle('strong', s.level === ACCENT);
+    clearTimeout(flashTimer); flashTimer = setTimeout(() => dial.classList.remove('hit', 'strong'), 70);
+  }
+  if (!s) renderStats();
+}
+
+/* ---------- render ---------- */
+const PLAY_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>';
+const STOP_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
+function renderPlay() {
+  $('#play').innerHTML = playing ? `${STOP_ICON}Stop` : `${PLAY_ICON}Start`;
+  $('#play').setAttribute('aria-pressed', String(playing));
+  $('#hdrPlay').textContent = playing ? 'Stop' : 'Start';
+}
+
+function renderTempo() {
+  const bpm = $('#bpm');
+  if (document.activeElement !== bpm) bpm.value = settings.bpm;
+  $('#bpmRange').value = settings.bpm;
+  $('#marking').textContent = tempoMarking(settings.bpm);
+  renderStats();
+}
+
+function renderPattern() {
+  const n = settings.beats, pat = $('#pattern');
+  pat.style.setProperty('--cols', n <= 8 ? n : Math.ceil(n / 2));
+  pat.style.setProperty('--cols-narrow', n <= 6 ? n : n <= 12 ? Math.ceil(n / 2) : Math.ceil(n / 3));
+  pat.innerHTML = settings.accents.map((l, i) => `<button type="button" class="cell" data-i="${i}" data-level="${l}" aria-label="Beat ${i + 1}: ${LEVEL_NAMES[l]}">
+    <span class="lv" aria-hidden="true"><i></i><i></i><i></i></span><span class="num" aria-hidden="true">${i + 1}</span>
+    <span class="subs" aria-hidden="true">${settings.subdiv > 1 ? '<i></i>'.repeat(settings.subdiv) : ''}</span></button>`).join('');
+  if (current) showStep(current);
+}
+
+function renderStats(heard) {
+  const s = playing ? current : null;
+  const stat = (label, val, unit = '', title = '') => `<div class="stat"${title ? ` title="${title}"` : ''}><dt>${label}</dt><dd${val === '–' ? ' class="muted"' : ''}>${val}${val !== '–' && unit ? `<small>${unit}</small>` : ''}</dd></div>`;
+  const barSec = stepSeconds(settings.bpm) * settings.beats;
+  const html = [
+    stat('Bar', s ? s.bar : '–'),
+    stat('Beat', s ? `${s.beat + 1}` : '–', s ? `of ${settings.beats}` : ''),
+    stat('Time', s && heard != null ? fmtElapsed(heard - startTime) : '–', '', 'Time since you pressed Start'),
+  ].join('');
+  // skip identical updates: this runs every frame while playing
+  if (html !== renderStats.last) $('#stats').innerHTML = renderStats.last = html;
+  $('#stats').title = `One bar lasts ${barSec.toFixed(2)} s at ${settings.bpm} BPM`;
+}
+
+/* ---------- tempo ---------- */
+function setBpm(v) {
+  const bpm = clampBpm(v);
+  if (!isFinite(bpm)) return;
+  settings.bpm = bpm; saveSettings(); renderTempo();
+}
+const nudge = d => setBpm(settings.bpm + d);
+
+const bpmInput = $('#bpm');
+bpmInput.addEventListener('change', () => { if (bpmInput.value !== '') setBpm(+bpmInput.value); bpmInput.value = settings.bpm; });
+bpmInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { bpmInput.blur(); }
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); nudge((e.key === 'ArrowUp' ? 1 : -1) * (e.shiftKey ? 10 : 1)); bpmInput.value = settings.bpm; }
+});
+bpmInput.addEventListener('focus', () => bpmInput.select());
+bpmInput.addEventListener('blur', () => { bpmInput.value = settings.bpm; });
+$('#bpmRange').addEventListener('input', e => setBpm(+e.target.value));
+
+/* −/+ repeat while held, like a hardware metronome. */
+function holdRepeat(btn, d) {
+  let t1, t2;
+  const end = () => { clearTimeout(t1); clearInterval(t2); };
+  btn.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    e.preventDefault(); btn.focus({ preventScroll: true });
+    nudge(e.shiftKey ? d * 10 : d);
+    t1 = setTimeout(() => { t2 = setInterval(() => nudge(d), 60); }, 400);
+  });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => btn.addEventListener(ev, end));
+  btn.addEventListener('click', e => { if (e.detail === 0) nudge(d); }); // keyboard activation
+  btn.addEventListener('contextmenu', e => e.preventDefault());
+}
+holdRepeat($('#slower'), -1);
+holdRepeat($('#faster'), 1);
+
+/* ---------- tap tempo ---------- */
+let taps = [], tapNoteTimer, tapFlashTimer;
+function tap(t) {
+  taps = addTap(taps, t);
+  const bpm = tapBpm(taps);
+  if (bpm != null) setBpm(bpm);
+  const b = $('#tap');
+  b.classList.add('hit'); clearTimeout(tapFlashTimer); tapFlashTimer = setTimeout(() => b.classList.remove('hit'), 60);
+  $('#tapNote').textContent = taps.length < 2 ? 'Keep tapping…' : `${taps.length} taps · ${bpm.toFixed(1)} BPM`;
+  clearTimeout(tapNoteTimer); tapNoteTimer = setTimeout(() => { $('#tapNote').textContent = ''; }, 2500);
+}
+$('#tap').addEventListener('pointerdown', e => {
+  if (e.button !== 0) return;
+  e.preventDefault(); $('#tap').focus({ preventScroll: true });
+  tap(e.timeStamp);
+});
+$('#tap').addEventListener('click', e => { if (e.detail === 0) tap(e.timeStamp); }); // keyboard activation
+$('#tap').addEventListener('contextmenu', e => e.preventDefault());
+
+/* ---------- accents ---------- */
+$('#pattern').addEventListener('click', e => {
+  const c = e.target.closest('.cell'); if (!c) return;
+  const i = +c.dataset.i;
+  settings.accents[i] = cycleLevel(settings.accents[i], e.shiftKey ? -1 : 1);
+  saveSettings(); renderPattern();
+  document.querySelector(`.cell[data-i="${i}"]`).focus();
+});
+$('#preset').addEventListener('change', e => {
+  if (!e.target.value) return;
+  settings.accents = accentPreset(e.target.value, settings.beats);
+  e.target.value = '';
+  saveSettings(); renderPattern();
+});
+
+/* ---------- options ---------- */
+const beatsSel = $('#optBeats');
+beatsSel.append(...Array.from({ length: MAX_BEATS }, (_, i) => new Option(String(i + 1), String(i + 1))));
+beatsSel.value = String(settings.beats);
+beatsSel.onchange = () => {
+  settings.beats = +beatsSel.value;
+  settings.accents = resizeAccents(settings.accents, settings.beats);
+  saveSettings(); renderPattern(); renderStats();
+};
+const subSel = $('#optSubdiv');
+subSel.value = String(settings.subdiv);
+subSel.onchange = () => {
+  const from = settings.subdiv;
+  settings.subdiv = +subSel.value;
+  // carry on from the next beat so the bar doesn't jump
+  if (playing) step = Math.ceil(step / from) * settings.subdiv;
+  saveSettings(); renderPattern();
+};
+const soundSel = $('#optSound');
+soundSel.value = settings.sound;
+soundSel.onchange = () => { settings.sound = soundSel.value; saveSettings(); };
+const vol = $('#optVolume');
+vol.value = settings.volume;
+vol.oninput = () => { settings.volume = +vol.value; setVolume(); saveSettings(); };
+const flashBox = $('#optFlash');
+flashBox.checked = settings.flash;
+flashBox.onchange = () => { settings.flash = flashBox.checked; saveSettings(); };
+
+/* ---------- keyboard ---------- */
+$('#play').onclick = toggle;
+$('#hdrPlay').onclick = toggle;
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const el = e.target, inField = el.closest && el.closest('input, select, textarea, [contenteditable]');
+  if (e.key === 'Escape') { if (playing) { e.preventDefault(); stop(); } return; }
+  if (inField) return;
+  if (e.key === ' ' && !(el.closest && el.closest('button, a'))) { e.preventDefault(); toggle(); }
+  else if ((e.key === 't' || e.key === 'T') && !e.repeat) { e.preventDefault(); tap(e.timeStamp); }
+  else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); nudge((e.key === 'ArrowUp' ? 1 : -1) * (e.shiftKey ? 10 : 1)); }
+});
+
+renderPlay();
+renderTempo();
+renderPattern();
+</script>
+</body>
+</html>

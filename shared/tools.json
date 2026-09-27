@@ -80,6 +80,16 @@
     "description": "Decode JSON Web Tokens without sending them anywhere: header and claims with explanations, exp, nbf and iat as readable dates, expired and not-yet-valid tokens flagged, security warnings, and signature checks for HS256, RS256, PS256, ES256 and EdDSA with a secret, PEM key, certificate or JWK."
   },
   {
+    "slug": "metronome",
+    "name": "Metronome",
+    "mark": [
+      "METRO",
+      ".nome"
+    ],
+    "summary": "Keep time with accents and tap tempo",
+    "description": "A precise metronome from 20 to 300 BPM with sample-accurate Web Audio timing, 1 to 16 beats per bar, subdivisions (eighths, triplets, sixteenths), a clickable accent pattern with presets, tap tempo, three click sounds, and a bar counter."
+  },
+  {
     "slug": "regex",
     "name": "Regex tester",
     "mark": [

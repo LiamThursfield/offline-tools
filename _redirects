@@ -16,6 +16,8 @@
 /json-format/  /json-format/json-format   200
 /jwt           /jwt/jwt                   200
 /jwt/          /jwt/jwt                   200
+/metronome     /metronome/metronome       200
+/metronome/    /metronome/metronome       200
 /regex         /regex/regex               200
 /regex/        /regex/regex               200
 /text-diff     /text-diff/text-diff       200
