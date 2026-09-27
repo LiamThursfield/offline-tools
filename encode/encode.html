@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Encoder/decoder – Encode and decode Base64, URLs, HTML and more | LXST.tools</title>
+<meta name="description" content="Encode and decode Base64 (standard, URL-safe and data: URLs), URL encoding, HTML entities, hex, JSON string escapes and Unicode escapes, with decoded images previewed, URL query parameters listed, hidden characters such as zero-width spaces flagged, and a character-by-character view. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/encode">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/encode">
+<meta property="og:title" content="Encoder/decoder">
+<meta property="og:description" content="Encode and decode Base64 (standard, URL-safe and data: URLs), URL encoding, HTML entities, hex, JSON string escapes and Unicode escapes, with decoded images previewed, URL query parameters listed, hidden characters such as zero-width spaces flagged, and a character-by-character view. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Encoder/decoder","url":"https://tools.lxst.digital/encode","description":"Encode and decode Base64 (standard, URL-safe and data: URLs), URL encoding, HTML entities, hex, JSON string escapes and Unicode escapes, with decoded images previewed, URL query parameters listed, hidden characters such as zero-width spaces flagged, and a character-by-character view.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --chg-bg:color-mix(in oklab,var(--chg) var(--tint),var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  --pane-h:clamp(320px,56vh,820px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-bottom:4px;border-bottom:1px solid var(--line);border-radius:calc(var(--radius) - 4px) calc(var(--radius) - 4px) 0 0;padding-bottom:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.nav:disabled{opacity:.45;cursor:not-allowed}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.linkish{border:0;background:none;padding:0;color:var(--accent-text);text-decoration:underline;font-weight:600}
+a.linkish{font-size:inherit}
+
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:var(--pill);padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.seg button:hover:not(:disabled):not([aria-pressed=true]){color:var(--ink)}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.modebar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 4px 10px}
+.modebar .seg{background:var(--panel);padding:3px}
+.modebar .seg button{padding:6px 18px;font-size:.92rem}
+.hint{margin:0 6px 14px;color:var(--muted);font-size:.86rem}
+.hint code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+
+/* panes */
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+#inPane:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane.drag{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pane-head h2{margin:0;font-size:.92rem;font-weight:700}
+.pane-head .spacer{flex:1}
+.pane-head .btn{padding:2px 11px;font-size:.8rem}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px;white-space:nowrap}
+.status.ok{color:var(--ins);background:var(--ins-bg)}.status.bad{color:var(--del);background:var(--del-bg)}
+.status.warn{color:var(--chg);background:var(--chg-bg)}.status.text{color:var(--muted);background:var(--surface)}
+textarea{display:block;width:100%;height:var(--pane-h);min-height:200px;resize:vertical;border:0;background:transparent;padding:12px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0;color:var(--ink);outline:none;white-space:pre-wrap;overflow-wrap:anywhere;overflow:auto;tab-size:2}
+textarea::placeholder{color:var(--muted);opacity:.8}
+.pane-foot{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.pane-foot label{display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.pane-foot label.off{opacity:.45}
+.pane-foot .lbl{font-weight:600;color:var(--ink)}
+.pane-foot small{font-size:.8rem}
+.pane-foot code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+.opts{display:contents}
+
+/* loaded file, shown in place of the textarea */
+.filecard{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:var(--pane-h);min-height:200px;padding:20px;text-align:center}
+.filecard svg{width:44px;height:44px;color:var(--accent-text)}
+.fc-name{font-weight:700;font-size:1.05rem;overflow-wrap:anywhere;max-width:100%}
+.fc-meta{color:var(--muted);font-size:.88rem}
+
+/* messages */
+.msgs:empty{display:none}
+.msg{padding:9px 14px;border-top:1px solid var(--line);font-size:.86rem}
+.msg.bad{background:var(--del-bg)}.msg.bad>b{color:var(--del)}
+.msg.warn{background:var(--chg-bg)}.msg.warn>b{color:var(--chg)}
+.msg.info{background:color-mix(in oklab,var(--accent) 8%,var(--panel))}
+.msg code{font-family:var(--mono);font-size:.92em;letter-spacing:0;word-break:break-all}
+
+/* output */
+.subbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.86rem}
+.subbar .lbl{font-weight:600}
+.note{padding:6px 14px;border-bottom:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:600}
+/* height:0 + flex:1 lets the input pane set the row height; the output scrolls inside it */
+.view{flex:1 1 auto;height:0;min-height:160px;overflow:auto}
+.out{margin:0;padding:12px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}
+.out.dump{white-space:pre;overflow-wrap:normal;min-width:max-content}
+.out.b64{word-break:break-all}
+.empty{padding:44px 16px;text-align:center;color:var(--muted)}
+.imgview{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:100%;padding:18px;
+  background:repeating-conic-gradient(color-mix(in oklab,var(--ink) 7%,transparent) 0 25%,transparent 0 50%) 0 0/16px 16px}
+.imgview img{max-width:100%;max-height:60vh;image-rendering:auto}
+.imgview span{font-size:.82rem;color:var(--muted);background:var(--panel);padding:2px 10px;border-radius:var(--pill)}
+
+/* tables: URL parts and characters */
+.tbl-title{margin:0;padding:10px 14px 6px;font-size:.84rem;font-weight:700;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th,td{padding:5px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:.78rem;position:sticky;top:0;background:var(--panel)}
+td.mono,td code{font-family:var(--mono);font-size:12.5px;letter-spacing:0;overflow-wrap:anywhere}
+td.k{font-weight:600;white-space:nowrap}
+td .flag{font-style:normal;color:var(--muted)}
+tr.sus td{background:var(--chg-bg)}
+tr.sus td .kind{color:var(--chg);font-weight:600}
+.glyph{display:inline-block;min-width:1.6em;text-align:center;font-size:1.05rem}
+.glyph.inv{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--chg);border:1px dashed currentColor;border-radius:4px;padding:0 3px}
+.chars td:first-child{color:var(--muted);font-variant-numeric:tabular-nums}
+
+.facts{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0;padding:10px 14px;border-top:1px solid var(--line);font-size:.84rem}
+.facts:empty{display:none}
+.facts div{display:flex;gap:6px;min-width:0}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;font-weight:600;overflow-wrap:anywhere;min-width:0}
+.stats{justify-content:flex-start}
+.stats b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1100px){
+  .panes{grid-template-columns:minmax(0,1fr)}
+  textarea,.filecard{height:36vh}
+  .view{flex:none;height:50vh}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .modebar .seg{width:100%;border-radius:var(--radius)}
+  .modebar .seg button{flex:1;padding:6px 8px}
+  #formatSeg{display:grid;grid-template-columns:repeat(3,1fr)}
+  th,td{padding:5px 10px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>ENC</b>.decode<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../encode/encode.html" data-path="/encode" aria-current="page"><span class="tm-mark"><b>ENC</b>.decode</span><span class="tm-text"><span class="tm-name">Encoder/decoder</span><span class="tm-sum">Encode and decode Base64, URLs, HTML and more</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../jwt/jwt.html" data-path="/jwt"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
+        <a href="../metronome/metronome.html" data-path="/metronome"><span class="tm-mark"><b>METRO</b>.nome</span><span class="tm-text"><span class="tm-name">Metronome</span><span class="tm-sum">Keep time with accents and tap tempo</span></span></a>
+        <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+        <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="sample">Load example</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Encode and decode text</h1>
+    <p>Convert text to and from Base64, URL encoding, HTML entities, hex, string escapes and Unicode escapes, and see hidden characters. Everything runs in your browser; nothing is uploaded.</p>
+  </div>
+
+  <div class="modebar">
+    <span class="seg" id="modeSeg" role="group" aria-label="Direction"><button type="button" data-v="encode">Encode</button><button type="button" data-v="decode">Decode</button></span>
+    <span class="seg" id="formatSeg" role="group" aria-label="Format"><button type="button" data-v="base64">Base64</button><button type="button" data-v="url">URL</button><button type="button" data-v="html">HTML</button><button type="button" data-v="hex">Hex</button><button type="button" data-v="string">String</button><button type="button" data-v="unicode">Unicode</button></span>
+  </div>
+  <p class="hint" id="modeHint"></p>
+
+  <div class="panes">
+    <section class="pane" id="inPane" aria-labelledby="inTitle">
+      <div class="pane-head">
+        <h2 id="inTitle">Input</h2>
+        <span class="spacer"></span><span class="status text" id="status">empty</span>
+        <button class="btn" id="openFile">Open file</button>
+        <input type="file" id="file" hidden>
+      </div>
+      <textarea id="input" spellcheck="false" autocomplete="off" aria-labelledby="inTitle"></textarea>
+      <div class="filecard" id="fileCard" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+        <span class="fc-name" id="fcName"></span>
+        <span class="fc-meta" id="fcMeta"></span>
+        <button class="btn" id="fcRemove">Remove file</button>
+      </div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="pane-foot">
+        <span class="opts" data-for="encode:base64">
+          <span class="lbl">Alphabet</span>
+          <span class="seg" data-opt="b64Url" role="group" aria-label="Base64 alphabet"><button type="button" data-v="false">Standard</button><button type="button" data-v="true" title="Uses - and _ instead of + and /, as in JWTs and URLs">URL-safe</button></span>
+          <label data-dis="b64DataUrl"><input type="checkbox" data-opt="b64Pad"> Padding</label>
+          <span class="lbl">Lines</span>
+          <span class="seg" data-opt="b64Wrap" role="group" aria-label="Line length"><button type="button" data-v="0">One line</button><button type="button" data-v="64" title="As in PEM files">64</button><button type="button" data-v="76" title="As in MIME email">76</button></span>
+          <label title="A data: URL you can use as an image src or link"><input type="checkbox" data-opt="b64DataUrl"> data: URL</label>
+        </span>
+        <span class="opts" data-for="decode:base64"><small>Standard and URL-safe Base64, with or without padding and line breaks, and <code>data:</code> URLs.</small></span>
+        <span class="opts" data-for="encode:url">
+          <span class="lbl">Encode as</span>
+          <span class="seg" data-opt="urlMode" role="group" aria-label="What to encode"><button type="button" data-v="component" title="encodeURIComponent: for one query value or path segment">Component</button><button type="button" data-v="uri" title="encodeURI: keeps : / ? # & = so the URL still works">Full URL</button><button type="button" data-v="form" title="application/x-www-form-urlencoded: spaces become +">Form</button></span>
+        </span>
+        <span class="opts" data-for="decode:url">
+          <label title="In query strings and form data, + stands for a space"><input type="checkbox" data-opt="urlPlus"> Read <code>+</code> as a space</label>
+        </span>
+        <span class="opts" data-for="encode:html">
+          <span class="lbl">Escape</span>
+          <span class="seg" data-opt="htmlMode" role="group" aria-label="What to escape"><button type="button" data-v="special" title="Only &amp; &lt; &gt; &quot; and '">Special characters</button><button type="button" data-v="numeric">+ non-ASCII as &amp;#…;</button><button type="button" data-v="named">+ non-ASCII by name</button></span>
+        </span>
+        <span class="opts" data-for="decode:html"><small>Named (<code>&amp;eacute;</code>), decimal (<code>&amp;#233;</code>) and hex (<code>&amp;#xE9;</code>) references.</small></span>
+        <span class="opts" data-for="encode:hex">
+          <span class="lbl">Separator</span>
+          <span class="seg" data-opt="hexSep" role="group" aria-label="Separator"><button type="button" data-v="none">None</button><button type="button" data-v="space">Space</button><button type="button" data-v="colon">Colon</button><button type="button" data-v="x">\x</button><button type="button" data-v="0x">0x, </button></span>
+          <label><input type="checkbox" data-opt="hexUpper"> Uppercase</label>
+        </span>
+        <span class="opts" data-for="decode:hex"><small>Spaces, colons, commas, <code>0x</code> and <code>\x</code> are ignored. Hex dumps from <code>xxd</code> and <code>hexdump -C</code> work too.</small></span>
+        <span class="opts" data-for="encode:string">
+          <label><input type="checkbox" data-opt="strQuotes"> Add quotes</label>
+          <label title="Escape every character outside ASCII as \uXXXX"><input type="checkbox" data-opt="strAscii"> ASCII only</label>
+        </span>
+        <span class="opts" data-for="decode:string"><small>JSON and JavaScript escapes, with or without the surrounding quotes.</small></span>
+        <span class="opts" data-for="encode:unicode">
+          <span class="lbl">Style</span>
+          <span class="seg" data-opt="uniStyle" role="group" aria-label="Escape style"><button type="button" data-v="js" title="JavaScript, JSON, Java, C#: characters beyond U+FFFF become surrogate pairs">\uXXXX</button><button type="button" data-v="es6" title="JavaScript (ES2015+), Rust, Swift">\u{…}</button><button type="button" data-v="python" title="Python, C, C++">\U…</button><button type="button" data-v="css">CSS</button><button type="button" data-v="uplus" title="Unicode notation, one per character">U+</button></span>
+          <label data-dis="uniStyle=uplus"><input type="checkbox" data-opt="uniAscii"> Escape ASCII too</label>
+        </span>
+        <span class="opts" data-for="decode:unicode"><small><code>\uXXXX</code>, <code>\u{…}</code>, <code>\U…</code>, <code>\xHH</code>, <code>U+XXXX</code>, <code>&amp;#x…;</code> and CSS escapes, mixed freely.</small></span>
+      </div>
+    </section>
+
+    <section class="pane" id="outPane" aria-labelledby="outTitle">
+      <div class="pane-head">
+        <h2 id="outTitle">Output</h2>
+        <span class="spacer"></span>
+        <button class="btn" id="swap" title="Use the output as the input, and switch direction" disabled>Use as input</button>
+        <button class="btn" id="copyOut" disabled>Copy</button>
+        <button class="btn" id="download" disabled>Download</button>
+      </div>
+      <div class="subbar">
+        <span class="lbl">Show as</span>
+        <span class="seg" id="showSeg" role="group" aria-label="Show as"><button type="button" data-v="text">Text</button><button type="button" data-v="chars" title="Every character with its code point and UTF-8 bytes">Characters</button><button type="button" data-v="hex" title="The UTF-8 bytes as a hex dump">Hex</button><button type="button" data-v="image" hidden>Image</button></span>
+      </div>
+      <div class="note" id="clip" hidden></div>
+      <div class="view" id="view" tabindex="0" aria-label="Output"></div>
+      <dl class="facts" id="facts"></dl>
+      <div class="pane-foot stats" id="stats"></div>
+    </section>
+  </div>
+
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Every format works in both directions: encode(format, input, options) and decode(format, text, options).
+   Base64, hex and URL encoding work on bytes (text is UTF-8); the others work on text.
+   Results carry notes ({ level: 'bad' | 'warn' | 'info', text, act? }) and facts ([label, value]) for the UI. */
+const FORMAT_NAMES = { base64: 'Base64', url: 'URL encoding', html: 'HTML entities', hex: 'Hex', string: 'String escapes', unicode: 'Unicode escapes' };
+const OPTION_DEFAULTS = {
+  b64Url: false, b64Pad: true, b64Wrap: 0, b64DataUrl: false,
+  urlMode: 'component', urlPlus: true,
+  htmlMode: 'special',
+  hexSep: 'none', hexUpper: false,
+  strQuotes: false, strAscii: false,
+  uniStyle: 'js', uniAscii: false,
+};
+
+const utf8 = s => new TextEncoder().encode(s);
+/* The UTF-8 text of some bytes, or null if they aren't valid UTF-8. A byte order mark is kept. */
+function utf8Text(bytes) {
+  try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes); } catch { return null; }
+}
+const hexOf = (n, w = 2) => n.toString(16).toUpperCase().padStart(w, '0');
+const cpLabel = cp => 'U+' + hexOf(cp, 4);
+const LONE_SURROGATE = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g;
+function wellFormed(s, notes) {
+  const n = (s.match(LONE_SURROGATE) || []).length;
+  if (!n) return s;
+  notes.push({ level: 'warn', text: `${n === 1 ? 'A lone surrogate half was' : `${n} lone surrogate halves were`} replaced with U+FFFD, because it can’t be encoded as UTF-8` });
+  return s.replace(LONE_SURROGATE, '\uFFFD');
+}
+function plural(n, one, many = one + 's') { return `${n.toLocaleString('en')} ${n === 1 ? one : many}`; }
+
+/* ---------- Base64 ---------- */
+const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+function base64Encode(bytes, { urlSafe = false, pad = true, wrap = 0 } = {}) {
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  let s = btoa(bin);
+  if (urlSafe) s = s.replace(/\+/g, '-').replace(/\//g, '_');
+  if (!pad) s = s.replace(/=+$/, '');
+  if (wrap > 0 && s.length > wrap) {
+    const lines = [];
+    for (let i = 0; i < s.length; i += wrap) lines.push(s.slice(i, i + wrap));
+    s = lines.join('\n');
+  }
+  return s;
+}
+
+/* base64Decode(text) -> { bytes, variant: 'base64' | 'base64url', padded, wrapped, mime?, notes } | { error }
+   Accepts either alphabet, missing padding, whitespace and line breaks, and data: URLs (including ones that aren't Base64). */
+function base64Decode(src) {
+  const notes = [];
+  let s = String(src), offset = s.length - s.trimStart().length, mime = null;
+  s = s.trim();
+  const du = /^data:([^,]*),/i.exec(s);
+  if (du) {
+    const params = du[1].split(';').map(p => p.trim());
+    mime = params.filter(p => p && p.toLowerCase() !== 'base64').join(';') || 'text/plain;charset=US-ASCII';
+    if (!params.some(p => p.toLowerCase() === 'base64')) {
+      notes.push({ level: 'info', text: 'This data: URL isn’t Base64: its data is percent-encoded, and was decoded as such' });
+      return { bytes: percentDecodeBytes(s.slice(du[0].length)), variant: 'percent', mime, notes };
+    }
+    s = s.slice(du[0].length); offset += du[0].length;
+  }
+  const bad = /[^A-Za-z0-9+/\-_=\s]/.exec(s);
+  if (bad) {
+    const c = bad[0], shown = c > ' ' && c <= '~' ? `‘${c}’` : cpLabel(c.codePointAt(0));
+    return { error: `${shown} can’t appear in Base64 (character ${(offset + bad.index + 1).toLocaleString('en')})` };
+  }
+  const compact = s.replace(/\s+/g, ''), body = compact.replace(/=+$/, ''), padN = compact.length - body.length;
+  if (body.includes('=')) return { error: '= can only appear at the end, as padding. This may be several Base64 strings joined together' };
+  if (body.length % 4 === 1) return { error: 'The length is off by one: a character is probably missing or extra' };
+  const std = /[+/]/.test(body), url = /[-_]/.test(body), want = (4 - body.length % 4) % 4;
+  if (std && url) notes.push({ level: 'warn', text: 'This mixes both alphabets: + or / (standard) and - or _ (URL-safe). It was decoded anyway' });
+  if (padN && padN !== want) notes.push({ level: 'warn', text: `It ends with ${plural(padN, '=')} but should have ${want || 'none'}` });
+  const rem = body.length % 4;
+  if (rem) {
+    const last = B64.indexOf(body[body.length - 1].replace('-', '+').replace('_', '/'));
+    if (last & (rem === 2 ? 0x0f : 0x03)) notes.push({ level: 'info', text: 'The last character has unused bits set, so this isn’t the canonical encoding. Most decoders accept it; strict ones don’t' });
+  }
+  const bin = atob(body.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat(want));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return { bytes, variant: url ? 'base64url' : 'base64', padded: padN > 0, wrapped: /\S\s+\S/.test(s), mime, notes };
+}
+
+/* ---------- URL (percent) encoding ---------- */
+function urlEncode(text, mode = 'component') {
+  if (mode === 'uri') return encodeURI(text);
+  const s = encodeURIComponent(text);
+  // application/x-www-form-urlencoded (as URLSearchParams writes it): also encodes ! ' ( ) ~, and spaces become +
+  return mode === 'form' ? s.replace(/[!'()~]/g, c => '%' + hexOf(c.charCodeAt(0))).replace(/%20/g, '+') : s;
+}
+
+/* urlDecode(text, { plus }) -> { text, sequences, plusCount, strayPercent, badUtf8, notes }
+   Unlike decodeURIComponent, it doesn't give up on a stray % or invalid UTF-8: they're kept or replaced, and reported. */
+function urlDecode(src, { plus = true } = {}) {
+  const parts = String(src).split(/((?:%[0-9A-Fa-f]{2})+)/), out = [], notes = [];
+  let sequences = 0, plusCount = 0, strayPercent = 0, badUtf8 = null;
+  parts.forEach((p, i) => {
+    if (i % 2) {
+      const bytes = new Uint8Array(p.length / 3);
+      for (let k = 0; k < bytes.length; k++) bytes[k] = parseInt(p.substr(k * 3 + 1, 2), 16);
+      sequences += bytes.length;
+      const t = utf8Text(bytes);
+      if (t === null && !badUtf8) badUtf8 = p;
+      out.push(t ?? new TextDecoder('utf-8').decode(bytes));
+    } else {
+      strayPercent += (p.match(/%/g) || []).length;
+      if (plus) { plusCount += (p.match(/\+/g) || []).length; p = p.replace(/\+/g, ' '); }
+      out.push(p);
+    }
+  });
+  const text = out.join('');
+  if (badUtf8) {
+    const latin = new TextDecoder('windows-1252').decode(new Uint8Array(badUtf8.slice(1).split('%').map(h => parseInt(h, 16))));
+    notes.push({ level: 'warn', text: `${badUtf8.length > 12 ? badUtf8.slice(0, 12) + '…' : badUtf8} isn’t valid UTF-8, so it became �. If it was encoded by an older system as Latin-1, it meant “${latin.slice(0, 8)}”` });
+  }
+  if (strayPercent) notes.push({ level: 'warn', text: `${strayPercent === 1 ? 'A % that isn’t' : `${strayPercent} % signs that aren’t`} followed by two hex digits ${strayPercent === 1 ? 'was' : 'were'} kept as ${strayPercent === 1 ? 'it is' : 'they are'}` });
+  return { text, sequences, plusCount, strayPercent, badUtf8: !!badUtf8, notes };
+}
+/* Percent-decoding to bytes, as for data: URLs: literal text is UTF-8. */
+function percentDecodeBytes(src) {
+  const chunks = String(src).split(/((?:%[0-9A-Fa-f]{2})+)/).map((p, i) =>
+    i % 2 ? Uint8Array.from(p.slice(1).split('%'), h => parseInt(h, 16)) : utf8(p));
+  const out = new Uint8Array(chunks.reduce((n, c) => n + c.length, 0));
+  let o = 0;
+  for (const c of chunks) { out.set(c, o); o += c.length; }
+  return out;
+}
+
+/* urlParts(text) -> { url?: { protocol, host, path, hash }, params: [[name, value, noEquals]] } | null
+   For a whole URL or a bare query string; names and values are decoded as form data (+ is a space). */
+function urlParts(src) {
+  const s = String(src).trim();
+  if (!s || /\s/.test(s)) return null;
+  let u = null, query = null;
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(s)) { try { u = new URL(s); } catch { return null; } query = u.search.slice(1); }
+  else if (/^\??[^=&?#/:]+=/.test(s) && !s.includes('://')) query = s.replace(/^\?/, '').replace(/#.*$/, '');
+  else return null;
+  const dec = x => urlDecode(x, { plus: true }).text;
+  const params = (query || '').split('&').filter(Boolean).map(p => {
+    const i = p.indexOf('=');
+    return i < 0 ? [dec(p), '', true] : [dec(p.slice(0, i)), dec(p.slice(i + 1)), false];
+  });
+  if (!u && !params.length) return null;
+  return {
+    url: u && { protocol: u.protocol, host: u.host, path: dec(u.pathname.replace(/\+/g, '%2B')), hash: u.hash ? dec(u.hash.slice(1).replace(/\+/g, '%2B')) : '' },
+    params,
+  };
+}
+
+/* ---------- HTML entities ---------- */
+/* Latin-1 (U+00A0 to U+00FF) in order, then the rest of HTML 4's entities and a few common HTML5 ones.
+   Any other name is left to the caller's resolver (the browser knows all 2,231). */
+const LATIN1_NAMES = ('nbsp iexcl cent pound curren yen brvbar sect uml copy ordf laquo not shy reg macr deg plusmn sup2 sup3 acute micro para middot cedil sup1 ordm raquo frac14 frac12 frac34 iquest '
+  + 'Agrave Aacute Acirc Atilde Auml Aring AElig Ccedil Egrave Eacute Ecirc Euml Igrave Iacute Icirc Iuml ETH Ntilde Ograve Oacute Ocirc Otilde Ouml times Oslash Ugrave Uacute Ucirc Uuml Yacute THORN szlig '
+  + 'agrave aacute acirc atilde auml aring aelig ccedil egrave eacute ecirc euml igrave iacute icirc iuml eth ntilde ograve oacute ocirc otilde ouml divide oslash ugrave uacute ucirc uuml yacute thorn yuml').split(' ');
+const HTML_NAMED = (() => {
+  const m = { quot: 34, amp: 38, apos: 39, lt: 60, gt: 62 };
+  LATIN1_NAMES.forEach((n, i) => { m[n] = 0xA0 + i; });
+  const greek = 'Alpha Beta Gamma Delta Epsilon Zeta Eta Theta Iota Kappa Lambda Mu Nu Xi Omicron Pi Rho'.split(' ');
+  greek.forEach((n, i) => { m[n] = 913 + i; m[n.toLowerCase()] = 945 + i; });
+  'Sigma Tau Upsilon Phi Chi Psi Omega'.split(' ').forEach((n, i) => { m[n] = 931 + i; m[n.toLowerCase()] = 963 + i; });
+  Object.assign(m, {
+    sigmaf: 962, thetasym: 977, upsih: 978, piv: 982, OElig: 338, oelig: 339, Scaron: 352, scaron: 353, Yuml: 376, fnof: 402, circ: 710, tilde: 732,
+    ensp: 8194, emsp: 8195, thinsp: 8201, zwnj: 8204, zwj: 8205, lrm: 8206, rlm: 8207, ndash: 8211, mdash: 8212, lsquo: 8216, rsquo: 8217, sbquo: 8218,
+    ldquo: 8220, rdquo: 8221, bdquo: 8222, dagger: 8224, Dagger: 8225, bull: 8226, hellip: 8230, permil: 8240, prime: 8242, Prime: 8243, lsaquo: 8249,
+    rsaquo: 8250, oline: 8254, frasl: 8260, euro: 8364, image: 8465, weierp: 8472, real: 8476, trade: 8482, alefsym: 8501, larr: 8592, uarr: 8593,
+    rarr: 8594, darr: 8595, harr: 8596, crarr: 8629, lArr: 8656, uArr: 8657, rArr: 8658, dArr: 8659, hArr: 8660, forall: 8704, part: 8706, exist: 8707,
+    empty: 8709, nabla: 8711, isin: 8712, notin: 8713, ni: 8715, prod: 8719, sum: 8721, minus: 8722, lowast: 8727, radic: 8730, prop: 8733, infin: 8734,
+    ang: 8736, and: 8743, or: 8744, cap: 8745, cup: 8746, int: 8747, there4: 8756, sim: 8764, cong: 8773, asymp: 8776, ne: 8800, equiv: 8801, le: 8804,
+    ge: 8805, sub: 8834, sup: 8835, nsub: 8836, sube: 8838, supe: 8839, oplus: 8853, otimes: 8855, perp: 8869, sdot: 8901, lceil: 8968, rceil: 8969,
+    lfloor: 8970, rfloor: 8971, lang: 10216, rang: 10217, loz: 9674, spades: 9824, clubs: 9827, hearts: 9829, diams: 9830,
+    Tab: 9, NewLine: 10, hyphen: 8208, check: 10003, cross: 10007, star: 9734, starf: 9733, half: 189, nbsp: 160,
+  });
+  for (const k in m) m[k] = String.fromCodePoint(m[k]);
+  return m;
+})();
+/* The names browsers still accept without a closing semicolon (for old pages). */
+const HTML_LEGACY = new Set(['amp', 'lt', 'gt', 'quot', ...LATIN1_NAMES]);
+const HTML_NAME_OF = (() => {
+  const r = {};
+  for (const [k, v] of Object.entries(HTML_NAMED)) if (!(v in r) && v.codePointAt(0) > 127) r[v] = k;
+  return r;
+})();
+/* Numeric references 0x80 to 0x9F mean Windows-1252 characters, as browsers read them. */
+const CP1252 = { 0x80: 0x20AC, 0x82: 0x201A, 0x83: 0x0192, 0x84: 0x201E, 0x85: 0x2026, 0x86: 0x2020, 0x87: 0x2021, 0x88: 0x02C6, 0x89: 0x2030, 0x8A: 0x0160,
+  0x8B: 0x2039, 0x8C: 0x0152, 0x8E: 0x017D, 0x91: 0x2018, 0x92: 0x2019, 0x93: 0x201C, 0x94: 0x201D, 0x95: 0x2022, 0x96: 0x2013, 0x97: 0x2014, 0x98: 0x02DC,
+  0x99: 0x2122, 0x9A: 0x0161, 0x9B: 0x203A, 0x9C: 0x0153, 0x9E: 0x017E, 0x9F: 0x0178 };
+
+/* htmlEncode(text, mode) -> { text, count }. mode: 'special' (& < > " ' only), 'numeric' or 'named' (non-ASCII too). */
+function htmlEncode(text, mode = 'special') {
+  const SPECIAL = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  let count = 0;
+  const re = mode === 'special' ? /[&<>"']/g : /[&<>"']|[^\x00-\x7F]/gu;
+  const out = text.replace(re, c => {
+    count++;
+    if (SPECIAL[c]) return SPECIAL[c];
+    if (mode === 'named' && HTML_NAME_OF[c]) return `&${HTML_NAME_OF[c]};`;
+    return `&#x${hexOf(c.codePointAt(0), 1)};`;
+  });
+  return { text: out, count };
+}
+
+/* htmlDecode(text, resolve?) -> { text, count, unknown: [names], notes }
+   resolve(name) can look up names missing from the table above; it returns a string or null. */
+function htmlDecode(src, resolve = null) {
+  let count = 0, noSemi = 0, badNum = 0, c1 = 0;
+  const unknown = new Set(), notes = [];
+  const text = String(src).replace(/&(?:#([0-9]+)|#[xX]([0-9a-fA-F]+)|([A-Za-z][A-Za-z0-9]*))(;?)/g, (m, dec, hex, name, semi) => {
+    if (name) {
+      let v = semi ? HTML_NAMED[name] ?? (resolve ? resolve(name) : null) : HTML_LEGACY.has(name) ? HTML_NAMED[name] : null;
+      if (v == null) { if (semi) unknown.add(name); return m; }
+      if (!semi) noSemi++;
+      count++;
+      return v;
+    }
+    count++;
+    if (!semi) noSemi++;
+    let cp = dec !== undefined ? (dec.length > 8 ? Infinity : parseInt(dec, 10)) : (hex.length > 8 ? Infinity : parseInt(hex, 16));
+    if (CP1252[cp]) { c1++; cp = CP1252[cp]; }
+    if (cp === 0 || cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF)) { badNum++; return '\uFFFD'; }
+    return String.fromCodePoint(cp);
+  });
+  if (unknown.size) notes.push({ level: 'warn', text: `Unknown ${unknown.size === 1 ? 'entity' : 'entities'} left as ${unknown.size === 1 ? 'it is' : 'they are'}: ${[...unknown].slice(0, 6).map(n => `&${n};`).join(' ')}${unknown.size > 6 ? ' …' : ''}` });
+  if (noSemi) notes.push({ level: 'info', text: `${plural(noSemi, 'reference')} ${noSemi === 1 ? 'has' : 'have'} no closing semicolon. Browsers accept ${noSemi === 1 ? 'it' : 'them'}, but it’s invalid HTML` });
+  if (c1) notes.push({ level: 'info', text: `${plural(c1, 'numeric reference')} in the range &#128; to &#159; ${c1 === 1 ? 'was' : 'were'} read as Windows-1252, as browsers do (for example &#150; is –)` });
+  if (badNum) notes.push({ level: 'warn', text: `${plural(badNum, 'numeric reference')} to an invalid code point became U+FFFD` });
+  return { text, count, unknown: [...unknown], notes };
+}
+
+/* ---------- Hex ---------- */
+const HEX = Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
+function hexEncode(bytes, { sep = 'none', upper = false } = {}) {
+  const t = upper ? HEX.map(h => h.toUpperCase()) : HEX, a = new Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) a[i] = t[bytes[i]];
+  switch (sep) {
+    case 'space': return a.join(' ');
+    case 'colon': return a.join(':');
+    case 'x': return a.map(h => '\\x' + h).join('');
+    case '0x': return a.map(h => '0x' + h).join(', ');
+    default: return a.join('');
+  }
+}
+
+/* The hex part of an xxd or hexdump -C (or od-style offset + bytes + |ascii|) dump, or null if it isn't one. */
+function hexFromDump(s) {
+  const lines = s.split(/\r?\n/).filter(l => l.trim());
+  if (!lines.length) return null;
+  const xxd = lines.every(l => /^[0-9a-fA-F]{4,16}: [0-9a-fA-F]{2}/.test(l));
+  const canon = !xxd && lines.every(l => /^[0-9a-fA-F]{4,16}\s*$/.test(l) || /^[0-9a-fA-F]{4,16}\s+(?:[0-9a-fA-F]{2}\s+)+.*\|.*\|\s*$/.test(l));
+  if (!xxd && !canon) return null;
+  return lines.map(l => {
+    if (xxd) return l.replace(/^[0-9a-fA-F]+: /, '').split(/\s{2,}/)[0];
+    const rest = l.replace(/^[0-9a-fA-F]+\s*/, ''), k = rest.search(/\s\|.{0,64}\|\s*$/);
+    return k < 0 ? '' : rest.slice(0, k);
+  }).join(' ');
+}
+
+/* hexDecode(text) -> { bytes, dump, notes } | { error } */
+function hexDecode(src) {
+  let s = String(src);
+  const dumped = hexFromDump(s), notes = [];
+  if (dumped !== null) s = dumped;
+  s = s.replace(/\\x/gi, ' ').replace(/(^|[^0-9a-fA-F])0x/gi, '$1 ').replace(/^\s*[{[(]|[}\])];?\s*$/g, ' ');
+  const bad = /[^0-9a-fA-F\s:,;.\-_]/.exec(s);
+  if (bad) {
+    const c = bad[0], shown = c > ' ' && c <= '~' ? `‘${c}’` : cpLabel(c.codePointAt(0));
+    return { error: `${shown} isn’t a hex digit (0–9, a–f)` };
+  }
+  const tokens = s.split(/[\s:,;.\-_]+/).filter(Boolean);
+  // "0x1, 0x2" and "a:b:c" have one-digit bytes; pad them when every token is a single byte
+  let digits = tokens.length > 1 && tokens.every(t => t.length <= 2) ? tokens.map(t => t.padStart(2, '0')).join('') : tokens.join('');
+  if (digits.length % 2) return { error: `There’s an odd number of hex digits (${digits.length.toLocaleString('en')}), so one is missing or extra` };
+  const bytes = new Uint8Array(digits.length / 2);
+  for (let i = 0; i < bytes.length; i++) bytes[i] = parseInt(digits.substr(i * 2, 2), 16);
+  return { bytes, dump: dumped !== null, notes };
+}
+
+/* ---------- String escapes (JSON / JavaScript) ---------- */
+function stringEscape(text, { quotes = false, ascii = false } = {}) {
+  let s = JSON.stringify(text);
+  if (ascii) s = s.replace(/[\u007f-\uffff]/g, c => '\\u' + hexOf(c.charCodeAt(0), 4).toLowerCase());
+  return quotes ? s : s.slice(1, -1);
+}
+
+/* stringUnescape(text) -> { text, count, quote, notes }
+   JSON and JavaScript escapes: \n \t \r \b \f \v \0 \' \" \\ \/ \` \xHH \uXXXX \u{…} and line continuations. */
+function stringUnescape(src) {
+  let s = String(src), quote = null;
+  const notes = [], m = /^\s*(["'`])([\s\S]*)\1\s*$/.exec(s);
+  if (m) { quote = m[1]; s = m[2]; }
+  const SIMPLE = { n: '\n', t: '\t', r: '\r', b: '\b', f: '\f', v: '\v', "'": "'", '"': '"', '\\': '\\', '/': '/', '`': '`', '\n': '', '\r': '' };
+  let out = '', count = 0;
+  const odd = new Set(), broken = [];
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c !== '\\' || i === s.length - 1) { out += c; continue; }
+    const n = s[i + 1];
+    count++;
+    if (n in SIMPLE) { out += SIMPLE[n]; i += n === '\r' && s[i + 2] === '\n' ? 2 : 1; continue; }
+    if (n === '0' && !/[0-9]/.test(s[i + 2] || '')) { out += '\0'; i++; continue; }
+    let h;
+    if (n === 'x' && (h = /^[0-9a-fA-F]{2}/.exec(s.slice(i + 2, i + 4)))) { out += String.fromCharCode(parseInt(h[0], 16)); i += 3; continue; }
+    if (n === 'u' && (h = /^\{([0-9a-fA-F]{1,6})\}/.exec(s.slice(i + 2, i + 10))) && parseInt(h[1], 16) <= 0x10FFFF) { out += String.fromCodePoint(parseInt(h[1], 16)); i += 1 + h[0].length; continue; }
+    if (n === 'u' && (h = /^[0-9a-fA-F]{4}/.exec(s.slice(i + 2, i + 6)))) { out += String.fromCharCode(parseInt(h[0], 16)); i += 5; continue; }
+    if (n === 'x' || n === 'u') { broken.push('\\' + n); out += '\\' + n; count--; i++; continue; }
+    odd.add('\\' + n); out += n; i++;
+  }
+  if (broken.length) notes.push({ level: 'warn', text: `${broken.length === 1 ? `An incomplete ${broken[0]} escape was` : `${broken.length} incomplete \\x or \\u escapes were`} kept as written` });
+  if (odd.size) notes.push({ level: 'info', text: `Not escape sequences in JSON or JavaScript, so the backslash was dropped: ${[...odd].slice(0, 6).join(' ')}` });
+  if (out.match(LONE_SURROGATE)) notes.push({ level: 'warn', text: 'The result has a lone surrogate half (an unpaired \\uD800 to \\uDFFF), which isn’t valid text' });
+  return { text: out, count, quote, notes };
+}
+
+/* ---------- Unicode escapes ---------- */
+function unicodeEscape(text, { style = 'js', ascii = false } = {}) {
+  if (style === 'uplus') return [...text].map(c => cpLabel(c.codePointAt(0))).join(' ');
+  const chars = [...text];
+  let out = '';
+  chars.forEach((c, i) => {
+    const cp = c.codePointAt(0);
+    if (cp < 0x80 && !ascii) { out += c; return; }
+    switch (style) {
+      case 'es6': out += `\\u{${hexOf(cp, 1)}}`; break;
+      case 'python': out += cp > 0xFFFF ? '\\U' + hexOf(cp, 8) : '\\u' + hexOf(cp, 4); break;
+      case 'css': {
+        // a space ends the escape when the next character could be read as part of it
+        const next = chars[i + 1];
+        out += '\\' + hexOf(cp, 2) + (next && (/[0-9a-fA-F\s]/.test(next) && (next.codePointAt(0) < 0x80 && !ascii || /\s/.test(next))) ? ' ' : '');
+        break;
+      }
+      default: for (let k = 0; k < c.length; k++) out += '\\u' + hexOf(c.charCodeAt(k), 4);
+    }
+  });
+  return out;
+}
+
+/* unicodeUnescape(text) -> { text, count, notes }. Any mix of the styles above, plus \xHH and &#…; references. */
+function unicodeUnescape(src) {
+  const s = String(src), notes = [];
+  let count = 0, bad = 0;
+  const re = /\\u\{([0-9a-fA-F]{1,8})\}|\\u([0-9a-fA-F]{4})|\\U([0-9a-fA-F]{8})|\\x([0-9a-fA-F]{2})|[Uu]\+([0-9a-fA-F]{4,6})|&#[xX]([0-9a-fA-F]{1,8});|&#([0-9]{1,8});|\\([0-9a-fA-F]{2,6}) ?/g;
+  // "U+0063 U+0061 U+0066" on its own: a list of code points, so the spaces between them go too
+  const list = /^\s*(?:[Uu]\+[0-9a-fA-F]{4,6}[\s,]*)+$/.test(s);
+  const text = (list ? s.replace(/[\s,]+/g, '') : s).replace(re, (m, ...g) => {
+    const h = g.slice(0, 8).find(x => x !== undefined), cp = parseInt(h, g[6] !== undefined ? 10 : 16);
+    count++;
+    if (g[1] !== undefined) return String.fromCharCode(cp);     // \uXXXX: may be half of a surrogate pair
+    if (cp > 0x10FFFF || (cp >= 0xD800 && cp <= 0xDFFF)) { bad++; return '\uFFFD'; }
+    return String.fromCodePoint(cp);
+  });
+  if (bad) notes.push({ level: 'warn', text: `${plural(bad, 'escape')} for an invalid code point became U+FFFD` });
+  if (text.match(LONE_SURROGATE)) notes.push({ level: 'warn', text: 'The result has a lone surrogate half (an unpaired \\uD800 to \\uDFFF), which isn’t valid text' });
+  return { text, count, notes };
+}
+
+/* ---------- Content sniffing and characters ---------- */
+/* sniff(bytes) -> { label, mime, ext, image?, tool? } | null */
+function sniff(b) {
+  const at = (sig, o = 0) => sig.length + o <= b.length && sig.every((x, i) => b[o + i] === x);
+  const ascii = s => [...s].map(c => c.charCodeAt(0));
+  if (at([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])) return { label: 'PNG image', mime: 'image/png', ext: 'png', image: true };
+  if (at([0xFF, 0xD8, 0xFF])) return { label: 'JPEG image', mime: 'image/jpeg', ext: 'jpg', image: true };
+  if (at(ascii('GIF87a')) || at(ascii('GIF89a'))) return { label: 'GIF image', mime: 'image/gif', ext: 'gif', image: true };
+  if (at(ascii('RIFF')) && at(ascii('WEBP'), 8)) return { label: 'WebP image', mime: 'image/webp', ext: 'webp', image: true };
+  if (at([0, 0, 1, 0]) && b.length > 22) return { label: 'ICO icon', mime: 'image/x-icon', ext: 'ico', image: true };
+  if (at(ascii('BM')) && b.length > 26 && (b[2] | b[3] << 8 | b[4] << 16 | b[5] << 24) >>> 0 === b.length) return { label: 'BMP image', mime: 'image/bmp', ext: 'bmp', image: true };
+  if (at(ascii('%PDF-'))) return { label: 'PDF document', mime: 'application/pdf', ext: 'pdf' };
+  if (at([0x50, 0x4B, 0x03, 0x04])) return { label: 'ZIP archive (or .docx, .xlsx, .jar…)', mime: 'application/zip', ext: 'zip' };
+  if (at([0x1F, 0x8B])) return { label: 'gzip data', mime: 'application/gzip', ext: 'gz', tool: 'gzip' };
+  if (at([0, 0x61, 0x73, 0x6D])) return { label: 'WebAssembly module', mime: 'application/wasm', ext: 'wasm' };
+  const head = utf8Text(b.subarray(0, Math.min(b.length, 2048)).slice(0, 2048));
+  if (head !== null && /^\uFEFF?\s*(?:<\?xml[^>]*>\s*)?(?:<!--[\s\S]*?-->\s*)*(?:<!DOCTYPE svg[^>]*>\s*)?<svg[\s>]/i.test(head)) return { label: 'SVG image', mime: 'image/svg+xml', ext: 'svg', image: true };
+  return null;
+}
+
+const CHAR_NAMES = { 0x00: 'null', 0x09: 'tab', 0x0A: 'line feed', 0x0D: 'carriage return', 0x1B: 'escape', 0x20: 'space', 0x7F: 'delete', 0x85: 'next line',
+  0xA0: 'no-break space', 0xAD: 'soft hyphen', 0x34F: 'combining grapheme joiner', 0x61C: 'Arabic letter mark', 0x180E: 'Mongolian vowel separator',
+  0x2000: 'en quad', 0x2001: 'em quad', 0x2002: 'en space', 0x2003: 'em space', 0x2004: 'three-per-em space', 0x2005: 'four-per-em space',
+  0x2006: 'six-per-em space', 0x2007: 'figure space', 0x2008: 'punctuation space', 0x2009: 'thin space', 0x200A: 'hair space',
+  0x200B: 'zero width space', 0x200C: 'zero width non-joiner', 0x200D: 'zero width joiner', 0x200E: 'left-to-right mark', 0x200F: 'right-to-left mark',
+  0x2028: 'line separator', 0x2029: 'paragraph separator', 0x202A: 'left-to-right embedding', 0x202B: 'right-to-left embedding',
+  0x202C: 'pop directional formatting', 0x202D: 'left-to-right override', 0x202E: 'right-to-left override', 0x202F: 'narrow no-break space',
+  0x205F: 'medium mathematical space', 0x2060: 'word joiner', 0x2061: 'function application', 0x2062: 'invisible times', 0x2063: 'invisible separator',
+  0x2064: 'invisible plus', 0x2066: 'left-to-right isolate', 0x2067: 'right-to-left isolate', 0x2068: 'first strong isolate', 0x2069: 'pop directional isolate',
+  0x3000: 'ideographic space', 0x3164: 'Hangul filler', 0xFEFF: 'byte order mark / zero width no-break space', 0xFFFC: 'object replacement character',
+  0xFFFD: 'replacement character' };
+const SHORT_NAMES = { 0x00: 'NUL', 0x09: 'TAB', 0x0A: 'LF', 0x0D: 'CR', 0x1B: 'ESC', 0x20: 'SP', 0xA0: 'NBSP', 0xAD: 'SHY', 0x200B: 'ZWSP', 0x200C: 'ZWNJ',
+  0x200D: 'ZWJ', 0x200E: 'LRM', 0x200F: 'RLM', 0x2028: 'LSEP', 0x2029: 'PSEP', 0x202A: 'LRE', 0x202B: 'RLE', 0x202C: 'PDF', 0x202D: 'LRO', 0x202E: 'RLO',
+  0x202F: 'NNBSP', 0x2060: 'WJ', 0x2066: 'LRI', 0x2067: 'RLI', 0x2068: 'FSI', 0x2069: 'PDI', 0xFEFF: 'BOM', 0x3000: 'IDSP' };
+
+/* charKind(cp) -> 'control' | 'format' | 'space' | 'mark' | 'private' | 'surrogate' | 'unassigned' | 'char' */
+function charKind(cp) {
+  const c = String.fromCodePoint(cp);
+  if (cp >= 0xD800 && cp <= 0xDFFF) return 'surrogate';
+  if (/\p{Cc}/u.test(c)) return 'control';
+  if (/\p{Cf}/u.test(c)) return 'format';
+  if (/[\p{Zs}\p{Zl}\p{Zp}]/u.test(c)) return 'space';
+  if (/\p{M}/u.test(c)) return 'mark';
+  if (/\p{Co}/u.test(c)) return 'private';
+  if (/\p{Cn}/u.test(c)) return 'unassigned';
+  return 'char';
+}
+/* Characters that are easy to miss: invisible, unusual spaces, controls other than tab and line breaks, U+FFFD. */
+function isHidden(cp) {
+  if (cp === 0x09 || cp === 0x0A || cp === 0x0D || cp === 0x20) return false;
+  if (cp === 0xFFFD || cp === 0x3164 || cp === 0x115F || cp === 0x1160) return true;
+  const k = charKind(cp);
+  return k === 'control' || k === 'format' || k === 'space' || k === 'surrogate' || (k === 'unassigned' && cp > 0xFFFF && cp < 0xE0000);
+}
+function charName(cp) {
+  if (CHAR_NAMES[cp]) return CHAR_NAMES[cp];
+  if (cp >= 0xE0000 && cp <= 0xE007F) return 'tag character' + (cp >= 0xE0020 && cp <= 0xE007E ? ` (hidden ‘${String.fromCharCode(cp - 0xE0000)}’)` : '');
+  if (cp >= 0xFE00 && cp <= 0xFE0F) return `variation selector ${cp - 0xFE00 + 1}`;
+  if (cp >= 0x1F3FB && cp <= 0x1F3FF) return 'skin tone modifier';
+  return '';
+}
+
+/* hiddenChars(text) -> [{ cp, name, count }], most common first. Scans at most `max` characters. */
+function hiddenChars(text, max = 5e6) {
+  const counts = new Map();
+  const s = text.length > max ? text.slice(0, max) : text;
+  for (const m of s.matchAll(/[\p{Cc}\p{Cf}\p{Zs}\p{Zl}\p{Zp}\uFFFD\u3164\u115F\u1160]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/gu)) {
+    const cp = m[0].codePointAt(0);
+    if (isHidden(cp)) counts.set(cp, (counts.get(cp) || 0) + 1);
+  }
+  return [...counts].map(([cp, count]) => ({ cp, name: charName(cp) || `${charKind(cp)} character ${cpLabel(cp)}`, count })).sort((a, b) => b.count - a.count);
+}
+
+/* charTable(text, max) -> { rows: [{ i, ch, cp, utf8, kind, name, hidden, short }], total } */
+function charTable(text, max = 2000) {
+  const rows = [];
+  let total = 0;
+  for (const ch of text) {
+    total++;
+    if (rows.length >= max) continue;
+    const cp = ch.codePointAt(0);
+    rows.push({ i: total, ch, cp, utf8: hexEncode(utf8(ch), { sep: 'space', upper: true }), kind: charKind(cp), name: charName(cp), hidden: isHidden(cp), short: SHORT_NAMES[cp] || '' });
+  }
+  return { rows, total };
+}
+
+/* ---------- Detection ---------- */
+/* detect(text) -> { format, strong } | null: what encoded text looks like. format can also be 'jwt'. */
+function detect(src) {
+  const s = String(src).trim();
+  if (!s) return null;
+  if (/^(?:Bearer\s+)?eyJ[\w-]*\.[\w-]+\.[\w-]*$/.test(s)) return { format: 'jwt', strong: true };
+  if (/^data:[^,]*;base64,/i.test(s)) return { format: 'base64', strong: true };
+  if ((s.match(/%[0-9A-Fa-f]{2}/g) || []).length >= 2 || /^[a-z][a-z0-9+.-]*%3A%2F%2F/i.test(s)) return { format: 'url', strong: true };
+  if ((s.match(/&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);/g) || []).length >= 2) return { format: 'html', strong: true };
+  if (/\\u\{[0-9a-fA-F]+\}|\\U[0-9a-fA-F]{8}|^(?:[Uu]\+[0-9a-fA-F]{4,6}[\s,]*)+$/.test(s)) return { format: 'unicode', strong: true };
+  if (/\\[nrt"\\]|\\u[0-9a-fA-F]{4}/.test(s)) return { format: /\\[nrt"\\]/.test(s) ? 'string' : 'unicode', strong: true };
+  if (hexFromDump(s) !== null) return { format: 'hex', strong: true };
+  const compactHex = s.replace(/0x|\\x|[\s:,]/gi, '');
+  if (/^(?:[0-9a-fA-F]{2}){2,}$/.test(compactHex) && /^(?:(?:0x)?[0-9a-fA-F]{2}[\s:,]*)+$/i.test(s)) return { format: 'hex', strong: compactHex.length >= 8 && /[a-fA-F]/.test(compactHex) && /\d/.test(compactHex) };
+  const b = s.replace(/\s+/g, '');
+  if (b.length >= 8 && !/[ \t]/.test(s) && /^[A-Za-z0-9+/_-]+={0,2}$/.test(b) && b.replace(/=+$/, '').length % 4 !== 1) {
+    const mixed = /[a-z]/.test(b) && /[A-Z]/.test(b) && /[0-9+/_=-]/.test(b);
+    return { format: 'base64', strong: mixed && b.length >= 16 && (b.length % 4 === 0 || /[-_]/.test(b)) };
+  }
+  if (/%[0-9A-Fa-f]{2}/.test(s)) return { format: 'url', strong: false };
+  if (/&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z]+);/.test(s)) return { format: 'html', strong: false };
+  return null;
+}
+
+/* Whether text is a JSON object or array (escapes inside its strings are expected, not a sign of double escaping). */
+function isJson(s) {
+  if (s.length > 5e6 || !/^\s*[[{]/.test(s)) return false;
+  try { JSON.parse(s); return true; } catch { return false; }
+}
+
+/* ---------- The two directions ---------- */
+/* encode(format, { text?, bytes?, mime? }, options) -> { text, notes, facts } | { error } */
+function encode(format, input, o = OPTION_DEFAULTS) {
+  const notes = [], facts = [];
+  const needText = () => {
+    if (input.bytes && input.text == null) {
+      const t = utf8Text(input.bytes);
+      if (t === null) throw new EncodeError(`This file isn’t text, and ${FORMAT_NAMES[format]} works on text. Use Base64 or Hex for binary files`);
+      return t;
+    }
+    return input.text;
+  };
+  const bytesIn = () => input.bytes || utf8(wellFormed(input.text, notes));
+  try {
+    switch (format) {
+      case 'base64': {
+        const bytes = bytesIn();
+        if (o.b64DataUrl) {
+          const text = `data:${input.mime || 'text/plain;charset=utf-8'};base64,${base64Encode(bytes)}`;
+          facts.push(['Type', input.mime || 'text/plain;charset=utf-8']);
+          if (text.length > 2e6) notes.push({ level: 'info', text: 'This data: URL is over 2 MB. Browsers accept it, but it bloats a page; a separate file is usually better' });
+          return { text, notes, facts };
+        }
+        const text = base64Encode(bytes, { urlSafe: o.b64Url, pad: o.b64Pad, wrap: +o.b64Wrap });
+        facts.push(['Alphabet', o.b64Url ? 'URL-safe (- _)' : 'standard (+ /)']);
+        if (bytes.length) facts.push(['Size', `${plural(bytes.length, 'byte')} → ${plural(text.replace(/\n/g, '').length, 'character')} (+${Math.round((text.replace(/\n/g, '').length / bytes.length - 1) * 100)}%)`]);
+        return { text, notes, facts };
+      }
+      case 'url': {
+        const t = wellFormed(needText(), notes);
+        if ((t.match(/%[0-9A-Fa-f]{2}/g) || []).length >= 1) notes.push({ level: 'warn', text: 'The input already contains percent-encoding, and each % is encoded again as %25. Did you mean to decode it?', act: { label: 'Decode instead', do: 'mode:decode' } });
+        if (o.urlMode === 'uri' && !/^[a-z][a-z0-9+.-]*:/i.test(t.trim()) && /[&=?#/]/.test(t)) notes.push({ level: 'info', text: 'Full URL mode leaves & = ? # / as they are. To put this text inside a URL as one value, use Component', act: { label: 'Use Component', do: 'opt:urlMode=component' } });
+        const text = urlEncode(t, o.urlMode);
+        facts.push(['Mode', { component: 'component (encodeURIComponent)', uri: 'full URL (encodeURI)', form: 'form data (spaces as +)' }[o.urlMode]]);
+        return { text, notes, facts };
+      }
+      case 'html': {
+        const r = htmlEncode(needText(), o.htmlMode);
+        facts.push(['Escaped', plural(r.count, 'character')]);
+        return { text: r.text, notes, facts };
+      }
+      case 'hex': {
+        const bytes = bytesIn(), text = hexEncode(bytes, { sep: o.hexSep, upper: o.hexUpper });
+        facts.push(['Bytes', bytes.length.toLocaleString('en')]);
+        return { text, notes, facts };
+      }
+      case 'string': {
+        const text = stringEscape(needText(), { quotes: o.strQuotes, ascii: o.strAscii });
+        facts.push(['Style', 'JSON (also valid in JavaScript)']);
+        return { text, notes, facts };
+      }
+      case 'unicode': {
+        const t = needText(), text = unicodeEscape(t, { style: o.uniStyle, ascii: o.uniAscii });
+        const n = o.uniStyle === 'uplus' || o.uniAscii ? [...t].length : [...t].filter(c => c.codePointAt(0) > 127).length;
+        facts.push(['Escaped', plural(n, 'character')]);
+        if (!n && t) notes.push({ level: 'info', text: 'There are no characters outside ASCII, so nothing was escaped', act: { label: 'Escape ASCII too', do: 'opt:uniAscii=true' } });
+        return { text, notes, facts };
+      }
+    }
+  } catch (e) {
+    if (e instanceof EncodeError) return { error: e.message };
+    throw e;
+  }
+  return { error: `Unknown format ${format}` };
+}
+class EncodeError extends Error {}
+
+/* decode(format, text, options, resolveEntity?) -> { text?, bytes?, mime?, parts?, notes, facts } | { error, notes }
+   Base64 and hex give bytes; the rest give text. */
+function decode(format, src, o = OPTION_DEFAULTS, resolveEntity = null) {
+  const notes = [], facts = [];
+  switch (format) {
+    case 'base64': {
+      const r = base64Decode(src);
+      if (r.error) return { error: r.error, notes };
+      notes.push(...r.notes);
+      facts.push(['Read as', r.variant === 'percent' ? 'percent-encoded data: URL' : (r.mime ? 'data: URL, ' : '') + (r.variant === 'base64url' ? 'URL-safe Base64' : 'Base64')]);
+      if (r.mime) facts.push(['Type', r.mime]);
+      if (r.variant !== 'percent') facts.push(['Padding', r.padded ? 'yes' : 'none']);
+      return { bytes: r.bytes, mime: r.mime, notes, facts };
+    }
+    case 'url': {
+      const r = urlDecode(src, { plus: o.urlPlus });
+      notes.push(...r.notes);
+      facts.push(['Decoded', plural(r.sequences, 'byte') + ' from %XX']);
+      if (o.urlPlus && r.plusCount) facts.push(['+ as space', r.plusCount.toLocaleString('en')]);
+      if (!o.urlPlus && /\+/.test(src)) notes.push({ level: 'info', text: 'The input has + signs, kept as they are. In a query string or form data they stand for spaces', act: { label: 'Read + as a space', do: 'opt:urlPlus=true' } });
+      if (r.sequences && /%[0-9A-Fa-f]{2}/.test(r.text)) notes.push({ level: 'info', text: 'The result still contains percent-encoding, so the input may have been encoded twice', act: { label: 'Decode again', do: 'again' } });
+      return { text: r.text, parts: urlParts(src) || urlParts(r.text), notes, facts };
+    }
+    case 'html': {
+      const r = htmlDecode(src, resolveEntity);
+      notes.push(...r.notes);
+      facts.push(['Decoded', plural(r.count, 'reference')]);
+      if (r.count && /&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);/.test(r.text) && /&amp;/i.test(src)) notes.push({ level: 'info', text: 'The result still contains entities, so the input may have been escaped twice', act: { label: 'Decode again', do: 'again' } });
+      return { text: r.text, notes, facts };
+    }
+    case 'hex': {
+      const r = hexDecode(src);
+      if (r.error) return { error: r.error, notes };
+      if (r.dump) facts.push(['Read as', 'hex dump']);
+      facts.push(['Bytes', r.bytes.length.toLocaleString('en')]);
+      return { bytes: r.bytes, notes, facts };
+    }
+    case 'string': {
+      const r = stringUnescape(src);
+      notes.push(...r.notes);
+      facts.push(['Escapes', r.count.toLocaleString('en')]);
+      if (r.quote) facts.push(['Quotes', `${r.quote}…${r.quote} removed`]);
+      if (r.count && /\\(?:["\\nrt/]|u[0-9a-fA-F]{4})/.test(r.text) && !isJson(r.text)) notes.push({ level: 'info', text: 'The result still contains escapes, so the input may have been escaped twice', act: { label: 'Unescape again', do: 'again' } });
+      return { text: r.text, notes, facts };
+    }
+    case 'unicode': {
+      const r = unicodeUnescape(src);
+      notes.push(...r.notes);
+      facts.push(['Escapes', r.count.toLocaleString('en')]);
+      return { text: r.text, notes, facts };
+    }
+  }
+  return { error: `Unknown format ${format}`, notes };
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  FORMAT_NAMES, OPTION_DEFAULTS, encode, decode, detect, sniff, isJson, utf8, utf8Text,
+  base64Encode, base64Decode, urlEncode, urlDecode, urlParts, percentDecodeBytes, htmlEncode, htmlDecode, HTML_NAMED,
+  hexEncode, hexDecode, hexFromDump, stringEscape, stringUnescape, unicodeEscape, unicodeUnescape,
+  charKind, charName, isHidden, hiddenChars, charTable,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function fmtBytes(n) {
+  return n < 1024 ? plural(n, 'byte') : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+}
+/* Links to the other tools: files when opened locally, short URLs when served. */
+const toolHref = slug => /^https?:$/.test(location.protocol) ? '/' + slug : `../${slug}/${slug}.html`;
+const TOOL_NAMES = { jwt: 'JWT decoder', gzip: 'Gzip helper', 'json-format': 'JSON formatter' };
+const SHORT_FORMATS = { base64: 'Base64', url: 'URL', html: 'HTML', hex: 'Hex', string: 'String', unicode: 'Unicode' };
+
+/* ---------- settings (preferences only, saved in localStorage; input is never stored) ---------- */
+const SETTINGS_KEY = 'encode.settings';
+const settings = (() => {
+  const s = { mode: 'encode', format: 'base64', ...OPTION_DEFAULTS };
+  try { Object.assign(s, JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')); } catch {}
+  if (!['encode', 'decode'].includes(s.mode)) s.mode = 'encode';
+  if (!(s.format in FORMAT_NAMES)) s.format = 'base64';
+  for (const k in OPTION_DEFAULTS) if (typeof s[k] !== typeof OPTION_DEFAULTS[k]) s[k] = OPTION_DEFAULTS[k];
+  return s;
+})();
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+
+const input = $('#input'), view = $('#view');
+const DISPLAY_CHARS = 1e6, DUMP_BYTES = 64 * 1024, CHAR_ROWS = 2000;
+let file = null;      // { name, bytes, type } while a binary file is loaded (the textarea is hidden then)
+let result = null;    // result for the current input and settings
+let show = null;      // how the output is shown: 'text' | 'chars' | 'hex' | 'image', or null to pick by content
+let imgUrl = null;
+
+/* Entity names outside the built-in table are looked up by the browser. Only a bare name reaches innerHTML,
+   and a textarea's content is parsed as text, so no markup can be created. */
+const entityBox = document.createElement('textarea');
+function resolveEntity(name) {
+  if (!/^[A-Za-z][A-Za-z0-9]{0,31}$/.test(name)) return null;
+  entityBox.innerHTML = `&${name};`;
+  const v = entityBox.value;
+  return v === `&${name};` ? null : v;
+}
+
+/* ---------- compute ---------- */
+function compute() {
+  const { mode, format } = settings;
+  let r;
+  if (!file && !input.value) r = { empty: true };
+  else {
+    try {
+      const t = performance.now();
+      if (mode === 'encode') r = encode(format, file ? { bytes: file.bytes, mime: file.type } : { text: input.value }, settings);
+      else {
+        const text = file ? utf8Text(file.bytes) : input.value;
+        r = text === null ? { error: 'This file isn’t text. Decoding reads encoded text, such as Base64 or hex' } : decode(format, text, settings, resolveEntity);
+      }
+      r.ms = performance.now() - t;
+    } catch (e) {
+      r = { error: `Something went wrong: ${e && e.message || e}` };
+    }
+  }
+  r.mode = mode; r.format = format;
+  r.notes = r.notes || [];
+  if (!r.empty && !r.error) {
+    r.outBytes = r.bytes || null;
+    r.outText = r.text ?? (r.bytes ? utf8Text(r.bytes) : null);
+    r.kind = r.bytes ? sniff(r.bytes) : null;
+    addHints(r);
+  } else if (r.error) addHints(r);
+  result = r;
+  render();
+}
+
+/* Suggestions based on what the input looks like, and warnings about what the output contains. */
+function addHints(r) {
+  const text = file ? null : input.value;
+  const d = text !== null && text.length < 2e6 ? detect(text) : null;
+  if (d && d.format === 'jwt') {
+    r.notes.push({ level: 'info', html: `This looks like a JSON Web Token. The <a class="linkish" href="${toolHref('jwt')}" target="_blank" rel="noopener">JWT decoder</a> shows its header and claims and checks its signature.` });
+  } else if (r.mode === 'decode' && d && d.format !== r.format && (r.error || (d.strong && r.outText === text))) {
+    r.notes.push({ level: 'info', text: `This looks like ${FORMAT_NAMES[d.format].replace(/^(Base64|Hex)$/, '$1')}${d.strong ? '' : ' (possibly)'}.`, act: { label: `Decode as ${SHORT_FORMATS[d.format]}`, do: 'format:' + d.format } });
+  } else if (r.mode === 'encode' && d && d.strong && d.format === r.format && !r.notes.some(n => n.act && n.act.do === 'mode:decode')) {
+    r.notes.push({ level: 'info', text: `The input already looks like ${FORMAT_NAMES[d.format]}.`, act: { label: 'Decode it', do: 'mode:decode' } });
+  }
+  if (r.error) return;
+  if (r.kind && r.kind.tool) {
+    r.notes.push({ level: 'info', html: `The result is ${esc(r.kind.label)}. Download it, or open the <a class="linkish" href="${toolHref(r.kind.tool)}" target="_blank" rel="noopener">${TOOL_NAMES[r.kind.tool]}</a> and paste the ${r.format === 'hex' ? 'hex' : 'Base64'} there.` });
+  } else if (r.bytes && r.outText === null) {
+    r.notes.push({ level: 'info', text: `The result isn’t UTF-8 text${r.kind ? `: it’s ${r.kind.label}` : ''}, so it’s shown ${r.kind && r.kind.image ? 'as an image' : 'as a hex dump'}. Download saves the bytes.` });
+  }
+  if (r.mode === 'decode' && r.outText && isJson(r.outText)) {
+    r.notes.push({ level: 'info', html: `The result is JSON. Copy it into the <a class="linkish" href="${toolHref('json-format')}" target="_blank" rel="noopener">JSON formatter</a> to explore it.` });
+  }
+  if (r.mode === 'decode' && r.outText) {
+    const hid = hiddenChars(r.outText);
+    if (hid.length) {
+      const total = hid.reduce((n, h) => n + h.count, 0);
+      r.notes.push({ level: 'warn', text: `The result contains ${plural(total, 'hidden or unusual character')}: ${hid.slice(0, 4).map(h => h.name + (h.count > 1 ? ` ×${h.count}` : '')).join(', ')}${hid.length > 4 ? ', …' : ''}.`, act: { label: 'Show them', do: 'show:chars' } });
+    }
+  }
+  if (r.mode === 'encode' && !file) {
+    const hid = hiddenChars(input.value);
+    if (hid.length) {
+      const total = hid.reduce((n, h) => n + h.count, 0);
+      r.notes.push({ level: 'warn', text: `The input contains ${plural(total, 'hidden or unusual character')} (${hid.slice(0, 3).map(h => h.name).join(', ')}${hid.length > 3 ? ', …' : ''}), which ${total === 1 ? 'is' : 'are'} encoded too.`, act: { label: 'Show them', do: 'show:chars' } });
+    }
+  }
+}
+
+let timer;
+const schedule = () => { clearTimeout(timer); timer = setTimeout(compute, input.value.length > 1e6 ? 400 : 120); };
+
+/* ---------- render ---------- */
+const HINTS = {
+  'encode:base64': 'Text or a file in, Base64 out. Used in data: URLs, email attachments, JWTs and APIs that carry binary data as text.',
+  'decode:base64': 'Base64 or a data: URL in; text, an image or other bytes out.',
+  'encode:url': 'Text in, percent-encoded text out, safe to put in a URL.',
+  'decode:url': 'Percent-encoded text or a whole URL in. A URL’s query parameters are listed one by one.',
+  'encode:html': 'Text in, text that’s safe to put in HTML out.',
+  'decode:html': 'HTML with entities such as &amp;amp; or &amp;#233; in, plain text out.',
+  'encode:hex': 'Text or a file in, its bytes in hex out.',
+  'decode:hex': 'Hex bytes in, text or other bytes out.',
+  'encode:string': 'Text in, a JSON or JavaScript string literal out, with quotes, backslashes and line breaks escaped.',
+  'decode:string': 'An escaped string literal in, such as one copied from a log or a JSON value, plain text out.',
+  'encode:unicode': 'Text in, code point escapes out, for source code that must stay ASCII.',
+  'decode:unicode': 'Code point escapes in, text out.',
+};
+const BYTE_FORMATS = ['base64', 'hex'];
+
+function render() {
+  const key = `${settings.mode}:${settings.format}`, enc = settings.mode === 'encode';
+  $('#modeHint').innerHTML = HINTS[key];
+  document.querySelectorAll('.opts[data-for]').forEach(el => el.hidden = el.dataset.for !== key);
+  input.placeholder = enc
+    ? `Type or paste text to encode${BYTE_FORMATS.includes(settings.format) ? ', or drop a file onto this box' : ''}`
+    : { base64: 'Paste Base64 or a data: URL', url: 'Paste a URL or percent-encoded text', html: 'Paste HTML with entities', hex: 'Paste hex bytes or a hex dump',
+        string: 'Paste an escaped string, such as "line one\\nline two"', unicode: 'Paste text with escapes such as \\u00e9 or U+1F600' }[settings.format];
+  input.hidden = !!file; $('#fileCard').hidden = !file;
+  if (file) {
+    $('#fcName').textContent = file.name;
+    $('#fcMeta').textContent = fmtBytes(file.bytes.length) + (file.type ? ' · ' + file.type : '');
+  }
+  syncOptions();
+  renderInput(); renderOutput();
+}
+
+function renderInput() {
+  const r = result, st = $('#status');
+  const [cls, label] = !r || r.empty ? ['text', 'empty'] : r.error ? ['bad', 'invalid']
+    : [r.notes.some(n => n.level === 'warn') ? 'warn' : 'ok', file ? 'file' : r.mode === 'decode' ? FORMAT_NAMES[r.format] : 'text'];
+  st.className = 'status ' + cls; st.textContent = label;
+  const msgs = [];
+  if (r && r.error) msgs.push(`<div class="msg bad"><b>${r.mode === 'decode' ? 'Can’t decode this.' : 'Can’t encode this.'}</b> ${esc(r.error)}.</div>`);
+  if (r) r.notes.forEach((n, i) => {
+    const body = n.html || esc(n.text) + (/[.?!]$/.test(n.text) ? '' : '.');
+    const act = n.act ? ` <button class="linkish" data-note="${i}">${esc(n.act.label)}</button>` : '';
+    msgs.push(`<div class="msg ${n.level}">${n.level === 'warn' ? '<b>Note:</b> ' : ''}${body}${act}</div>`);
+  });
+  $('#msgs').innerHTML = msgs.join('');
+}
+
+function showKinds() {
+  const r = result, kinds = [];
+  if (r.outText !== null) kinds.push('text', 'chars');
+  kinds.push('hex');
+  if (r.kind && r.kind.image) kinds.push('image');
+  return kinds;
+}
+function showKind() {
+  const kinds = showKinds();
+  if (show && kinds.includes(show)) return show;
+  return result.kind && result.kind.image ? 'image' : result.outText !== null ? 'text' : 'hex';
+}
+const outBytes = () => result.outBytes || (result.outBytes = utf8(result.outText));
+
+function renderOutput() {
+  const r = result, has = !!(r && !r.empty && !r.error);
+  ['#copyOut', '#download', '#swap'].forEach(s => $(s).disabled = !has);
+  $('#clip').hidden = true;
+  $('#facts').innerHTML = has ? r.facts.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('') + (r.kind ? `<div><dt>Content</dt><dd>${esc(r.kind.label)}</dd></div>` : '') : '';
+  renderStats();
+  if (imgUrl) { URL.revokeObjectURL(imgUrl); imgUrl = null; }
+  const segBtns = [...document.querySelectorAll('#showSeg button')];
+  if (!has) {
+    segBtns.forEach(b => { b.setAttribute('aria-pressed', 'false'); b.disabled = true; });
+    view.innerHTML = `<div class="empty">${!r || r.empty ? `Type or paste something${settings.mode === 'encode' && BYTE_FORMATS.includes(settings.format) ? ', open a file,' : ''} or load the example.` : 'Fix the problem in the input to see the output.'}</div>`;
+    return;
+  }
+  const kinds = showKinds(), kind = showKind();
+  segBtns.forEach(b => {
+    b.hidden = b.dataset.v === 'image' && !kinds.includes('image');
+    b.disabled = !kinds.includes(b.dataset.v);
+    b.title = b.disabled ? 'The output isn’t UTF-8 text' : b.dataset.v === 'chars' ? 'Every character with its code point and UTF-8 bytes' : '';
+    b.setAttribute('aria-pressed', String(b.dataset.v === kind));
+  });
+  $('#copyOut').textContent = kind === 'hex' && r.outText === null ? 'Copy hex' : 'Copy';
+
+  const nodes = [];
+  if (kind === 'image') {
+    const box = document.createElement('div'), img = new Image(), cap = document.createElement('span');
+    box.className = 'imgview';
+    imgUrl = URL.createObjectURL(new Blob([r.outBytes], { type: r.kind.mime }));
+    img.alt = 'Decoded image'; img.src = imgUrl;
+    img.onload = () => { cap.textContent = `${r.kind.label} · ${img.naturalWidth} × ${img.naturalHeight} px · ${fmtBytes(r.outBytes.length)}`; };
+    img.onerror = () => { cap.textContent = `${r.kind.label}, but the browser couldn’t display it. It may be damaged.`; };
+    cap.textContent = r.kind.label;
+    box.append(img, cap);
+    nodes.push(box);
+  } else if (kind === 'chars') {
+    nodes.push(charsTable(r.outText));
+  } else {
+    const pre = document.createElement('pre');
+    let clipped = false;
+    if (kind === 'hex') { pre.className = 'out dump'; pre.textContent = hexDump(outBytes(), DUMP_BYTES); clipped = outBytes().length > DUMP_BYTES; }
+    else {
+      pre.className = 'out' + (r.mode === 'encode' && ['base64', 'hex', 'url'].includes(r.format) ? ' b64' : '');
+      pre.textContent = r.outText.slice(0, DISPLAY_CHARS); clipped = r.outText.length > DISPLAY_CHARS;
+    }
+    if (!r.outText && !(r.outBytes && r.outBytes.length)) pre.textContent = '(empty)';
+    if (clipped) {
+      $('#clip').hidden = false;
+      $('#clip').textContent = `Showing the first ${kind === 'hex' ? fmtBytes(DUMP_BYTES) : DISPLAY_CHARS.toLocaleString('en') + ' characters'}. Copy and Download use all of it.`;
+    }
+    nodes.push(pre);
+  }
+  if (r.parts && kind !== 'image') nodes.push(...partsTables(r.parts));
+  view.replaceChildren(...nodes);
+}
+
+function hexDump(bytes, max) {
+  const n = Math.min(bytes.length, max), lines = [];
+  for (let o = 0; o < n; o += 16) {
+    const row = bytes.subarray(o, Math.min(o + 16, n));
+    let h = '', a = '';
+    for (let j = 0; j < 16; j++) {
+      h += (j < row.length ? row[j].toString(16).padStart(2, '0') : '  ') + (j === 7 ? '  ' : ' ');
+      if (j < row.length) a += row[j] >= 0x20 && row[j] < 0x7f ? String.fromCharCode(row[j]) : '.';
+    }
+    lines.push(`${o.toString(16).padStart(8, '0')}  ${h} |${a}|`);
+  }
+  return lines.join('\n');
+}
+
+function charsTable(text) {
+  const { rows, total } = charTable(text, CHAR_ROWS), wrap = document.createElement('div');
+  if (total > CHAR_ROWS) { $('#clip').hidden = false; $('#clip').textContent = `Showing the first ${CHAR_ROWS.toLocaleString('en')} of ${total.toLocaleString('en')} characters.`; }
+  const glyph = r => r.hidden || r.kind === 'control' || r.kind === 'space' || r.kind === 'format'
+    ? `<span class="glyph inv">${esc(r.short || (r.cp === 0x20 ? 'SP' : cpLabel(r.cp).slice(2)))}</span>`
+    : r.kind === 'mark' ? `<span class="glyph">◌${esc(r.ch)}</span>` : `<span class="glyph">${esc(r.ch)}</span>`;
+  const kindText = { control: 'control character', format: 'invisible formatting', space: 'space', mark: 'combining mark', private: 'private use', surrogate: 'lone surrogate', unassigned: 'unassigned', char: '' };
+  wrap.innerHTML = `<table class="chars"><thead><tr><th>#</th><th>Char</th><th>Code point</th><th>UTF-8</th><th>Notes</th></tr></thead><tbody>${rows.map(r =>
+    `<tr${r.hidden ? ' class="sus"' : ''}><td>${r.i}</td><td>${glyph(r)}</td><td class="mono">${cpLabel(r.cp)}</td><td class="mono">${r.utf8}</td><td><span class="kind">${esc(r.name || kindText[r.kind])}</span></td></tr>`).join('')}</tbody></table>`;
+  return wrap;
+}
+
+function partsTables(p) {
+  const out = [];
+  if (p.url) {
+    const rows = [['Scheme', p.url.protocol.replace(/:$/, '')], ['Host', p.url.host], ['Path', p.url.path], ...(p.url.hash ? [['Fragment', p.url.hash]] : [])];
+    const h = document.createElement('div');
+    h.innerHTML = `<h3 class="tbl-title">URL</h3><table><tbody>${rows.map(([k, v]) => `<tr><td class="k">${esc(k)}</td><td class="mono">${esc(v)}</td></tr>`).join('')}</tbody></table>`;
+    out.push(h);
+  }
+  if (p.params.length) {
+    const t = document.createElement('div');
+    t.innerHTML = `<h3 class="tbl-title">Query parameters (${p.params.length})</h3><table><thead><tr><th>Name</th><th>Value (decoded)</th></tr></thead><tbody>${p.params.map(([k, v, bare]) =>
+      `<tr><td class="k mono">${esc(k)}</td><td class="mono">${bare ? '<i class="flag">no value</i>' : v === '' ? '<i class="flag">empty</i>' : esc(v)}</td></tr>`).join('')}</tbody></table>`;
+    out.push(t);
+  }
+  return out;
+}
+
+function renderStats() {
+  const r = result, el = $('#stats');
+  if (!r || r.empty || r.error) { el.innerHTML = ''; return; }
+  const inText = file ? null : input.value;
+  const inDesc = inText !== null ? `${plural([...inText].length, 'char')} (${fmtBytes(utf8(inText).length)})` : fmtBytes(file.bytes.length);
+  const outDesc = r.outText !== null ? `${plural([...r.outText].length, 'char')} (${fmtBytes(outBytes().length)})` : fmtBytes(r.outBytes.length);
+  el.innerHTML = [`<span><b>${inDesc} → ${outDesc}</b></span>`, `<span>${r.ms < 10 ? r.ms.toFixed(1) : Math.round(r.ms)} ms</span>`].join('<span aria-hidden="true">·</span>');
+}
+
+/* ---------- output actions ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function copyText(text, what) {
+  const done = () => toast(`Copied ${what}`);
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(() => {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); done(); } catch { toast('Couldn’t copy to the clipboard'); } t.remove();
+  });
+}
+$('#copyOut').onclick = () => {
+  if (result.outText !== null) copyText(result.outText, 'the output');
+  else copyText(hexEncode(result.outBytes), 'hex');
+};
+
+function outName() {
+  const r = result;
+  if (r.mode === 'encode') return `${file ? file.name : 'text'}.${{ base64: 'b64', hex: 'hex' }[r.format] || 'encoded'}.txt`;
+  const base = file ? file.name.replace(/\.(b64|base64|hex|txt)$/i, '') : 'decoded';
+  if (r.kind) return base.replace(/\.[^.]+$/, '') + '.' + r.kind.ext;
+  return base + (r.outText !== null ? (/\.[a-z0-9]{1,5}$/i.test(base) ? '' : '.txt') : '.bin');
+}
+$('#download').onclick = () => {
+  const r = result, a = document.createElement('a');
+  const blob = r.outBytes && r.outText === null || r.kind ? new Blob([r.outBytes], { type: (r.kind && r.kind.mime) || 'application/octet-stream' })
+    : new Blob([r.outText], { type: 'text/plain;charset=utf-8' });
+  a.href = URL.createObjectURL(blob);
+  a.download = outName();
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* Round trip: the output becomes the input in the other direction (or the same one, to decode twice). */
+function useOutput(sameMode = false) {
+  const r = result;
+  if (!sameMode) setMode(r.mode === 'encode' ? 'decode' : 'encode', false);
+  if (r.outText !== null && r.outText.length <= 20e6) setInput(r.outText);
+  else setInput('', { name: outName(), bytes: r.outBytes, type: r.kind ? r.kind.mime : '' });
+}
+$('#swap').onclick = () => useOutput();
+
+/* ---------- input ---------- */
+function setInput(text, f = null) {
+  input.value = text; file = f; show = null;
+  input.scrollTop = 0;
+  clearTimeout(timer);
+  compute();
+}
+async function loadFile(f) {
+  if (!f) return;
+  const bytes = new Uint8Array(await f.arrayBuffer());
+  const text = bytes.length <= 20e6 ? utf8Text(bytes) : null;
+  // Text files go into the text box, so they can be edited; binary files can only be encoded as Base64 or hex
+  if (text !== null && !(settings.mode === 'encode' && BYTE_FORMATS.includes(settings.format) && sniff(bytes))) { setInput(text.replace(/^\uFEFF/, '')); return; }
+  if (settings.mode === 'decode' || !BYTE_FORMATS.includes(settings.format)) {
+    settings.mode = 'encode';
+    if (!BYTE_FORMATS.includes(settings.format)) settings.format = 'base64';
+    saveSettings(); syncSegs();
+    toast('Binary file: switched to Encode');
+  }
+  setInput('', { name: f.name, bytes, type: f.type || (sniff(bytes) || {}).mime || '' });
+}
+$('#openFile').onclick = () => $('#file').click();
+$('#file').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
+$('#fcRemove').onclick = () => { setInput(''); input.focus(); };
+const pane = $('#inPane');
+pane.addEventListener('dragover', e => { e.preventDefault(); pane.classList.add('drag'); });
+pane.addEventListener('dragleave', e => { if (!pane.contains(e.relatedTarget)) pane.classList.remove('drag'); });
+pane.addEventListener('drop', e => {
+  e.preventDefault(); pane.classList.remove('drag');
+  if (e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
+  else { const t = e.dataTransfer.getData('text'); if (t) setInput(t); }
+});
+input.addEventListener('input', () => { show = null; schedule(); });
+
+$('#msgs').addEventListener('click', e => {
+  const b = e.target.closest('[data-note]');
+  if (!b) return;
+  const act = result.notes[+b.dataset.note].act.do, [what, arg] = act.split(':');
+  if (what === 'again') useOutput(true);
+  else if (what === 'mode') setMode(arg);
+  else if (what === 'format') { settings.format = arg; if (settings.mode !== 'decode') settings.mode = 'decode'; saveSettings(); syncSegs(); compute(); }
+  else if (what === 'show') { show = arg; renderOutput(); }
+  else if (what === 'opt') { const [k, v] = arg.split('='); setOpt(k, v); }
+});
+
+/* ---------- examples ---------- */
+const SAMPLE = 'Café déjà vu — "naïve" <b>résumé</b> & 50% off? ✓ 🎉';
+const SAMPLE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128"><circle cx="32" cy="32" r="28" fill="#3ddc84"/><path d="M19 33l9 9 17-19" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SAMPLE_URL = 'https://example.com/search?q=crème brûlée&tag=café & bar&redirect=/menu?id=42#top';
+const DECODE_SAMPLES = {
+  base64: () => 'data:image/svg+xml;base64,' + base64Encode(utf8(SAMPLE_SVG)),
+  url: () => 'https://example.com/search?q=cr%C3%A8me+br%C3%BBl%C3%A9e&tag=caf%C3%A9+%26+bar&redirect=%2Fmenu%3Fid%3D42#top',
+  html: () => '&lt;p&gt;Caf&eacute; &amp; cr&#232;me br&#xFB;l&eacute;e &mdash; &quot;50% off&quot;&lt;/p&gt;',
+  hex: () => hexEncode(utf8(SAMPLE), { sep: 'space' }),
+  string: () => JSON.stringify(JSON.stringify({ user: 'Zoë', note: 'Line one\nLine two', tags: ['café', '✓'] })),
+  unicode: () => 'Caf\\u00e9 d\\u00e9j\\u00e0 vu \\u2014 \\u2713 \\u{1F389}',
+};
+$('#sample').onclick = () => {
+  if (settings.mode === 'decode') return setInput(DECODE_SAMPLES[settings.format]());
+  setInput(settings.format === 'url' && settings.urlMode === 'uri' ? SAMPLE_URL : settings.format === 'url' ? 'crème brûlée & café/bar? 50% off!' : SAMPLE);
+};
+$('#clear').onclick = () => { setInput(''); input.focus(); };
+
+/* ---------- controls ---------- */
+function setMode(mode, run = true) {
+  settings.mode = mode; saveSettings(); syncSegs();
+  if (run) { show = null; compute(); }
+}
+const segs = [
+  ['#modeSeg', () => settings.mode, v => setMode(v)],
+  ['#formatSeg', () => settings.format, v => { settings.format = v; saveSettings(); show = null; compute(); }],
+];
+function syncSegs() {
+  for (const [sel, get] of segs) document.querySelectorAll(sel + ' button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === get())));
+}
+for (const [sel, , set] of segs) document.querySelectorAll(sel + ' button').forEach(b => b.onclick = () => { set(b.dataset.v); syncSegs(); });
+
+/* Format options: segmented controls and checkboxes with data-opt name the setting they change. */
+function setOpt(k, v) {
+  const d = OPTION_DEFAULTS[k];
+  settings[k] = typeof d === 'boolean' ? v === true || v === 'true' : typeof d === 'number' ? +v : v;
+  saveSettings(); compute();
+}
+function syncOptions() {
+  document.querySelectorAll('.seg[data-opt]').forEach(seg => seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === String(settings[seg.dataset.opt])))));
+  document.querySelectorAll('input[data-opt]').forEach(cb => cb.checked = !!settings[cb.dataset.opt]);
+  // controls that don't apply with the current settings
+  const off = { b64DataUrl: settings.b64DataUrl, 'uniStyle=uplus': settings.uniStyle === 'uplus' };
+  document.querySelectorAll('[data-dis]').forEach(l => { const o = !!off[l.dataset.dis]; l.classList.toggle('off', o); l.querySelector('input').disabled = o; });
+  document.querySelectorAll('.seg[data-opt=b64Url] button, .seg[data-opt=b64Wrap] button').forEach(b => b.disabled = settings.b64DataUrl);
+}
+document.querySelectorAll('.seg[data-opt]').forEach(seg => seg.querySelectorAll('button').forEach(b => b.onclick = () => setOpt(seg.dataset.opt, b.dataset.v)));
+document.querySelectorAll('input[data-opt]').forEach(cb => cb.onchange = () => setOpt(cb.dataset.opt, cb.checked));
+document.querySelectorAll('#showSeg button').forEach(b => b.onclick = () => { show = b.dataset.v; renderOutput(); });
+
+syncSegs();
+compute();
+</script>
+</body>
+</html>

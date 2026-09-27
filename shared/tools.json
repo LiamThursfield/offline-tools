@@ -40,6 +40,16 @@
     "description": "Convert CSV to JSON and JSON to CSV, with delimiter detection, quoted fields and line breaks, number and boolean detection, nested objects as dotted columns, and a sortable, filterable table preview."
   },
   {
+    "slug": "encode",
+    "name": "Encoder/decoder",
+    "mark": [
+      "ENC",
+      ".decode"
+    ],
+    "summary": "Encode and decode Base64, URLs, HTML and more",
+    "description": "Encode and decode Base64 (standard, URL-safe and data: URLs), URL encoding, HTML entities, hex, JSON string escapes and Unicode escapes, with decoded images previewed, URL query parameters listed, hidden characters such as zero-width spaces flagged, and a character-by-character view."
+  },
+  {
     "slug": "gzip",
     "name": "Gzip helper",
     "mark": [
