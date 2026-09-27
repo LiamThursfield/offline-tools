@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JSON formatter</title>
+<script>
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in the CSS.
+   "auto" follows the OS light/dark setting using the two ids named below. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+];
+const THEME_KEY = 'json-format.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  document.documentElement.dataset.theme = t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id;
+  return t.id;
+}
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+</script>
+<style>
+/* ===== Themes =====
+   Each theme sets only the base tokens below; everything else (tints, hover states,
+   focus rings) is derived from them further down. To add a theme: copy a block, give it
+   a new data-theme id, and add a matching entry to THEMES in the <head> script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --chg-bg:color-mix(in oklab,var(--chg) var(--tint),var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  --pane-h:clamp(320px,64vh,900px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input[type=text]:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.home{display:inline-grid;place-items:center;flex:none;width:34px;height:34px;margin-left:-12px;border-radius:var(--pill);color:var(--muted);transition:background .3s,color .3s}
+.home:hover{background:var(--hover);color:var(--accent-text)}
+.home svg{width:18px;height:18px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.home{margin-left:-8px}.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.nav:disabled{opacity:.45;cursor:not-allowed}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+kbd{font:600 .82em var(--mono);letter-spacing:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel);color:var(--ink)}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.linkish{border:0;background:none;padding:0;color:var(--accent-text);text-decoration:underline;font-weight:600}
+
+/* panes */
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+#inPane:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane.drag{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pane-head h2{margin:0;font-size:.92rem;font-weight:700}
+.pane-head .spacer{flex:1}
+.pane-head .btn,.subbar .btn{padding:2px 11px;font-size:.8rem}
+.fname{color:var(--muted);font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:30%}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px;white-space:nowrap}
+.status.ok{color:var(--ins);background:var(--ins-bg)}.status.bad{color:var(--del);background:var(--del-bg)}
+.status.warn{color:var(--chg);background:var(--chg-bg)}.status.text{color:var(--muted);background:var(--surface)}
+textarea{display:block;width:100%;height:var(--pane-h);min-height:200px;resize:vertical;border:0;background:transparent;padding:12px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0;color:var(--ink);outline:none;white-space:pre;overflow:auto;tab-size:2}
+textarea::placeholder{color:var(--muted);opacity:.8}
+.pane-foot{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:8px 14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.pane-foot label{display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.pane-foot small{font-size:.78rem}
+
+/* input messages */
+.msgs:empty{display:none}
+.msg{padding:9px 14px;border-top:1px solid var(--line);font-size:.86rem}
+.msg.bad{background:var(--del-bg)}.msg.bad>b{color:var(--del)}
+.msg.warn{background:var(--chg-bg)}.msg.warn>b{color:var(--chg)}
+.msg.info{background:color-mix(in oklab,var(--accent) 8%,var(--panel))}
+.msg ul{margin:4px 0 0;padding-left:18px}
+.msg code{font-family:var(--mono);font-size:.92em;letter-spacing:0;word-break:break-all}
+.snip{margin:6px 0 0;padding:6px 10px;background:var(--panel);border-radius:calc(var(--radius) - 4px);font:12px/1.5 var(--mono);letter-spacing:0;overflow-x:auto;white-space:pre}
+.snip i{font-style:normal;color:var(--del);font-weight:700}
+
+/* output */
+.subbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.86rem}
+.subbar label{display:inline-flex;align-items:center;gap:6px}
+.tree-btns{display:inline-flex;gap:6px;margin-left:auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.query{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.86rem}
+.query label{font-weight:600}
+.query input{flex:1 1 14em;min-width:0;border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 12px;font:12.5px/1.5 var(--mono);letter-spacing:0}
+.query input.bad{border-color:var(--del)}
+.qinfo{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.qinfo.bad{color:var(--del);white-space:normal}
+.help{font-size:.82rem}
+.help summary{cursor:pointer;color:var(--muted);list-style:none;text-decoration:underline dotted;text-underline-offset:3px}
+.help summary::-webkit-details-marker{display:none}
+.help[open] summary{color:var(--accent-text)}
+.help-pop{position:absolute;z-index:5;top:calc(100% - 2px);right:8px;width:min(420px,calc(100% - 16px));background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px 14px}
+.help-pop p{margin:0 0 6px;color:var(--muted)}
+.help-pop table{border-collapse:collapse;width:100%}
+.help-pop td{padding:4px 0;vertical-align:top;border-top:1px solid var(--line)}
+.help-pop td:first-child{padding-right:14px;white-space:nowrap}
+.help-pop code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+.stale{padding:6px 14px;border-bottom:1px solid var(--line);background:var(--chg-bg);color:var(--chg);font-size:.82rem;font-weight:600}
+/* height:0 + flex:1 lets the input pane set the row height; the output scrolls inside it */
+.view{flex:1 1 auto;height:0;min-height:200px;overflow:auto;transition:opacity .15s}
+.view.dim{opacity:.55}
+.empty{padding:44px 16px;text-align:center;color:var(--muted)}
+.stats{justify-content:flex-start}
+.stats b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.stats .big{color:var(--chg);cursor:help}
+
+/* formatted view */
+.code{display:flex;min-width:max-content;font:12.5px/1.6 var(--mono);letter-spacing:0}
+.code pre{margin:0;font:inherit}
+.gutter{position:sticky;left:0;padding:12px 10px 12px 14px;text-align:right;color:color-mix(in oklab,var(--muted) 70%,transparent);background:var(--panel);border-right:1px solid var(--line);user-select:none}
+.src{padding:12px 16px 12px 14px;white-space:pre;tab-size:2}
+.src .k,.tk{color:var(--typ)}
+.src .s,.tv.s{color:var(--ins)}
+.src .n,.tv.n{color:var(--chg)}
+.src .b,.src .z,.tv.b,.tv.z{color:var(--del)}
+
+/* tree view */
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree{padding:8px 8px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0}
+.tree ul{margin-left:11px;padding-left:10px;border-left:1px solid var(--line)}
+.tr{display:flex;align-items:flex-start;gap:6px;padding:1px 6px 1px 2px;border-radius:5px;min-width:0}
+.tr:hover{background:var(--hover)}
+.tr.has{cursor:pointer}
+.tw,.tsp{flex:none;width:18px;height:20px}
+.tw{display:grid;place-items:center;border:0;background:none;padding:0;border-radius:4px;color:var(--muted)}
+.tw svg{width:13px;height:13px;transition:transform .15s}
+.tw[aria-expanded=true] svg{transform:rotate(90deg)}
+.tr:hover .tw{color:var(--ink)}
+.tl{flex:none;max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ti{color:var(--muted)}
+.tcol{margin-left:-6px}
+.tv{min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.tc{color:var(--muted);white-space:nowrap}
+.ta{display:inline-flex;gap:4px;margin-left:auto;padding-left:8px;opacity:0;transition:opacity .15s}
+.tr:hover .ta,.tr:focus-within .ta{opacity:1}
+@media (hover:none){.ta{opacity:1}}
+.ta button{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:0 8px;font:600 .7rem/1.6 var(--sans);color:var(--muted)}
+.ta button:hover{color:var(--accent-text);border-color:var(--accent)}
+.tree li.more{padding:2px 0 2px 26px;font-family:var(--sans);font-size:.82rem}
+
+.keys{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 4px 0;padding:0;list-style:none;font-size:.82rem;color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1100px){
+  .panes{grid-template-columns:minmax(0,1fr)}
+  textarea{height:40vh}
+  .view{flex:none;height:60vh}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:static;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+  .keys{display:none}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .fname{max-width:40%}
+  .tree-btns{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <a class="home" href="../index.html" data-path="/" aria-label="All tools" title="All tools"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>JSON</b>.fmt<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format" aria-current="page"><span class="tm-mark"><b>JSON</b>.fmt</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="sample">Load example</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Format JSON</h1>
+    <p>Paste, drop or open a file to format, validate and explore it. Common mistakes such as comments and trailing commas are fixed for you. Everything runs in your browser; nothing is uploaded.</p>
+  </div>
+
+  <div class="panes">
+    <section class="pane" id="inPane" aria-labelledby="inTitle">
+      <div class="pane-head">
+        <h2 id="inTitle">Input</h2><span class="fname" id="fname"></span>
+        <span class="spacer"></span><span class="status text" id="status">empty</span>
+        <button class="btn" id="openFile">Open file</button>
+        <button class="btn" id="formatInput" title="Replace the input with the formatted JSON (Shift+Alt+F). Undo with Ctrl/Cmd+Z." disabled>Format input</button>
+        <input type="file" id="file" accept=".json,.jsonc,.json5,.txt,.geojson,.jsonl,.ndjson,application/json,text/*" hidden>
+      </div>
+      <textarea id="input" spellcheck="false" autocomplete="off" aria-labelledby="inTitle" placeholder="Paste JSON here, or drop a file onto this box"></textarea>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="pane-foot">
+        <label><input type="checkbox" id="optRepair"> Fix common mistakes</label>
+        <small>comments, trailing and missing commas, single quotes, unquoted keys, True/None…</small>
+      </div>
+    </section>
+
+    <section class="pane" id="outPane" aria-labelledby="outTitle">
+      <div class="pane-head">
+        <h2 id="outTitle">Output</h2>
+        <span class="seg" id="viewSeg" role="group" aria-label="View"><button type="button" data-v="text">Formatted</button><button type="button" data-v="tree">Tree</button></span>
+        <span class="spacer"></span>
+        <button class="btn" id="copyOut" disabled>Copy</button>
+        <button class="btn" id="copyStr" title="Copy the output as a quoted, escaped JSON string" disabled>Copy as string</button>
+        <button class="btn" id="download" disabled>Download</button>
+      </div>
+      <div class="subbar">
+        <span class="seg" id="indentSeg" role="group" aria-label="Indentation"><button type="button" data-v="2">2 spaces</button><button type="button" data-v="4">4 spaces</button><button type="button" data-v="tab">Tab</button><button type="button" data-v="min">Minify</button></span>
+        <label><input type="checkbox" id="optSort"> Sort keys</label>
+        <label title="Write characters outside ASCII as \u escapes"><input type="checkbox" id="optAscii"> Escape non-ASCII</label>
+        <span class="tree-btns" id="treeBtns"><button class="btn" id="expandAll">Expand all</button><button class="btn" id="collapseAll">Collapse all</button></span>
+      </div>
+      <div class="query">
+        <label for="q">Query</label>
+        <input type="text" id="q" spellcheck="false" autocomplete="off" placeholder="e.g. $.items[*].name  or  ..id">
+        <span class="qinfo" id="qInfo" aria-live="polite"></span>
+        <details class="help"><summary>Syntax</summary>
+          <div class="help-pop">
+            <p>Picks parts of the document. Everything else in the output (copy, download, tree) then works on the result.</p>
+            <table>
+              <tr><td><code>$.address.city</code></td><td>a nested property (the <code>$</code> is optional)</td></tr>
+              <tr><td><code>items[0]</code>, <code>items[-1]</code></td><td>first and last element</td></tr>
+              <tr><td><code>items[*].id</code></td><td><code>id</code> of every element</td></tr>
+              <tr><td><code>$.*</code></td><td>every top-level value</td></tr>
+              <tr><td><code>..id</code></td><td><code>id</code> at any depth</td></tr>
+              <tr><td><code>$["a key"]</code></td><td>a key with spaces or special characters</td></tr>
+            </table>
+            <p style="margin:8px 0 0">A path without wildcards gives that value. With <code>*</code> or <code>..</code> you get an array of every match.</p>
+          </div>
+        </details>
+      </div>
+      <div class="stale" id="stale" hidden>The input has an error. Showing the last valid version.</div>
+      <div class="view" id="view" tabindex="0" aria-label="Output"></div>
+      <div class="pane-foot stats" id="stats"></div>
+    </section>
+  </div>
+
+  <ul class="keys">
+    <li><kbd>Shift</kbd> <kbd>Alt</kbd> <kbd>F</kbd> format the input</li>
+    <li><kbd>Tab</kbd> in the input indents</li>
+    <li><kbd>Esc</kbd> in the query clears it</li>
+  </ul>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+  
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Documents are parsed into a small syntax tree rather than with JSON.parse, so that:
+   error messages give an exact position and a useful reason; numbers keep the digits
+   exactly as written (JSON.parse rounds integers beyond 2^53); duplicate keys survive;
+   and a loose mode can repair common mistakes.
+   Nodes: { type: 'object', entries: [{ key, value }] } | { type: 'array', items: [] }
+          | { type: 'string', value } | { type: 'number', raw } | { type: 'boolean', value } | { type: 'null' } */
+const MAX_DEPTH = 1000;
+const IDENT = /[A-Za-z_$][\w$]*/y;
+const LOOSE_KEY = /[\w$]+/y;
+const STRICT_NUM = /-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/y;
+const LOOSE_NUM = /[+-]?(?:0[xX][\da-fA-F]+|Infinity|NaN|(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?)/y;
+const ODD_SPACE = /[\u00a0\u1680\u2000-\u200b\u2028\u2029\u202f\u205f\u3000\ufeff]/;
+const ESCAPES = { '"': '"', '\\': '\\', '/': '/', b: '\b', f: '\f', n: '\n', r: '\r', t: '\t' };
+const LITERALS = { True: true, False: false, None: null, undefined: null, NaN: null, Infinity: null };
+
+/* What loose mode can repair: [one, many] labels. */
+const FIXES = {
+  comment: ['comment removed', 'comments removed'],
+  trailingComma: ['trailing comma removed', 'trailing commas removed'],
+  missingComma: ['missing comma added', 'missing commas added'],
+  singleQuote: ['single-quoted string converted', 'single-quoted strings converted'],
+  curlyQuote: ['curly-quoted string converted', 'curly-quoted strings converted'],
+  unquotedKey: ['unquoted property name quoted', 'unquoted property names quoted'],
+  literal: ['True, False, None or undefined converted', 'True, False, None or undefined values converted'],
+  nonFinite: ['NaN or Infinity replaced with null', 'NaN or Infinity values replaced with null'],
+  number: ['number rewritten in standard form', 'numbers rewritten in standard form'],
+  control: ['raw tab or control character in a string escaped', 'raw tabs or control characters in strings escaped'],
+  escape: ['invalid escape sequence fixed', 'invalid escape sequences fixed'],
+  space: ['non-standard space removed', 'non-standard spaces removed'],
+  multiple: ['separate values wrapped in an array', 'separate values wrapped in an array'],
+};
+
+function lineCol(text, pos) {
+  let line = 1, ls = 0;
+  for (let j = text.indexOf('\n'); j !== -1 && j < pos; j = text.indexOf('\n', j + 1)) { line++; ls = j + 1; }
+  return { line, col: pos - ls + 1 };
+}
+
+function describeChar(c) {
+  const names = { '\u00a0': 'non-breaking space', '\u200b': 'zero-width space', '\ufeff': 'byte order mark', '\u2028': 'line separator', '\u2029': 'paragraph separator',
+    '\u201c': 'curly quote \u201c', '\u201d': 'curly quote \u201d', '\u2018': 'curly quote \u2018', '\u2019': 'curly quote \u2019' };
+  const u = 'U+' + c.codePointAt(0).toString(16).toUpperCase().padStart(4, '0');
+  if (names[c]) return `${names[c]} (${u})`;
+  if (c < ' ' || ODD_SPACE.test(c)) return `character ${u}`;
+  return c === "'" ? `"'"` : `'${c}'`;
+}
+
+function numberProblem(raw) {
+  const s = raw.replace(/^[+-]/, '');
+  if (s === 'Infinity' || s === 'NaN') return `${raw} isn\u2019t valid JSON. Use null or a string`;
+  if (raw[0] === '+') return 'Numbers can\u2019t start with +';
+  if (/^0x/i.test(s)) return 'Hex numbers aren\u2019t valid JSON';
+  if (s[0] === '.') return 'Numbers need a digit before the decimal point';
+  if (/\.(?!\d)/.test(s)) return 'Numbers need a digit after the decimal point';
+  if (/^0\d/.test(s)) return 'Numbers can\u2019t have leading zeros';
+  return `Invalid number ${raw}`;
+}
+
+/* Rewrites a number loose mode accepted in standard JSON form. null for NaN and Infinity. */
+function normalizeNumber(raw) {
+  let s = raw.replace(/^\+/, '');
+  const neg = s[0] === '-';
+  if (neg) s = s.slice(1);
+  if (s === 'Infinity' || s === 'NaN') return null;
+  if (/^0x/i.test(s)) s = BigInt(s).toString();
+  else {
+    const [, int, frac, exp = ''] = s.match(/^(\d*)(?:\.(\d*))?([eE].*)?$/);
+    s = (int.replace(/^0+(?=\d)/, '') || '0') + (frac ? '.' + frac : '') + exp;
+  }
+  return (neg ? '-' : '') + s;
+}
+
+/* parse(text, { loose }) -> { empty: true } | { ok: true, root, fixes } | { ok: false, error, pos, line, col }
+   Strict mode follows RFC 8259. Loose mode also accepts the mistakes listed in FIXES and
+   records each repair as { kind, pos }. */
+function parse(text, { loose = false } = {}) {
+  if (!text.trim()) return { empty: true };
+  const n = text.length, fixes = [];
+  let i = text.charCodeAt(0) === 0xFEFF ? 1 : 0;
+  const fail = (msg, pos = i) => { throw { jsonError: true, msg, pos }; };
+  const fix = (kind, pos = i) => fixes.push({ kind, pos });
+  const at = p => p >= n ? 'end of input' : describeChar(text[p]);
+  const unclosed = (ch, open) => {
+    const lc = lineCol(text, open);
+    fail(`Unexpected end of input: the ${ch} on line ${lc.line}, column ${lc.col} is never closed`, n);
+  };
+
+  function ws() {
+    while (i < n) {
+      const c = text[i];
+      if (c === ' ' || c === '\n' || c === '\r' || c === '\t') { i++; continue; }
+      if (c === '/' && (text[i + 1] === '/' || text[i + 1] === '*')) {
+        if (!loose) fail('Comments aren\u2019t allowed in JSON');
+        fix('comment');
+        if (text[i + 1] === '/') { const e = text.indexOf('\n', i); i = e < 0 ? n : e; }
+        else { const e = text.indexOf('*/', i + 2); if (e < 0) fail('This /* comment is never closed'); i = e + 2; }
+        continue;
+      }
+      if (ODD_SPACE.test(c)) {
+        if (!loose) fail(`Unexpected ${describeChar(c)}. Only spaces, tabs and line breaks can go between values`);
+        fix('space'); i++; continue;
+      }
+      return;
+    }
+  }
+
+  function value(depth) {
+    ws();
+    if (i >= n) fail('Unexpected end of input: expected a value');
+    const c = text[i];
+    if (c === '{' || c === '[') {
+      if (depth >= MAX_DEPTH) fail(`Nested more than ${MAX_DEPTH} levels deep`);
+      return c === '{' ? object(depth) : array(depth);
+    }
+    if (c === '"') return { type: 'string', value: string('"') };
+    if (c === "'" || c === '\u201c') return { type: 'string', value: altString(c) };
+    if (c === '-' || c === '+' || c === '.' || (c >= '0' && c <= '9')) return number();
+    IDENT.lastIndex = i;
+    const m = IDENT.exec(text);
+    if (m) return literal(m[0]);
+    fail(`Unexpected ${at(i)}: expected a value`);
+  }
+
+  function altString(c) {
+    if (!loose) fail(c === "'" ? 'Strings must use double quotes' : 'Curly quotes aren\u2019t valid JSON. Use straight double quotes');
+    fix(c === "'" ? 'singleQuote' : 'curlyQuote');
+    return string(c === "'" ? "'" : '\u201d');
+  }
+
+  function string(close) {
+    const start = i++;
+    let out = '', seg = i;
+    for (;;) {
+      if (i >= n) fail('This string is never closed', start);
+      const c = text[i];
+      if (c === close) { out += text.slice(seg, i++); return out; }
+      if (c === '\\') {
+        out += text.slice(seg, i);
+        const e = text[i + 1];
+        if (ESCAPES[e] !== undefined) { out += ESCAPES[e]; i += 2; }
+        else if (e === 'u') {
+          const h = text.slice(i + 2, i + 6);
+          if (!/^[\da-fA-F]{4}$/.test(h)) fail('Invalid \\u escape: it needs 4 hex digits');
+          out += String.fromCharCode(parseInt(h, 16)); i += 6;
+        } else {
+          if (e === undefined) fail('This string is never closed', start);
+          if (!loose) fail(`Invalid escape \\${e < ' ' ? describeChar(e) : e}`);
+          fix('escape');
+          out += e === '\n' ? '' : e === '\r' ? '' : e;   // \' -> '; backslash + line break continues the line
+          i += 2;
+        }
+        seg = i; continue;
+      }
+      if (c < ' ') {
+        // raw line breaks are never repaired: they almost always mean a missing closing quote
+        if (!loose || c === '\n' || c === '\r') fail(c === '\n' || c === '\r'
+          ? 'Line break inside a string. Write it as \\n, or add the missing closing quote'
+          : `Unescaped ${describeChar(c)} inside a string`);
+        fix('control');
+      }
+      i++;
+    }
+  }
+
+  function number() {
+    const start = i;
+    LOOSE_NUM.lastIndex = STRICT_NUM.lastIndex = i;
+    const lm = LOOSE_NUM.exec(text), sm = STRICT_NUM.exec(text);
+    const raw = lm ? lm[0] : '';
+    if (!raw) fail(`Unexpected ${at(i)}: expected a value`);
+    let node;
+    if (sm && sm[0].length >= raw.length) { i += sm[0].length; node = { type: 'number', raw: sm[0] }; }
+    else {
+      if (!loose) fail(numberProblem(raw), start);
+      i += raw.length;
+      const norm = normalizeNumber(raw);
+      fix(norm === null ? 'nonFinite' : 'number', start);
+      node = norm === null ? { type: 'null' } : { type: 'number', raw: norm };
+    }
+    if (i < n && /[\w.]/.test(text[i])) fail(`Invalid number ${text.slice(start, i + 1)}`, start);
+    return node;
+  }
+
+  function literal(w) {
+    const start = i;
+    if (w === 'true' || w === 'false') { i += w.length; return { type: 'boolean', value: w === 'true' }; }
+    if (w === 'null') { i += 4; return { type: 'null' }; }
+    if (w in LITERALS) {
+      if (!loose) fail(w === 'NaN' || w === 'Infinity' ? numberProblem(w)
+        : w === 'undefined' ? 'undefined isn\u2019t valid JSON. Use null'
+        : `${w} isn\u2019t valid JSON. Use ${w === 'None' ? 'null' : w.toLowerCase()}`);
+      fix(w === 'NaN' || w === 'Infinity' ? 'nonFinite' : 'literal');
+      i += w.length;
+      const v = LITERALS[w];
+      return v === null ? { type: 'null' } : { type: 'boolean', value: v };
+    }
+    fail(`Unexpected ${w}: strings need double quotes`, start);
+  }
+
+  function object(depth) {
+    const open = i++, entries = [];
+    ws();
+    if (text[i] === '}') { i++; return { type: 'object', entries }; }
+    for (;;) {
+      ws();
+      if (i >= n) unclosed('{', open);
+      const c = text[i];
+      let key;
+      if (c === '"') key = string('"');
+      else if (c === "'" || c === '\u201c') key = altString(c);
+      else {
+        (loose ? LOOSE_KEY : IDENT).lastIndex = i;
+        const m = (loose ? LOOSE_KEY : IDENT).exec(text);
+        if (!m) fail(`Expected a property name in double quotes, found ${at(i)}`);
+        if (!loose) fail(`Property names need double quotes: "${m[0]}"`);
+        fix('unquotedKey');
+        key = m[0]; i += key.length;
+      }
+      ws();
+      if (i >= n) unclosed('{', open);
+      if (text[i] !== ':') fail(`Expected ':' after the property name, found ${at(i)}`);
+      i++;
+      entries.push({ key, value: value(depth + 1) });
+      const end = i;
+      ws();
+      if (text[i] === '}') { i++; return { type: 'object', entries }; }
+      if (text[i] === ',') {
+        const comma = i++;
+        ws();
+        if (text[i] === '}') {
+          if (!loose) fail('Trailing comma: remove the comma before }', comma);
+          fix('trailingComma', comma); i++;
+          return { type: 'object', entries };
+        }
+        continue;
+      }
+      if (i >= n) unclosed('{', open);
+      if (loose && /["'\u201c\w$]/.test(text[i])) { fix('missingComma', end); continue; }
+      fail(`Expected ',' or '}' after the value, found ${at(i)}`);
+    }
+  }
+
+  function array(depth) {
+    const open = i++, items = [];
+    ws();
+    if (text[i] === ']') { i++; return { type: 'array', items }; }
+    for (;;) {
+      ws();
+      if (i >= n) unclosed('[', open);
+      items.push(value(depth + 1));
+      const end = i;
+      ws();
+      if (text[i] === ']') { i++; return { type: 'array', items }; }
+      if (text[i] === ',') {
+        const comma = i++;
+        ws();
+        if (text[i] === ']') {
+          if (!loose) fail('Trailing comma: remove the comma before ]', comma);
+          fix('trailingComma', comma); i++;
+          return { type: 'array', items };
+        }
+        continue;
+      }
+      if (i >= n) unclosed('[', open);
+      if (loose && /["'\u201c\w$.{[+-]/.test(text[i])) { fix('missingComma', end); continue; }
+      fail(`Expected ',' or ']' after the value, found ${at(i)}`);
+    }
+  }
+
+  try {
+    let root = value(0);
+    const end = i;
+    ws();
+    if (i < n) {
+      if (!loose) fail(`Unexpected ${at(i)} after the end of the JSON value`
+        + (text[i] === '}' || text[i] === ']' ? '. Is there one too many?' : '. Only one top-level value is allowed'));
+      // loose: JSON Lines or several values in a row
+      const items = [root];
+      while (i < n) {
+        if (text[i] === ',') { i++; ws(); if (i >= n) break; }
+        items.push(value(0)); ws();
+      }
+      fix('multiple', end);
+      root = { type: 'array', items };
+    }
+    return { ok: true, root, fixes };
+  } catch (e) {
+    if (!e || !e.jsonError) throw e;
+    return { ok: false, error: e.msg, pos: e.pos, ...lineCol(text, e.pos) };
+  }
+}
+
+/* Parses strictly, and when that fails and repair is on, tries loose mode.
+   A repaired result carries repaired: true and the strict error in `strict`. */
+function parseText(text, { repair = true } = {}) {
+  const strict = parse(text);
+  if (strict.empty || strict.ok || !repair) return strict;
+  const loose = parse(text, { loose: true });
+  if (loose.ok) return { ...loose, repaired: true, strict };
+  // loose got further: the earlier problems were repairable, so report the one that isn't
+  return loose.pos >= strict.pos ? loose : strict;
+}
+
+/* Groups repairs by kind: [{ kind, count, pos (first), label }] */
+function summarizeFixes(fixes) {
+  const by = new Map();
+  for (const f of fixes) { const g = by.get(f.kind); if (g) g.count++; else by.set(f.kind, { kind: f.kind, count: 1, pos: f.pos }); }
+  return [...by.values()].map(g => ({ ...g, label: FIXES[g.kind][g.count === 1 ? 0 : 1] }));
+}
+
+function escHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+const quote = (s, ascii) => {
+  const q = JSON.stringify(s);
+  return ascii ? q.replace(/[\u007f-\uffff]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')) : q;
+};
+
+/* Writes a node as JSON. indent '' minifies. html wraps tokens in <span class="k|s|n|b|z">. */
+function serialize(root, { indent = '  ', sortKeys = false, ascii = false, html = false } = {}) {
+  const out = [], nl = indent ? '\n' : '', colon = indent ? ': ' : ':';
+  const tok = html ? (cls, s) => `<span class="${cls}">${escHtml(s)}</span>` : (cls, s) => s;
+  const byKey = (a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : 0;
+  (function walk(node, pad) {
+    switch (node.type) {
+      case 'object': {
+        const es = sortKeys ? [...node.entries].sort(byKey) : node.entries;
+        if (!es.length) { out.push('{}'); return; }
+        const inner = pad + indent;
+        out.push('{' + nl);
+        es.forEach((e, j) => {
+          out.push(inner, tok('k', quote(e.key, ascii)), colon);
+          walk(e.value, inner);
+          out.push(j < es.length - 1 ? ',' + nl : nl);
+        });
+        out.push(pad + '}');
+        return;
+      }
+      case 'array': {
+        if (!node.items.length) { out.push('[]'); return; }
+        const inner = pad + indent;
+        out.push('[' + nl);
+        node.items.forEach((v, j) => { out.push(inner); walk(v, inner); out.push(j < node.items.length - 1 ? ',' + nl : nl); });
+        out.push(pad + ']');
+        return;
+      }
+      case 'string': out.push(tok('s', quote(node.value, ascii))); return;
+      case 'number': out.push(tok('n', node.raw)); return;
+      case 'boolean': out.push(tok('b', String(node.value))); return;
+      default: out.push(tok('z', 'null'));
+    }
+  })(root, '');
+  return out.join('');
+}
+
+/* Path as text: $.a.b[0]["odd key"] */
+function fmtPath(path) {
+  let s = '$';
+  for (const p of path) s += typeof p === 'number' ? `[${p}]` : /^[A-Za-z_$][\w$]*$/.test(p) ? '.' + p : `[${JSON.stringify(p)}]`;
+  return s;
+}
+
+/* Counts for the footer, plus duplicate keys and integers JSON.parse would round. */
+function analyze(root) {
+  const s = { objects: 0, arrays: 0, keys: 0, values: 0, depth: 0, dupes: [], bigInts: 0 };
+  (function walk(node, path, d) {
+    if (d > s.depth) s.depth = d;
+    if (node.type === 'object') {
+      s.objects++; s.keys += node.entries.length;
+      const seen = new Set();
+      for (const e of node.entries) {
+        const p = [...path, e.key];
+        if (seen.has(e.key)) s.dupes.push(fmtPath(p)); else seen.add(e.key);
+        walk(e.value, p, d + 1);
+      }
+    } else if (node.type === 'array') {
+      s.arrays++;
+      node.items.forEach((v, j) => walk(v, [...path, j], d + 1));
+    } else {
+      s.values++;
+      if (node.type === 'number' && /^-?\d+$/.test(node.raw) && !Number.isSafeInteger(Number(node.raw))) s.bigInts++;
+    }
+  })(root, [], 0);
+  return s;
+}
+
+/* Query paths: $ (optional), .name, ["key"], ['key'], [n], [-n], [*], .*, ..name, ..[*]
+   -> { segs: [{ k } | { i } | { w: true } | { r: true }], single } or { error, pos }.
+   single is true when the path can match at most one value (no * or ..). */
+const BRACKET = /\[\s*(?:(\*)|(-?\d+)|"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)')\s*\]/y;
+const NAME = /[^.[\]\s]+/y;
+function parseQuery(src) {
+  let s = String(src || '').trim(), i = 0;
+  const segs = [];
+  if (!s) return { segs, single: true };
+  if (s[0] === '$') i = 1;
+  else if (s[0] !== '.' && s[0] !== '[') s = '.' + s;
+  while (i < s.length) {
+    let named = false;
+    if (s.startsWith('..', i)) { segs.push({ r: true }); i += 2; named = s[i] !== '['; }
+    else if (s[i] === '.') { i++; named = true; }
+    else if (s[i] !== '[') return { error: `Unexpected ${s[i]}. Use .name or [\u2026]`, pos: i };
+    if (named) {
+      NAME.lastIndex = i;
+      const m = NAME.exec(s);
+      if (!m) return { error: i >= s.length ? 'Expected a property name at the end' : `Expected a property name after '.'`, pos: i };
+      segs.push(m[0] === '*' ? { w: true } : { k: m[0] });
+      i += m[0].length;
+      continue;
+    }
+    BRACKET.lastIndex = i;
+    const m = BRACKET.exec(s);
+    if (!m) return { error: 'Invalid [\u2026]: use [0], [-1], [*] or ["key"]', pos: i };
+    if (m[1]) segs.push({ w: true });
+    else if (m[2] !== undefined) segs.push({ i: +m[2] });
+    else if (m[3] !== undefined) { try { segs.push({ k: JSON.parse('"' + m[3] + '"') }); } catch { return { error: 'Invalid escape in the key', pos: i }; } }
+    else segs.push({ k: m[4].replace(/\\(.)/g, '$1') });
+    i += m[0].length;
+  }
+  return { segs, single: !segs.some(g => g.w || g.r) };
+}
+
+/* Runs parsed query segments against a node. -> [{ path, node }] in document order. */
+function runQuery(root, segs) {
+  let cur = [{ path: [], node: root }];
+  const kids = m => m.node.type === 'object' ? m.node.entries.map(e => ({ path: [...m.path, e.key], node: e.value }))
+    : m.node.type === 'array' ? m.node.items.map((v, j) => ({ path: [...m.path, j], node: v })) : [];
+  for (const g of segs) {
+    const next = [];
+    for (const m of cur) {
+      if (g.r) { (function all(x) { next.push(x); kids(x).forEach(all); })(m); continue; }
+      if (g.w) { next.push(...kids(m)); continue; }
+      if ('k' in g) {
+        if (m.node.type !== 'object') continue;
+        // with duplicate keys, the last one wins, as in JSON.parse
+        for (let j = m.node.entries.length - 1; j >= 0; j--) {
+          const e = m.node.entries[j];
+          if (e.key === g.k) { next.push({ path: [...m.path, e.key], node: e.value }); break; }
+        }
+        continue;
+      }
+      if (m.node.type !== 'array') continue;
+      const j = g.i < 0 ? m.node.items.length + g.i : g.i;
+      if (j >= 0 && j < m.node.items.length) next.push({ path: [...m.path, j], node: m.node.items[j] });
+    }
+    cur = next;
+  }
+  return cur;
+}
+
+/* The line containing pos, clipped to `width` characters, and the caret column within it. */
+function errorSnippet(text, pos, width = 72) {
+  const ls = text.lastIndexOf('\n', pos - 1) + 1;
+  let le = text.indexOf('\n', ls);
+  if (le < 0) le = text.length;
+  const line = text.slice(ls, le).replace(/\r$/, '').replace(/\t/g, ' ');
+  const col = Math.min(pos - ls, line.length);
+  const start = Math.max(0, Math.min(col - Math.floor(width * .6), line.length - width));
+  let s = line.slice(start, start + width), caret = col - start;
+  if (start > 0) { s = '\u2026' + s; caret++; }
+  if (start + width < line.length) s += '\u2026';
+  return { text: s, caret };
+}
+
+if (typeof module !== 'undefined') module.exports = { parse, parseText, summarizeFixes, normalizeNumber, serialize, fmtPath, analyze, parseQuery, runQuery, lineCol, errorSnippet };
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const plural = (n, one, many = one + 's') => `${n.toLocaleString()} ${n === 1 ? one : many}`;
+
+/* ---------- settings (preferences only, saved in localStorage; the input is never stored) ---------- */
+const SETTINGS_KEY = 'json-format.settings';
+const DEFAULTS = { indent: '2', sortKeys: false, ascii: false, repair: true, view: 'text' };
+const INDENTS = { 2: '  ', 4: '    ', tab: '\t', min: '' };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+if (!(settings.indent in INDENTS)) settings.indent = DEFAULTS.indent;
+if (settings.view !== 'tree') settings.view = 'text';
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+const fmtOpts = () => ({ indent: INDENTS[settings.indent], sortKeys: settings.sortKeys, ascii: settings.ascii });
+
+const input = $('#input'), view = $('#view'), qEl = $('#q');
+const HIGHLIGHT_LIMIT = 1.5e6;   // above this many characters the formatted view is plain text
+let fileName = '';
+let parsed = { empty: true };    // latest parse of the input
+let shown = null;                // what the output shows: built from the last input that parsed
+let outText = null;              // cached plain output text for `shown`
+
+/* ---------- compute ---------- */
+function compute() {
+  parsed = parseText(input.value, { repair: settings.repair });
+  if (parsed.ok) shown = build(parsed.root);
+  else if (parsed.empty) shown = null;
+  renderInput();
+  renderOutput();
+}
+
+/* Applies the query to a parsed document. */
+function build(root) {
+  const q = parseQuery(qEl.value), b = { root, stats: analyze(root), q };
+  if (q.error || !q.segs.length) { b.target = root; b.roots = [{ node: root, path: [] }]; return b; }
+  const m = runQuery(root, q.segs);
+  b.matches = m;
+  b.target = q.single ? (m[0] ? m[0].node : null) : m.length ? { type: 'array', items: m.map(x => x.node) } : null;
+  b.roots = m.map(x => ({ node: x.node, path: x.path, label: fmtPath(x.path) }));
+  return b;
+}
+const getOutText = () => outText ??= shown && shown.target ? serialize(shown.target, fmtOpts()) : '';
+
+/* ---------- input side ---------- */
+function renderInput() {
+  const st = $('#status');
+  const [cls, label] = parsed.empty ? ['text', 'empty'] : !parsed.ok ? ['bad', 'invalid'] : parsed.repaired ? ['warn', 'repaired'] : ['ok', 'valid JSON'];
+  st.className = 'status ' + cls; st.textContent = label;
+  $('#formatInput').disabled = !parsed.ok;
+
+  const text = input.value, msgs = [];
+  const goto = (pos, label) => `<button class="linkish" data-goto="${pos}">${label}</button>`;
+  if (parsed.ok === false) {
+    const sn = errorSnippet(text, parsed.pos), g = String(parsed.line);
+    msgs.push(`<div class="msg bad"><b>Line ${parsed.line}, column ${parsed.col}:</b> ${esc(parsed.error)}. ${goto(parsed.pos, 'Go to error')}`
+      + `<pre class="snip">${g} \u2502 ${esc(sn.text)}\n${' '.repeat(g.length)} \u2502 ${' '.repeat(sn.caret)}<i>^</i></pre></div>`);
+  }
+  if (parsed.repaired) {
+    const s = parsed.strict;
+    msgs.push(`<div class="msg warn"><b>Not strict JSON.</b> The output is repaired to valid JSON. `
+      + `A strict parser stops at ${goto(s.pos, `line ${s.line}, column ${s.col}`)}: ${esc(s.error)}.<ul>`
+      + summarizeFixes(parsed.fixes).map(f => `<li>${f.count > 1 ? f.count + ' ' : ''}${esc(f.label)}${f.kind === 'multiple' ? '' : ` (first on ${goto(f.pos, 'line ' + lineCol(text, f.pos).line)})`}</li>`).join('')
+      + `</ul></div>`);
+  }
+  if (parsed.ok && shown.stats.dupes.length) {
+    const d = shown.stats.dupes;
+    msgs.push(`<div class="msg warn"><b>Duplicate ${d.length === 1 ? 'key' : 'keys'}:</b> ${d.slice(0, 5).map(p => `<code>${esc(p)}</code>`).join(', ')}${d.length > 5 ? ` and ${d.length - 5} more` : ''}. `
+      + `The output keeps every copy, but most parsers keep only the last one.</div>`);
+  }
+  if (parsed.ok && parsed.root.type === 'string' && /^\s*[[{]/.test(parsed.root.value) && parse(parsed.root.value, { loose: settings.repair }).ok) {
+    msgs.push(`<div class="msg info">This is a JSON string that contains JSON. <button class="linkish" data-act="decode">Decode it</button></div>`);
+  }
+  $('#msgs').innerHTML = msgs.join('');
+}
+
+function goTo(pos) {
+  input.focus();
+  input.setSelectionRange(pos, Math.min(pos + 1, input.value.length));
+  const lh = parseFloat(getComputedStyle(input).lineHeight) || 20;
+  input.scrollTop = Math.max(0, (lineCol(input.value, pos).line - 1) * lh - input.clientHeight / 3);
+}
+
+/* Replaces the input text so that Ctrl/Cmd+Z can undo it. */
+function replaceInput(next) {
+  if (next === input.value) return;
+  input.focus(); input.select();
+  if (!document.execCommand || !document.execCommand('insertText', false, next)) input.value = next;
+  input.setSelectionRange(0, 0); input.scrollTop = 0;
+  compute();
+}
+function formatInput() { if (parsed.ok) replaceInput(serialize(parsed.root, fmtOpts())); }
+
+/* ---------- output side ---------- */
+function renderOutput() {
+  outText = null;
+  const stale = !parsed.ok && !parsed.empty && !!shown;
+  $('#stale').hidden = !stale;
+  view.classList.toggle('dim', stale);
+  $('#treeBtns').hidden = settings.view !== 'tree';
+
+  const q = shown ? shown.q : parseQuery(qEl.value), qi = $('#qInfo');
+  qEl.classList.toggle('bad', !!q.error);
+  qi.className = 'qinfo' + (q.error ? ' bad' : '');
+  qi.textContent = q.error ? q.error : shown && shown.matches ? plural(shown.matches.length, 'match', 'matches') : '';
+
+  const has = !!(shown && shown.target);
+  ['#copyOut', '#copyStr', '#download'].forEach(s => $(s).disabled = !has);
+  renderStats();
+
+  if (!shown) {
+    view.innerHTML = `<div class="empty">${parsed.empty ? 'Paste JSON into the input, open a file, or load the example.' : 'Fix the error in the input to see the output.'}</div>`;
+    return;
+  }
+  if (!shown.target && settings.view === 'text') { view.innerHTML = '<div class="empty">Nothing matches the query.</div>'; return; }
+  if (settings.view === 'tree') return renderTree();
+
+  const text = getOutText(), lines = text.split('\n').length;
+  const body = text.length > HIGHLIGHT_LIMIT ? esc(text) : serialize(shown.target, { ...fmtOpts(), html: true });
+  view.innerHTML = `<div class="code"><pre class="gutter" aria-hidden="true">${Array.from({ length: lines }, (_, j) => j + 1).join('\n')}</pre><pre class="src">${body}</pre></div>`;
+}
+
+function fmtBytes(n) {
+  return n < 1024 ? plural(n, 'byte') : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+}
+const bytes = s => new TextEncoder().encode(s).length;
+
+function renderStats() {
+  if (!shown) { $('#stats').innerHTML = ''; return; }
+  const s = shown.stats, parts = [
+    `<span><b>${plural(s.keys, 'key')}</b></span>`,
+    `<span>${plural(s.objects, 'object')}</span>`,
+    `<span>${plural(s.arrays, 'array')}</span>`,
+    `<span>${plural(s.values, 'value')}</span>`,
+    `<span>depth ${s.depth}</span>`,
+  ];
+  if (!parsed.empty) parts.push(`<span>${fmtBytes(bytes(input.value))} \u2192 ${fmtBytes(bytes(getOutText()))}</span>`);
+  if (s.bigInts) parts.push(`<span class="big" title="Integers beyond \u00b12^53. JavaScript\u2019s JSON.parse would round them; the output keeps every digit as written.">${plural(s.bigInts, 'large integer')} kept exactly</span>`);
+  $('#stats').innerHTML = parts.join('<span aria-hidden="true">\u00b7</span>');
+}
+
+/* ---------- tree view ----------
+   Children render only when a node is first expanded, PAGE at a time, so large documents stay fast.
+   Expanded nodes are remembered by path, so the tree keeps its shape while you edit. */
+const PAGE = 200, CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+let treeItems = [], treeOpen = null;   // treeOpen: Set of expanded paths, or null to pick a default
+
+function renderTree() {
+  treeItems = [];
+  const roots = shown.roots;
+  if (!roots.length) { view.innerHTML = '<div class="empty">Nothing matches the query.</div>'; return; }
+  view.innerHTML = `<ul class="tree">${roots.map(treeLi).join('')}</ul>`;
+  const fresh = !treeOpen;
+  if (fresh) treeOpen = new Set();
+  const lis = [...view.querySelectorAll('.tree > li')];
+  // default: open the top level, then more levels while under ~120 rows
+  let rows = lis.length;
+  for (let k = 0; k < lis.length; k++) {
+    const li = lis[k], item = treeItems[li.dataset.id], c = childCount(item.node);
+    const want = fresh ? (k < roots.length || rows + c <= 120) : treeOpen.has(fmtPath(item.path));
+    if (!want || !c) continue;
+    rows += setOpen(li, true);
+    lis.push(...li.lastElementChild.children);
+  }
+}
+const childCount = n => n.type === 'object' ? n.entries.length : n.type === 'array' ? n.items.length : 0;
+
+function treeLi(item) {
+  const id = treeItems.push(item) - 1, n = item.node, c = childCount(n), box = n.type === 'object' || n.type === 'array';
+  const label = item.label !== undefined ? `<span class="tl tk" title="${esc(item.label)}">${esc(item.label)}</span>`
+    : item.key !== undefined ? `<span class="tl tk" title="${esc(item.key)}">${item.key === '' ? '""' : esc(item.key)}</span>`
+    : item.index !== undefined ? `<span class="tl ti">${item.index}</span>` : '';
+  const val = box
+    ? `<span class="tc">${n.type === 'object' ? '{' : '['}${c ? ' ' + plural(c, n.type === 'object' ? 'key' : 'item') + ' ' : ''}${n.type === 'object' ? '}' : ']'}</span>`
+    : n.type === 'string' ? `<span class="tv s">${esc(quote(n.value.length > 400 ? n.value.slice(0, 400) + '\u2026' : n.value, settings.ascii))}</span>`
+    : `<span class="tv ${{ number: 'n', boolean: 'b', null: 'z' }[n.type]}">${n.type === 'number' ? n.raw : n.type === 'boolean' ? n.value : 'null'}</span>`;
+  const name = item.label ?? item.key ?? item.index ?? 'root';
+  return `<li data-id="${id}"><div class="tr${c ? ' has' : ''}">`
+    + (c ? `<button type="button" class="tw" aria-expanded="false" aria-label="Expand ${esc(name)}">${CHEV}</button>` : '<span class="tsp"></span>')
+    + label + (label ? '<span class="ti tcol">:</span>' : '') + val
+    + `<span class="ta"><button type="button" data-act="path" aria-label="Copy the path of ${esc(name)}">path</button><button type="button" data-act="copy" aria-label="Copy the value of ${esc(name)}">copy</button></span></div></li>`;
+}
+
+function childrenHtml(item, from) {
+  const n = item.node, obj = n.type === 'object', kids = obj ? n.entries : n.items, to = Math.min(kids.length, from + PAGE);
+  let h = '';
+  for (let j = from; j < to; j++) h += treeLi(obj ? { key: kids[j].key, node: kids[j].value, path: [...item.path, kids[j].key] } : { index: j, node: kids[j], path: [...item.path, j] });
+  if (to < kids.length) h += `<li class="more"><button type="button" class="linkish" data-from="${to}">Show ${Math.min(PAGE, kids.length - to)} more (${(kids.length - to).toLocaleString()} left)</button></li>`;
+  return h;
+}
+
+/* Opens or closes a node. Returns how many child rows it now shows. */
+function setOpen(li, open) {
+  const btn = li.querySelector(':scope > .tr > .tw');
+  if (!btn) return 0;
+  const item = treeItems[li.dataset.id];
+  let ul = li.querySelector(':scope > ul');
+  if (open && !ul) { ul = document.createElement('ul'); ul.innerHTML = childrenHtml(item, 0); li.appendChild(ul); }
+  if (ul) ul.hidden = !open;
+  btn.setAttribute('aria-expanded', String(open));
+  btn.setAttribute('aria-label', btn.getAttribute('aria-label').replace(/^\w+/, open ? 'Collapse' : 'Expand'));
+  treeOpen[open ? 'add' : 'delete'](fmtPath(item.path));
+  return open && ul ? ul.children.length : 0;
+}
+
+function expandAll() {
+  const LIMIT = 5000, lis = [...view.querySelectorAll('.tree > li')];
+  let rows = lis.length;
+  for (let k = 0; k < lis.length; k++) {
+    if (rows >= LIMIT) return toast(`Expanded the first ${LIMIT.toLocaleString()} rows`);
+    const c = setOpen(lis[k], true);
+    if (c) { rows += c; lis.push(...lis[k].lastElementChild.children); }
+  }
+}
+function collapseAll() {
+  view.querySelectorAll('.tree ul .tw[aria-expanded=true]').forEach(b => setOpen(b.closest('li'), false));
+}
+
+view.addEventListener('click', e => {
+  const act = e.target.closest('[data-act]');
+  if (act) {
+    const item = treeItems[act.closest('li').dataset.id];
+    return act.dataset.act === 'path' ? copyText(fmtPath(item.path), 'path') : copyText(serialize(item.node, fmtOpts()), 'value');
+  }
+  const more = e.target.closest('[data-from]');
+  if (more) {
+    const li = more.closest('li.more'), parent = li.parentElement.closest('li');
+    li.outerHTML = childrenHtml(treeItems[parent.dataset.id], +more.dataset.from);
+    return;
+  }
+  const tr = e.target.closest('.tr.has');
+  if (tr && !getSelection().toString()) {
+    const li = tr.parentElement;
+    setOpen(li, tr.querySelector('.tw').getAttribute('aria-expanded') !== 'true');
+  }
+});
+
+/* ---------- copy / download / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function copyText(text, what = 'output') {
+  const done = () => toast(`Copied ${what}`);
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(() => {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); done(); } catch { toast('Couldn\u2019t copy to the clipboard'); } t.remove();
+  });
+}
+$('#copyOut').onclick = () => copyText(getOutText());
+$('#copyStr').onclick = () => copyText(JSON.stringify(getOutText()), 'as a string');
+$('#download').onclick = () => {
+  const base = (fileName.replace(/\.[^.]*$/, '') || 'formatted') + (shown.matches ? '.query' : '') + (settings.indent === 'min' ? '.min' : '');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([getOutText()], { type: 'application/json' }));
+  a.download = base + '.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* ---------- input events ---------- */
+let timer;
+const schedule = () => { clearTimeout(timer); timer = setTimeout(compute, input.value.length > 1e6 ? 400 : 150); };
+input.addEventListener('input', schedule);
+input.addEventListener('keydown', e => {
+  if (e.key === 'Tab' && !e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); input.setRangeText('  ', input.selectionStart, input.selectionEnd, 'end'); schedule(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.shiftKey && e.altKey && !e.ctrlKey && !e.metaKey && e.code === 'KeyF') { e.preventDefault(); clearTimeout(timer); compute(); formatInput(); }
+});
+
+function setInput(text, name = '') {
+  input.value = text; fileName = name;
+  $('#fname').textContent = name; $('#fname').title = name;
+  treeOpen = null;
+  input.scrollTop = 0;
+  compute();
+}
+function loadFile(f) {
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => setInput(String(r.result), f.name);
+  r.readAsText(f);
+}
+$('#openFile').onclick = () => $('#file').click();
+$('#file').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
+const pane = $('#inPane');
+pane.addEventListener('dragover', e => { e.preventDefault(); pane.classList.add('drag'); });
+pane.addEventListener('dragleave', e => { if (!pane.contains(e.relatedTarget)) pane.classList.remove('drag'); });
+pane.addEventListener('drop', e => { e.preventDefault(); pane.classList.remove('drag'); loadFile(e.dataTransfer.files[0]); });
+
+$('#formatInput').onclick = formatInput;
+$('#msgs').addEventListener('click', e => {
+  const g = e.target.closest('[data-goto]');
+  if (g) return goTo(+g.dataset.goto);
+  if (e.target.closest('[data-act=decode]') && parsed.ok) { treeOpen = null; replaceInput(parsed.root.value); }
+});
+
+const EXAMPLE = `// A caf\u00e9 listing with a few common mistakes: this comment, a single-quoted key,
+// an unquoted key and a trailing comma. They're repaired in the output.
+{"name":"Harbour Caf\u00e9","id":9007199254740993,"open":true,'rating':4.6,
+"tags":["coffee","brunch","wifi",],"address":{"street":"12 Quay Road","city":"Bristol","geo":{"lat":51.4495,"lng":-2.5977}},
+"hours":[{"day":"Mon\u2013Fri","from":"07:30","to":"17:00"},{"day":"Sat","from":"08:30","to":"16:00"},{"day":"Sun","from":null,"to":null}],
+"menu":{"espresso":2.4,"flat white":3.2,"pastries":{"croissant":2.8,"cinnamon bun":3.1}},updatedAt:"2026-09-01T09:12:00Z"}
+`;
+$('#sample').onclick = () => { qEl.value = ''; setInput(EXAMPLE, 'example.jsonc'); };
+$('#clear').onclick = () => { qEl.value = ''; setInput(''); input.focus(); };
+
+/* ---------- output controls ---------- */
+function bindSeg(sel, key, after) {
+  const btns = [...document.querySelectorAll(sel + ' button')];
+  const sync = () => btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === settings[key])));
+  btns.forEach(b => b.onclick = () => { settings[key] = b.dataset.v; saveSettings(); sync(); after(); });
+  sync();
+}
+bindSeg('#viewSeg', 'view', renderOutput);
+bindSeg('#indentSeg', 'indent', renderOutput);
+function bindCheck(sel, key, after) {
+  const el = $(sel);
+  el.checked = !!settings[key];
+  el.onchange = () => { settings[key] = el.checked; saveSettings(); after(); };
+}
+bindCheck('#optSort', 'sortKeys', renderOutput);
+bindCheck('#optAscii', 'ascii', renderOutput);
+bindCheck('#optRepair', 'repair', compute);
+$('#expandAll').onclick = expandAll;
+$('#collapseAll').onclick = collapseAll;
+
+let qTimer;
+qEl.addEventListener('input', () => {
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => { treeOpen = null; if (shown) shown = build(shown.root); renderOutput(); }, 120);
+});
+qEl.addEventListener('keydown', e => { if (e.key === 'Escape' && qEl.value) { e.preventDefault(); qEl.value = ''; qEl.dispatchEvent(new Event('input')); } });
+document.addEventListener('click', e => { const h = $('.help[open]'); if (h && !h.contains(e.target)) h.open = false; });
+
+const themeSel = $('#theme');
+themeSel.innerHTML = THEMES.map(t => `<option value="${t.id}">${esc(t.label)}</option>`).join('');
+themeSel.value = savedTheme();
+themeSel.onchange = () => { const id = applyTheme(themeSel.value); try { localStorage.setItem(THEME_KEY, id); } catch {} };
+
+compute();
+</script>
+</body>
+</html>
