@@ -3,6 +3,7 @@
   <!-- shared:sitemap -->
   <url><loc>https://tools.lxst.digital/</loc></url>
   <url><loc>https://tools.lxst.digital/bpm-tapper</loc></url>
+  <url><loc>https://tools.lxst.digital/csv-json</loc></url>
   <url><loc>https://tools.lxst.digital/gzip</loc></url>
   <url><loc>https://tools.lxst.digital/json-diff</loc></url>
   <url><loc>https://tools.lxst.digital/json-format</loc></url>

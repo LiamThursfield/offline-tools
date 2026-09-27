@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>CSV ⇄ JSON converter – Convert between CSV and JSON | LXST.tools</title>
+<meta name="description" content="Convert CSV to JSON and JSON to CSV, with delimiter detection, quoted fields and line breaks, number and boolean detection, nested objects as dotted columns, and a sortable, filterable table preview. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/csv-json">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/csv-json">
+<meta property="og:title" content="CSV ⇄ JSON converter">
+<meta property="og:description" content="Convert CSV to JSON and JSON to CSV, with delimiter detection, quoted fields and line breaks, number and boolean detection, nested objects as dotted columns, and a sortable, filterable table preview. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"CSV ⇄ JSON converter","url":"https://tools.lxst.digital/csv-json","description":"Convert CSV to JSON and JSON to CSV, with delimiter detection, quoted fields and line breaks, number and boolean detection, nested objects as dotted columns, and a sortable, filterable table preview.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --chg-bg:color-mix(in oklab,var(--chg) var(--tint),var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  --pane-h:clamp(260px,44vh,640px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.nav:disabled{opacity:.45;cursor:not-allowed}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:66ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* panes */
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.pane,.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+#inPane:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane.drag{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pane-head h2{margin:0;font-size:.92rem;font-weight:700}
+.pane-head .spacer{flex:1}
+.pane-head .btn{padding:2px 11px;font-size:.8rem}
+.fname{color:var(--muted);font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:30%}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px;white-space:nowrap}
+.status.ok{color:var(--ins);background:var(--ins-bg)}.status.bad{color:var(--del);background:var(--del-bg)}
+.status.warn{color:var(--chg);background:var(--chg-bg)}.status.text{color:var(--muted);background:var(--surface)}
+textarea{display:block;flex:1;width:100%;height:var(--pane-h);min-height:180px;resize:vertical;border:0;background:transparent;padding:12px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0;color:var(--ink);outline:none;white-space:pre;overflow:auto;tab-size:4}
+textarea::placeholder{color:var(--muted);opacity:.8}
+.opts{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.86rem;min-height:45px}
+.opts label{display:inline-flex;align-items:center;gap:6px}
+.opts .lbl{color:var(--muted)}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:3px 10px;max-width:100%;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+
+/* input messages */
+.msgs:empty{display:none}
+.msg{padding:9px 14px;border-top:1px solid var(--line);font-size:.86rem}
+.msg.bad{background:var(--del-bg)}.msg.bad>b{color:var(--del)}
+.msg.warn{background:var(--chg-bg)}.msg.warn>b{color:var(--chg)}
+.msg code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+
+/* table preview */
+.card{margin-top:16px}
+.card-head{display:flex;align-items:center;gap:8px 12px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.tinfo{color:var(--muted);font-size:.84rem;font-variant-numeric:tabular-nums}
+.filter{flex:0 1 240px;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:var(--pill);padding:3px 12px;font-size:.86rem}
+.table-wrap{overflow:auto;max-height:70vh;overscroll-behavior:contain}
+table{border-collapse:separate;border-spacing:0;min-width:100%;font-size:.84rem}
+th,td{padding:5px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;vertical-align:top}
+td{max-width:36ch;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);font-size:.8rem;letter-spacing:0}
+thead th{position:sticky;top:0;z-index:2;background:var(--surface);padding:0;font-weight:700}
+thead th button{display:flex;align-items:center;gap:6px;width:100%;border:0;background:none;padding:7px 12px;font-weight:700;text-align:left;white-space:nowrap}
+thead th button:hover{color:var(--accent-text)}
+thead th button:focus-visible{outline-offset:-2px}
+th .arrow{display:inline-block;width:1em;color:var(--muted);font-size:.8em}
+th[aria-sort] .arrow{color:var(--accent-text)}
+th .ctype{font:500 .68rem var(--sans);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.rn{position:sticky;left:0;z-index:1;background:var(--panel);color:var(--muted);text-align:right;font:500 .74rem var(--mono);letter-spacing:0;font-variant-numeric:tabular-nums;border-right:1px solid var(--line);padding:5px 8px}
+thead .rn{z-index:3;background:var(--surface);padding:7px 8px}
+tbody tr:hover td{background:var(--hover)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+td.nil{color:var(--muted);font-style:italic}
+td.bool{color:var(--typ)}
+td.miss{background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in oklab,var(--line) 60%,transparent) 6px 7px)}
+.tfoot{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:8px 14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.tfoot .btn{padding:2px 11px;font-size:.8rem}
+.empty-t{padding:28px 14px;text-align:center;color:var(--muted);font-size:.9rem}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);overflow-wrap:anywhere}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1000px){
+  .panes{grid-template-columns:minmax(0,1fr)}
+  textarea{height:36vh}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .fname{max-width:40%}
+  .filter{flex:1 1 100%}
+  .table-wrap{max-height:60vh}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>CSV</b>.json<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json" aria-current="page"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="sample">Load example</button>
+      <button class="nav" id="swap" title="Use the output as the input, to convert it back" disabled>Swap</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Convert CSV and JSON</h1>
+    <p>Paste, drop or open a CSV or JSON file and get the other one back. Check the result in a table you can sort and filter. Everything runs in your browser; nothing is uploaded.</p>
+  </div>
+
+  <div class="panes">
+    <section class="pane" id="inPane" aria-labelledby="inTitle">
+      <div class="pane-head">
+        <h2 id="inTitle">Input</h2><span class="fname" id="fname"></span>
+        <span class="spacer"></span><span class="status text" id="status">empty</span>
+        <span class="seg" id="modeSeg" role="group" aria-label="Input format"><button type="button" data-v="auto" title="Work out the format from the input">Auto</button><button type="button" data-v="csv">CSV</button><button type="button" data-v="json">JSON</button></span>
+        <button class="btn" id="openFile">Open file</button>
+        <input type="file" id="file" accept=".csv,.tsv,.tab,.psv,.txt,.json,.jsonl,.ndjson,text/csv,text/tab-separated-values,application/json,text/*" hidden>
+      </div>
+      <div class="opts" id="csvInOpts">
+        <label><span class="lbl">Delimiter</span> <select id="delimiter"></select></label>
+        <label><input type="checkbox" id="optHeader"> First row is headers</label>
+        <label title="Turn 42, 3.5, true, false and null into JSON numbers, booleans and null. Empty cells become null. Numbers with leading zeros, such as 02134, stay text."><input type="checkbox" id="optTypes"> Detect numbers and booleans</label>
+        <label title="Headers such as address.city become nested objects; items.0, items.1 become arrays"><input type="checkbox" id="optNested"> Nest dotted headers</label>
+      </div>
+      <div class="opts" id="jsonInOpts" hidden>
+        <span class="lbl" id="nestLabel">Nested values</span>
+        <span class="seg" id="nestSeg" role="group" aria-labelledby="nestLabel"><button type="button" data-v="flatten" title="One column per nested field: address.city, tags.0, tags.1">Columns (a.b)</button><button type="button" data-v="json" title="One column per top-level field, holding nested values as JSON text">JSON text</button></span>
+      </div>
+      <textarea id="input" spellcheck="false" autocomplete="off" aria-labelledby="inTitle" placeholder="Paste CSV or JSON here, or drop a file onto this box"></textarea>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+    </section>
+
+    <section class="pane" id="outPane" aria-labelledby="outTitle">
+      <div class="pane-head">
+        <h2 id="outTitle">Output</h2><span class="status text" id="outKind">–</span>
+        <span class="spacer"></span>
+        <button class="btn" id="copyOut" disabled>Copy</button>
+        <button class="btn" id="download" disabled>Download</button>
+      </div>
+      <div class="opts" id="jsonOutOpts">
+        <span class="seg" id="shapeSeg" role="group" aria-label="Shape"><button type="button" data-v="objects" title="An array with one object per row, keyed by the headers">Objects</button><button type="button" data-v="arrays" title="An array with one array per row, headers first">Arrays</button></span>
+        <span class="seg" id="indentSeg" role="group" aria-label="Indentation"><button type="button" data-v="2">2 spaces</button><button type="button" data-v="4">4 spaces</button><button type="button" data-v="tab">Tab</button><button type="button" data-v="min">Minify</button></span>
+      </div>
+      <div class="opts" id="csvOutOpts" hidden>
+        <label><span class="lbl">Delimiter</span> <select id="outDelimiter"></select></label>
+        <label><input type="checkbox" id="optOutHeader"> Header row</label>
+        <span class="seg" id="eolSeg" role="group" aria-label="Line endings"><button type="button" data-v="lf" title="Unix line endings (\n)">LF</button><button type="button" data-v="crlf" title="Windows line endings (\r\n), as RFC 4180 specifies">CRLF</button></span>
+        <label><input type="checkbox" id="optQuoteAll"> Quote every field</label>
+        <label title="Adds a byte order mark to downloads, so Excel opens accented characters correctly"><input type="checkbox" id="optBom"> BOM for Excel</label>
+      </div>
+      <textarea id="output" readonly spellcheck="false" aria-labelledby="outTitle" placeholder="The converted data appears here"></textarea>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="tableTitle">
+    <div class="card-head">
+      <h2 id="tableTitle">Table</h2><span class="tinfo" id="tinfo" aria-live="polite"></span>
+      <span class="spacer"></span>
+      <input class="filter" id="filter" type="search" placeholder="Filter rows" aria-label="Filter rows" autocomplete="off" spellcheck="false">
+      <button class="btn" id="unsort" disabled>Original order</button>
+    </div>
+    <div class="table-wrap" id="tableWrap"></div>
+    <div class="tfoot" id="tfoot"><span>Click a column heading to sort by it (again to reverse). Sorting and filtering change this preview only.</span><span class="spacer" style="flex:1"></span><button class="btn" id="more" hidden>Show more</button></div>
+  </section>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core conversion logic (pure functions, no DOM) ===== -->
+<script id="core">
+const DELIMITERS = [[',', 'Comma'], [';', 'Semicolon'], ['\t', 'Tab'], ['|', 'Pipe']];
+const delimiterName = d => (DELIMITERS.find(x => x[0] === d) || [, `“${d}”`])[1];
+
+/* CSV if it doesn't start like a JSON array or object. */
+const detectFormat = text => /^\s*[[{]/.test(text) ? 'json' : 'csv';
+
+/* Picks the candidate delimiter that splits the first lines into the same number of fields most often
+   (quotes are respected, so commas inside "…" don't count). Falls back to a comma. */
+function detectDelimiter(text) {
+  const sample = text.slice(0, 65536);
+  let best = ',', bestScore = 0;
+  for (const [d] of DELIMITERS) {
+    const counts = [];
+    let n = 0, quoted = false;
+    for (let i = 0; i < sample.length && counts.length < 30; i++) {
+      const c = sample[i];
+      if (c === '"') quoted = !quoted;
+      else if (!quoted && c === d) n++;
+      else if (!quoted && (c === '\n' || c === '\r')) {
+        if (c === '\r' && sample[i + 1] === '\n') i++;
+        counts.push(n); n = 0;
+      }
+    }
+    if (n || !counts.length) counts.push(n);
+    const lines = counts.filter((x, i) => x || i < counts.length - 1);
+    if (!lines[0]) continue;
+    const same = lines.filter(x => x === lines[0]).length / lines.length;
+    const score = same * 1000 + Math.min(lines[0], 999);
+    if (score > bestScore) { best = d; bestScore = score; }
+  }
+  return best;
+}
+
+/* RFC 4180 CSV: quoted fields may hold delimiters, line breaks and "" for a quote. Accepts \n, \r\n and \r
+   line endings and a leading byte order mark, and skips blank lines. It's forgiving: a stray quote inside
+   an unquoted field is kept as text. Returns { rows, lines (the line each row starts on), delimiter, warnings }. */
+function parseCSV(text, { delimiter = 'auto' } = {}) {
+  text = String(text);
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const delim = delimiter && delimiter !== 'auto' ? delimiter : detectDelimiter(text);
+  const D = delim.charCodeAt(0), n = text.length;
+  const rows = [], lines = [], warnings = [];
+  if (!n) return { rows, lines, delimiter: delim, warnings };
+  let i = 0, line = 1, row = [], rowLine = 1, trailing = 0;
+  const endRow = () => {
+    if (!(row.length === 1 && row[0] === '')) { rows.push(row); lines.push(rowLine); }
+    row = []; rowLine = line;
+  };
+  for (;;) {
+    let val;
+    if (text.charCodeAt(i) === 34) {
+      const parts = [], start = line;
+      let j = i + 1, closed = false;
+      for (;;) {
+        const q = text.indexOf('"', j);
+        if (q < 0) { parts.push(text.slice(j)); i = n; break; }
+        parts.push(text.slice(j, q));
+        if (text.charCodeAt(q + 1) === 34) { parts.push('"'); j = q + 2; continue; }
+        i = q + 1; closed = true; break;
+      }
+      val = parts.join('');
+      line += (val.match(/\r\n|\r|\n/g) || []).length;
+      if (!closed) warnings.push(`Line ${start}: a quoted value is never closed, so everything after it was read as one value.`);
+      let k = i;
+      while (k < n) { const c = text.charCodeAt(k); if (c === D || c === 10 || c === 13) break; k++; }
+      if (k > i) { if (!trailing++) warnings.push(`Line ${line}: there's text after a closing quote. It was kept as part of the value.`); val += text.slice(i, k); i = k; }
+    } else {
+      let k = i;
+      while (k < n) { const c = text.charCodeAt(k); if (c === D || c === 10 || c === 13) break; k++; }
+      val = text.slice(i, k); i = k;
+    }
+    row.push(val);
+    if (i >= n) { endRow(); break; }
+    const c = text.charCodeAt(i);
+    if (c === D) { i++; if (i >= n) { row.push(''); endRow(); break; } continue; }
+    i += c === 13 && text.charCodeAt(i + 1) === 10 ? 2 : 1;
+    line++;
+    endRow();
+    if (i >= n) break;
+  }
+  return { rows, lines, delimiter: delim, warnings };
+}
+
+/* A cell's JSON value: numbers, true/false and null are converted, and an empty cell is null. Numbers with a
+   leading zero (02134) or more digits than a double holds exactly stay text, so nothing is silently changed. */
+function inferValue(s) {
+  if (s === '' || /^null$/i.test(s)) return null;
+  if (/^true$/i.test(s)) return true;
+  if (/^false$/i.test(s)) return false;
+  if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?$/.test(s)) {
+    const digits = s.replace(/[eE].*$/, '').replace(/\D/g, '').replace(/^0+/, '');
+    const v = Number(s);
+    if (Number.isFinite(v) && digits.length <= 15) return v;
+  }
+  return s;
+}
+
+/* Header names: blanks become column_N and repeats get _2, _3… so every key is unique. */
+function uniqueHeaders(names) {
+  const seen = new Map(), renamed = [];
+  const out = names.map((h, i) => {
+    let name = String(h).trim() || `column_${i + 1}`;
+    if (seen.has(name)) {
+      let k = seen.get(name) + 1;
+      while (seen.has(`${name}_${k}`)) k++;
+      seen.set(name, k);
+      renamed.push(name);
+      name = `${name}_${k}`;
+    }
+    seen.set(name, 1);
+    return name;
+  });
+  return { names: out, renamed };
+}
+
+/* { "a.b": 1, "t.0": 2, "t.1": 3 } → { a: { b: 1 }, t: [2, 3] }. A key that clashes with another
+   (both "a" and "a.b") is left flat. Objects whose keys are exactly 0…n-1 become arrays. */
+function unflatten(record) {
+  const out = {}, made = new Set();
+  for (const [key, v] of Object.entries(record)) {
+    const path = key.split('.');
+    if (path.length < 2 || path.some(p => p === '')) { if (!(key in out)) out[key] = v; continue; }
+    let o = out, ok = true;
+    for (const p of path.slice(0, -1)) {
+      if (!(p in o)) { o[p] = {}; made.add(o[p]); }
+      else if (!made.has(o[p])) { ok = false; break; }
+      o = o[p];
+    }
+    const last = path.at(-1);
+    if (ok && !(last in o)) o[last] = v;
+    else if (!(key in out)) out[key] = v;
+  }
+  const arrays = o => {
+    if (!made.has(o)) return o;
+    const keys = Object.keys(o);
+    for (const k of keys) o[k] = arrays(o[k]);
+    return keys.length && keys.every((k, i) => k === String(i)) ? keys.map(k => o[k]) : o;
+  };
+  for (const k of Object.keys(out)) out[k] = arrays(out[k]);
+  return out;
+}
+
+/* Parsed CSV rows → { value (the JSON), table: { columns, rows }, warnings }.
+   header: first row names the fields. types: see inferValue. nested: see unflatten.
+   shape: 'objects' (one object per row) or 'arrays' (one array per row, headers first). */
+function csvToJSON(rows, { header = true, types = true, nested = false, shape = 'objects', lines = [] } = {}) {
+  const warnings = [];
+  const width = rows.reduce((m, r) => Math.max(m, r.length), 0);
+  const body = header ? rows.slice(1) : rows;
+  let columns;
+  if (header && rows.length) {
+    const u = uniqueHeaders(rows[0]);
+    columns = u.names;
+    if (u.renamed.length) warnings.push(`Repeated header${u.renamed.length > 1 ? 's' : ''} ${[...new Set(u.renamed)].map(h => `“${h}”`).join(', ')} got a number on the end to keep the keys unique.`);
+    for (let i = columns.length; i < width; i++) columns.push(`column_${i + 1}`);
+  } else columns = Array.from({ length: width }, (_, i) => `column_${i + 1}`);
+
+  const expected = header && rows.length ? rows[0].length : width;
+  const off = [];
+  body.forEach((r, i) => { if (r.length !== expected) off.push(lines[i + (header ? 1 : 0)] ?? i + 1); });
+  if (off.length) warnings.push(`${off.length.toLocaleString('en')} row${off.length > 1 ? 's have' : ' has'} a different number of values from the ${header ? 'header' : 'first row'} (line${off.length > 1 ? 's' : ''} ${off.slice(0, 5).join(', ')}${off.length > 5 ? '…' : ''}). Missing values are left ${types ? 'null' : 'empty'}${width > expected ? '; extra ones go in column_N fields' : ''}.`);
+
+  const cell = s => s === undefined ? (types ? null : '') : types ? inferValue(s) : s;
+  const tableRows = body.map(r => columns.map((_, i) => r[i] === undefined ? undefined : cell(r[i])));
+  let value;
+  if (shape === 'arrays') value = (header && rows.length ? [rows[0].slice()] : []).concat(body.map(r => r.map(cell)));
+  else value = tableRows.map(r => {
+    const o = {};
+    columns.forEach((c, i) => { if (i < r.length && (r[i] !== undefined || i < expected)) o[c] = r[i] === undefined ? cell(undefined) : r[i]; });
+    return nested ? unflatten(o) : o;
+  });
+  return { value, table: { columns, rows: tableRows }, warnings };
+}
+
+/* JSON, or JSON Lines (one value per line) when the whole text isn't valid JSON.
+   Returns { value, kind } or { error, line, col }. */
+function parseJSONInput(text) {
+  try { return { value: JSON.parse(text), kind: 'JSON' }; } catch (e) {
+    const ls = text.split(/\r\n|\r|\n/).filter(l => l.trim());
+    if (ls.length > 1) {
+      try { return { value: ls.map(l => JSON.parse(l)), kind: 'JSON Lines' }; } catch {}
+    }
+    const msg = String(e.message).replace(/^JSON\.parse: /, '');
+    let line, col;
+    const lc = /line (\d+) column (\d+)/.exec(msg), pos = /position (\d+)/.exec(msg);
+    if (lc) { line = +lc[1]; col = +lc[2]; }
+    else if (pos) { const before = text.slice(0, +pos[1]).split(/\r\n|\r|\n/); line = before.length; col = before.at(-1).length + 1; }
+    return { error: msg.replace(/ in JSON at position \d+.*$/, '').replace(/ at line \d+ column \d+ of the JSON data$/, ''), line, col };
+  }
+}
+
+const isPlainObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+
+/* Nested values of a record as dotted columns ("address.city", "tags.0"), or as JSON text. */
+function flattenRecord(obj, flatten, prefix = '', out = {}) {
+  for (const [k, v] of Object.entries(obj)) {
+    const key = prefix + k;
+    if (v !== null && typeof v === 'object') {
+      const keys = Object.keys(v);
+      if (flatten && keys.length) flattenRecord(v, true, key + '.', out);
+      else out[key] = JSON.stringify(v);
+    } else out[key] = v;
+  }
+  return out;
+}
+
+/* A JSON value → { columns, rows, headerless, note }. An array of objects is one row per object, with a column
+   for every key found (in the order first seen). An array of arrays is taken as rows already (no header is
+   added). A single object is one row, and plain values go in a "value" column. */
+function jsonToTable(value, { flatten = true } = {}) {
+  const list = Array.isArray(value) ? value : [value];
+  let note = Array.isArray(value) ? '' : isPlainObject(value) ? 'A single object, so one row.' : 'A single value, so one row.';
+  if (list.length && list.every(Array.isArray)) {
+    const width = list.reduce((m, r) => Math.max(m, r.length), 0);
+    const cell = v => v !== null && typeof v === 'object' ? JSON.stringify(v) : v;
+    return { columns: Array.from({ length: width }, (_, i) => `column_${i + 1}`), rows: list.map(r => r.map(cell)), headerless: true, note: 'An array of arrays, so each one is a row as it is.' };
+  }
+  const index = new Map(), records = [];
+  for (const item of list) {
+    const rec = isPlainObject(item) ? flattenRecord(item, flatten) : { value: Array.isArray(item) ? JSON.stringify(item) : item };
+    for (const k of Object.keys(rec)) if (!index.has(k)) index.set(k, index.size);
+    records.push(rec);
+  }
+  const columns = [...index.keys()];
+  return { columns, rows: records.map(r => columns.map(c => r[c])), headerless: false, note };
+}
+
+/* One CSV field: quoted when it holds the delimiter, a quote, a line break or leading/trailing spaces. */
+function csvField(v, delim, quoteAll) {
+  const s = v === null || v === undefined ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v);
+  return quoteAll || s.includes(delim) || /["\r\n]|^\s|\s$/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+function toCSV({ columns, rows, headerless }, { delimiter = ',', header = true, eol = '\n', quoteAll = false } = {}) {
+  const out = [];
+  if (header && !headerless && columns.length) out.push(columns.map(c => csvField(c, delimiter, quoteAll)).join(delimiter));
+  for (const r of rows) out.push(columns.map((_, i) => csvField(r[i], delimiter, quoteAll)).join(delimiter));
+  return out.length ? out.join(eol) + eol : '';
+}
+
+/* Row order for the table: missing and null values last in either direction, numbers numerically,
+   text in natural order ("item 2" before "item 10"). Stable, so ties keep their original order. */
+const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+function compareCells(a, b) {
+  const ea = a === undefined || a === null || a === '', eb = b === undefined || b === null || b === '';
+  if (ea || eb) return ea === eb ? 0 : ea ? 1 : -1;
+  const ta = typeof a, tb = typeof b;
+  if (ta === 'number' && tb === 'number') return a - b;
+  if (ta === 'boolean' && tb === 'boolean') return a === b ? 0 : a ? 1 : -1;
+  if (ta !== tb) return ta === 'number' ? -1 : tb === 'number' ? 1 : collator.compare(String(a), String(b));
+  return collator.compare(a, b);
+}
+function sortOrder(rows, col, dir) {
+  const idx = rows.map((_, i) => i);
+  if (col < 0) return idx;
+  const sign = dir === 'desc' ? -1 : 1;
+  return idx.sort((x, y) => {
+    const a = rows[x][col], b = rows[y][col];
+    const empty = v => v === undefined || v === null || v === '';
+    if (empty(a) || empty(b)) return compareCells(a, b) || x - y; // empties stay last when reversed
+    return sign * compareCells(a, b) || x - y;
+  });
+}
+
+/* The kind of values in a column, for the table heading. */
+function columnType(rows, col) {
+  const kinds = new Set();
+  for (const r of rows) { const v = r[col]; if (v !== undefined && v !== null && v !== '') kinds.add(typeof v); if (kinds.size > 1) return 'mixed'; }
+  return kinds.size ? { number: 'number', boolean: 'bool', string: 'text' }[[...kinds][0]] : 'empty';
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  DELIMITERS, detectFormat, detectDelimiter, parseCSV, inferValue, uniqueHeaders, unflatten, csvToJSON,
+  parseJSONInput, flattenRecord, jsonToTable, csvField, toCSV, compareCells, sortOrder, columnType,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const fmtN = n => n.toLocaleString('en');
+const plural = (n, w) => `${fmtN(n)} ${w}${n === 1 ? '' : 's'}`;
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'csv-json.settings';
+const DEFAULTS = { mode: 'auto', delimiter: 'auto', header: true, types: true, nested: false, shape: 'objects', indent: '2',
+  nest: 'flatten', outDelimiter: ',', outHeader: true, eol: 'lf', quoteAll: false, bom: false };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+
+/* ---------- state ---------- */
+const input = $('#input'), output = $('#output');
+let fileName = '';
+let result = { outKind: null, text: '' };
+let table = null;               // { columns, rows }
+let sort = { col: -1, dir: 'asc' };
+let limit = 500;
+const PAGE = 500;
+
+/* ---------- options ---------- */
+$('#delimiter').innerHTML = `<option value="auto">Auto</option>` + DELIMITERS.map(([d, n]) => `<option value="${esc(d)}">${n}</option>`).join('');
+$('#outDelimiter').innerHTML = DELIMITERS.map(([d, n]) => `<option value="${esc(d)}">${n}</option>`).join('');
+function bindSeg(id, key) {
+  const btns = [...document.querySelectorAll(`#${id} button`)];
+  if (!btns.some(b => b.dataset.v === settings[key])) settings[key] = DEFAULTS[key];
+  const sync = () => btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === settings[key])));
+  btns.forEach(b => b.onclick = () => { settings[key] = b.dataset.v; saveSettings(); sync(); compute(); });
+  sync();
+}
+function bindCheck(id, key) {
+  const el = $('#' + id); el.checked = !!settings[key];
+  el.onchange = () => { settings[key] = el.checked; saveSettings(); compute(); };
+}
+function bindSelect(id, key) {
+  const el = $('#' + id);
+  el.value = settings[key]; if (el.value !== settings[key]) el.value = settings[key] = DEFAULTS[key];
+  el.onchange = () => { settings[key] = el.value; saveSettings(); compute(); };
+}
+bindSeg('modeSeg', 'mode'); bindSeg('nestSeg', 'nest'); bindSeg('shapeSeg', 'shape'); bindSeg('indentSeg', 'indent'); bindSeg('eolSeg', 'eol');
+bindCheck('optHeader', 'header'); bindCheck('optTypes', 'types'); bindCheck('optNested', 'nested');
+bindCheck('optOutHeader', 'outHeader'); bindCheck('optQuoteAll', 'quoteAll'); bindCheck('optBom', 'bom');
+bindSelect('delimiter', 'delimiter'); bindSelect('outDelimiter', 'outDelimiter');
+
+/* ---------- convert ---------- */
+function setStatus(cls, text) { const s = $('#status'); s.className = 'status ' + cls; s.textContent = text; }
+function showMsgs(list) {
+  $('#msgs').innerHTML = list.map(m => `<div class="msg ${m.cls}"><b>${esc(m.title)}</b> ${m.html}</div>`).join('');
+}
+
+function compute() {
+  const text = input.value;
+  const kind = !text.trim() ? null : settings.mode === 'auto' ? detectFormat(text) : settings.mode;
+  $('#csvInOpts').hidden = kind === 'json';
+  $('#jsonInOpts').hidden = kind !== 'json';
+  $('#jsonOutOpts').hidden = kind === 'json';
+  $('#csvOutOpts').hidden = kind !== 'json';
+  const msgs = [];
+  let prevCols = table && table.columns.join('\u0000');
+  table = null; result = { outKind: kind === 'json' ? 'csv' : 'json', text: '' };
+
+  if (!kind) setStatus('text', 'empty');
+  else if (kind === 'csv') {
+    const p = parseCSV(text, { delimiter: settings.delimiter });
+    const r = csvToJSON(p.rows, { header: settings.header, types: settings.types, nested: settings.nested, shape: settings.shape, lines: p.lines });
+    const indent = settings.indent === 'min' ? undefined : settings.indent === 'tab' ? '\t' : +settings.indent;
+    result.text = JSON.stringify(r.value, null, indent) + (indent === undefined ? '' : '\n');
+    table = r.table;
+    const warn = p.warnings.length + r.warnings.length;
+    setStatus(warn ? 'warn' : 'ok', `CSV · ${delimiterName(p.delimiter).toLowerCase()}${settings.delimiter === 'auto' ? ' (detected)' : ''}`);
+    for (const w of [...p.warnings, ...r.warnings]) msgs.push({ cls: 'warn', title: 'Note', html: esc(w) });
+  } else {
+    const j = parseJSONInput(text);
+    if (j.error) {
+      setStatus('bad', 'invalid JSON');
+      msgs.push({ cls: 'bad', title: 'Invalid JSON.', html: esc(j.error) + (j.line ? ` <code>line ${j.line}, column ${j.col}</code>` : '') });
+    } else {
+      const t = jsonToTable(j.value, { flatten: settings.nest === 'flatten' });
+      result.text = toCSV(t, { delimiter: settings.outDelimiter, header: settings.outHeader, eol: settings.eol === 'crlf' ? '\r\n' : '\n', quoteAll: settings.quoteAll });
+      table = t;
+      setStatus('ok', j.kind);
+      if (j.kind === 'JSON Lines') msgs.push({ cls: 'warn', title: 'Note', html: 'Read as JSON Lines: one JSON value per line.' });
+      if (t.note) msgs.push({ cls: 'warn', title: 'Note', html: esc(t.note) });
+    }
+  }
+  showMsgs(msgs);
+  output.value = result.text;
+  $('#outKind').textContent = kind ? result.outKind.toUpperCase() : '–';
+  $('#outKind').className = 'status ' + (result.text ? 'ok' : 'text');
+  ['#copyOut', '#download', '#swap'].forEach(s => $(s).disabled = !result.text);
+
+  // Keep the sort while editing, unless the columns changed.
+  if (!table || table.columns.join('\u0000') !== prevCols) sort = { col: -1, dir: 'asc' };
+  limit = PAGE;
+  renderTable();
+}
+
+/* ---------- table ---------- */
+let order = [];
+function cellHTML(v) {
+  if (v === undefined) return '<td class="miss" title="Missing"></td>';
+  if (v === null) return '<td class="nil">null</td>';
+  if (typeof v === 'number') return `<td class="num">${esc(v)}</td>`;
+  if (typeof v === 'boolean') return `<td class="bool">${v}</td>`;
+  const s = String(v);
+  return s.length > 36 || /[\r\n]/.test(s) ? `<td title="${esc(s)}">${esc(s.replace(/\r\n|\r|\n/g, '↵'))}</td>` : `<td>${esc(s)}</td>`;
+}
+function renderTable() {
+  const wrap = $('#tableWrap'), info = $('#tinfo');
+  $('#unsort').disabled = sort.col < 0;
+  if (!table || !table.columns.length) {
+    wrap.innerHTML = `<div class="empty-t">${input.value.trim() ? 'Nothing to show.' : 'Convert something to see it as a table.'}</div>`;
+    info.textContent = ''; $('#more').hidden = true;
+    return;
+  }
+  const { columns, rows } = table;
+  const q = $('#filter').value.trim().toLowerCase();
+  order = sortOrder(rows, sort.col, sort.dir);
+  if (q) order = order.filter(i => rows[i].some(v => v !== undefined && v !== null && String(v).toLowerCase().includes(q)));
+  const shown = order.slice(0, limit);
+  info.textContent = `${plural(rows.length, 'row')} × ${plural(columns.length, 'column')}${q ? ` · ${fmtN(order.length)} match` : ''}`;
+  const head = columns.map((c, i) => {
+    const on = sort.col === i, t = columnType(rows, i);
+    return `<th${on ? ` aria-sort="${sort.dir === 'asc' ? 'ascending' : 'descending'}"` : ''}><button type="button" data-col="${i}" title="Sort by ${esc(c)}">${esc(c)} <span class="ctype">${t}</span><span class="arrow" aria-hidden="true">${on ? (sort.dir === 'asc' ? '▲' : '▼') : ''}</span></button></th>`;
+  }).join('');
+  const body = shown.map(i => `<tr><td class="rn">${i + 1}</td>${columns.map((_, c) => cellHTML(rows[i][c])).join('')}</tr>`).join('');
+  wrap.innerHTML = `<table><thead><tr><th class="rn" title="Row in the original order">#</th>${head}</tr></thead><tbody>${body}</tbody></table>`
+    + (q && !order.length ? '<div class="empty-t">No rows match the filter.</div>' : '');
+  const more = $('#more');
+  more.hidden = order.length <= limit;
+  more.textContent = `Show more (${fmtN(Math.min(limit, order.length))} of ${fmtN(order.length)} shown)`;
+}
+$('#tableWrap').addEventListener('click', e => {
+  const b = e.target.closest('th button'); if (!b) return;
+  const col = +b.dataset.col;
+  sort = sort.col === col ? (sort.dir === 'asc' ? { col, dir: 'desc' } : { col: -1, dir: 'asc' }) : { col, dir: 'asc' };
+  renderTable();
+  $(`th button[data-col="${col}"]`)?.focus();
+});
+$('#unsort').onclick = () => { sort = { col: -1, dir: 'asc' }; renderTable(); };
+let filterTimer;
+$('#filter').addEventListener('input', () => { clearTimeout(filterTimer); filterTimer = setTimeout(() => { limit = PAGE; renderTable(); }, 120); });
+$('#more').onclick = () => { limit += PAGE; renderTable(); };
+
+/* ---------- copy / download / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function copyText(text) {
+  const done = () => toast(`Copied the ${result.outKind.toUpperCase()}`);
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(() => {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); done(); } catch { toast('Couldn’t copy to the clipboard'); } t.remove();
+  });
+}
+$('#copyOut').onclick = () => copyText(result.text);
+$('#download').onclick = () => {
+  const csv = result.outKind === 'csv';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv && settings.bom ? '﻿' : '', result.text], { type: csv ? 'text/csv' : 'application/json' }));
+  a.download = (fileName.replace(/\.[^.]*$/, '') || 'data') + (csv ? '.csv' : '.json');
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* ---------- input ---------- */
+let timer;
+const schedule = () => { clearTimeout(timer); timer = setTimeout(compute, input.value.length > 1e6 ? 400 : 150); };
+input.addEventListener('input', schedule);
+
+function setInput(text, name = '') {
+  input.value = text; fileName = name;
+  $('#fname').textContent = name; $('#fname').title = name;
+  input.scrollTop = 0;
+  $('#filter').value = '';
+  compute();
+}
+function loadFile(f) {
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => setInput(String(r.result), f.name);
+  r.readAsText(f);
+}
+$('#openFile').onclick = () => $('#file').click();
+$('#file').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
+const pane = $('#inPane');
+pane.addEventListener('dragover', e => { e.preventDefault(); pane.classList.add('drag'); });
+pane.addEventListener('dragleave', e => { if (!pane.contains(e.relatedTarget)) pane.classList.remove('drag'); });
+pane.addEventListener('drop', e => { e.preventDefault(); pane.classList.remove('drag'); loadFile(e.dataTransfer.files[0]); });
+
+/* Swap: the output becomes the input, so it converts back the other way. */
+$('#swap').onclick = () => {
+  const to = result.outKind;
+  if (settings.mode !== 'auto') { settings.mode = to; saveSettings(); document.querySelectorAll('#modeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === to))); }
+  setInput(result.text, fileName ? fileName.replace(/\.[^.]*$/, '') + '.' + to : '');
+  input.focus();
+};
+$('#clear').onclick = () => { setInput(''); input.focus(); };
+
+const EXAMPLE = `id,name,city,postcode,joined,active,score,notes
+1,Ada Lovelace,London,SW1Y 4JH,2024-01-15,true,98.5,
+2,Grace Hopper,"Arlington, VA",22201,2023-11-02,false,87,"Prefers ""tabs"" to spaces"
+3,Alan Turing,Wilmslow,SK9 1AA,2025-03-09,TRUE,,"A note over
+two lines"
+4,Katherine Johnson,"Hampton, VA",23666,2022-07-30,true,100,
+5,Edsger Dijkstra,Austin,78712,2024-05-21,false,91.25,
+6,Margaret Hamilton,Boston,02134,2025-01-01,true,95,Postcode keeps its leading zero
+`;
+$('#sample').onclick = () => { setInput(EXAMPLE, 'people.csv'); };
+
+/* ---------- start ---------- */
+compute();
+input.focus({ preventScroll: true });
+</script>
+</body>
+</html>

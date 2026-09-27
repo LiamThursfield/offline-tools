@@ -10,6 +10,7 @@ The tools are also hosted at [tools.lxst.digital](https://tools.lxst.digital/).
 | Tool | What it does |
 | --- | --- |
 | [BPM tapper](bpm-tapper/) | Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter. |
+| [CSV ⇄ JSON converter](csv-json/) | Convert CSV to JSON and JSON to CSV, with delimiter detection, quoted fields and line breaks, number and boolean detection, nested objects as dotted columns, and a sortable, filterable table preview. |
 | [Gzip helper](gzip/) | Compress text or files to gzip, zlib or raw deflate, and decompress them from a file, Base64 or hex, with header details (file name, date, OS), checksum checks and multi-member support. |
 | [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch, combinable field filters and saved comparisons. |
 | [JSON formatter](json-format/) | Format, minify and validate JSON with exact error locations, repair common mistakes (comments, trailing commas, single quotes), browse it as a collapsible tree and query it by path. |

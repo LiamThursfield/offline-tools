@@ -10,6 +10,16 @@
     "description": "Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter."
   },
   {
+    "slug": "csv-json",
+    "name": "CSV ⇄ JSON converter",
+    "mark": [
+      "CSV",
+      ".json"
+    ],
+    "summary": "Convert between CSV and JSON",
+    "description": "Convert CSV to JSON and JSON to CSV, with delimiter detection, quoted fields and line breaks, number and boolean detection, nested objects as dotted columns, and a sortable, filterable table preview."
+  },
+  {
     "slug": "gzip",
     "name": "Gzip helper",
     "mark": [
