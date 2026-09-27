@@ -70,6 +70,16 @@
     "description": "Format, minify and validate JSON with exact error locations, repair common mistakes (comments, trailing commas, single quotes), browse it as a collapsible tree and query it by path."
   },
   {
+    "slug": "jwt",
+    "name": "JWT decoder",
+    "mark": [
+      "JWT",
+      ".decode"
+    ],
+    "summary": "Decode JWTs and check their signatures",
+    "description": "Decode JSON Web Tokens without sending them anywhere: header and claims with explanations, exp, nbf and iat as readable dates, expired and not-yet-valid tokens flagged, security warnings, and signature checks for HS256, RS256, PS256, ES256 and EdDSA with a secret, PEM key, certificate or JWK."
+  },
+  {
     "slug": "regex",
     "name": "Regex tester",
     "mark": [

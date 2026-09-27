@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>JWT decoder – Decode JWTs and check their signatures | LXST.tools</title>
+<meta name="description" content="Decode JSON Web Tokens without sending them anywhere: header and claims with explanations, exp, nbf and iat as readable dates, expired and not-yet-valid tokens flagged, security warnings, and signature checks for HS256, RS256, PS256, ES256 and EdDSA with a secret, PEM key, certificate or JWK. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/jwt">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/jwt">
+<meta property="og:title" content="JWT decoder">
+<meta property="og:description" content="Decode JSON Web Tokens without sending them anywhere: header and claims with explanations, exp, nbf and iat as readable dates, expired and not-yet-valid tokens flagged, security warnings, and signature checks for HS256, RS256, PS256, ES256 and EdDSA with a secret, PEM key, certificate or JWK. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"JWT decoder","url":"https://tools.lxst.digital/jwt","description":"Decode JSON Web Tokens without sending them anywhere: header and claims with explanations, exp, nbf and iat as readable dates, expired and not-yet-valid tokens flagged, security warnings, and signature checks for HS256, RS256, PS256, ES256 and EdDSA with a secret, PEM key, certificate or JWK.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --chg-bg:color-mix(in oklab,var(--chg) var(--tint),var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  /* the token's parts: header, payload, signature (and a JWE's two extra parts) */
+  --p0:var(--del); --p1:var(--typ); --p2:var(--chg); --p3:var(--ins); --p4:var(--accent-text);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible,.key-in:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover{background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:66ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:2px 11px;font-weight:600;font-size:.8rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* layout: token and signature on the left, what's in the token on the right */
+.layout{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);grid-template-rows:auto 1fr;grid-template-areas:"token result" "verify result";gap:16px;align-items:start}
+.a-token{grid-area:token}.a-verify{grid-area:verify}.a-result{grid-area:result;display:flex;flex-direction:column;gap:16px;min-width:0}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.a-token:focus-within,.a-verify:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap;min-height:45px}
+.pane-head h2{margin:0;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.pane-head .spacer{flex:1}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.dot.p0{background:var(--p0)}.dot.p1{background:var(--p1)}.dot.p2{background:var(--p2)}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px;color:var(--muted);background:var(--surface);font-variant-numeric:tabular-nums}
+.pane-body{padding:12px 14px}
+
+/* token editor: a transparent textarea over a backdrop that colours each part.
+   Both use the same font and wrapping, and the backdrop sets the height, so they line up exactly. */
+.hl{position:relative;min-width:0}
+.hl-back,.hl textarea{display:block;margin:0;border:0;padding:12px 14px;font:500 .9rem/1.6 var(--mono);letter-spacing:0;
+  white-space:pre-wrap;word-break:break-all;overflow-wrap:anywhere;font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0;font-kerning:none}
+.hl-back{color:var(--ink);pointer-events:none;min-height:11.2em}
+.hl textarea{position:absolute;inset:0;width:100%;height:100%;resize:none;overflow:hidden;background:transparent;color:transparent;caret-color:var(--ink);outline:none;border-radius:0}
+.hl textarea::placeholder{color:var(--muted);opacity:.75}
+.hl textarea::selection{background:color-mix(in oklab,var(--accent) 38%,transparent);color:transparent}
+.t0{color:var(--p0)}.t1{color:var(--p1)}.t2{color:var(--p2)}.t3{color:var(--p3)}.t4{color:var(--p4)}
+.tp{color:var(--muted)}.td{color:var(--ink);font-weight:700}
+.token-foot{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;padding:9px 14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.legend{display:inline-flex;align-items:center;gap:6px}
+.token-foot .spacer{flex:1}
+.token-foot label{display:inline-flex;align-items:center;gap:6px}
+.token-foot input{width:5em;border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:2px 10px;font-variant-numeric:tabular-nums}
+
+/* status cards: expiry and signature */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);box-shadow:var(--shadow);min-width:0}
+.card .ico{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.9rem;background:var(--surface);color:var(--muted)}
+.card b{display:block;font-size:1rem}
+.card p{margin:2px 0 0;color:var(--muted);font-size:.86rem;overflow-wrap:anywhere}
+.card.ok{border-color:color-mix(in oklab,var(--ins) 45%,var(--line));background:var(--ins-bg)}
+.card.ok .ico{background:var(--ins);color:var(--bg)}
+.card.bad{border-color:color-mix(in oklab,var(--del) 50%,var(--line));background:var(--del-bg)}
+.card.bad .ico{background:var(--del);color:var(--bg)}
+.card.warn{border-color:color-mix(in oklab,var(--chg) 45%,var(--line));background:var(--chg-bg)}
+.card.warn .ico{background:var(--chg);color:var(--bg)}
+.card.ok b{color:var(--ins)}.card.bad b{color:var(--del)}.card.warn b{color:var(--chg)}
+
+/* findings */
+.flags{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.flags li{padding:8px 12px 8px 14px;border-radius:calc(var(--radius) - 4px);background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--muted);font-size:.88rem;overflow-wrap:anywhere}
+.flags li.bad{border-left-color:var(--del);background:var(--del-bg)}
+.flags li.warn{border-left-color:var(--chg);background:var(--chg-bg)}
+.flags li.info{border-left-color:var(--accent)}
+.flags li b{font-weight:700}
+
+/* decoded JSON */
+pre.json{margin:0;padding:12px 14px;font:13px/1.6 var(--mono);letter-spacing:0;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2}
+.tk{color:var(--typ)}.s{color:var(--ins)}.n{color:var(--chg)}.z{color:var(--del)}
+pre.json .n[title]{text-decoration:underline dotted;text-underline-offset:3px;cursor:help}
+pre.raw{color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px}
+.seg button{border:0;background:none;padding:1px 10px;border-radius:var(--pill);font-weight:600;font-size:.8rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.part-err{padding:12px 14px;color:var(--del);font-size:.9rem}
+
+/* claims table */
+table.claims{width:100%;border-collapse:collapse;font-size:.88rem}
+table.claims th,table.claims td{text-align:left;vertical-align:top;padding:8px 14px;border-top:1px solid var(--line)}
+table.claims tr:first-child th,table.claims tr:first-child td{border-top:0}
+table.claims th{width:34%;font-weight:400}
+table.claims th code{font-weight:700;color:var(--typ)}
+table.claims .lbl{display:block;color:var(--muted);font-size:.8rem;line-height:1.35;margin-top:1px}
+table.claims td{overflow-wrap:anywhere}
+table.claims td > code{font-size:.86rem}
+.when{display:block;margin-top:2px}
+.when .utc{display:block;color:var(--muted);font:.78rem/1.4 var(--mono);letter-spacing:0}
+.rel{font-weight:600}
+.rel.past{color:var(--del)}.rel.future{color:var(--ins)}
+.chip{display:inline-block;margin:0 4px 3px 0;padding:0 8px;border-radius:var(--pill);background:var(--surface);font:.8rem/1.6 var(--mono);letter-spacing:0}
+.badge{display:inline-block;padding:0 8px;border-radius:var(--pill);font-size:.74rem;font-weight:700;vertical-align:1px;margin-left:4px}
+.badge.bad{background:var(--del-bg);color:var(--del)}.badge.ok{background:var(--ins-bg);color:var(--ins)}.badge.warn{background:var(--chg-bg);color:var(--chg)}
+
+/* signature */
+.alg-line{margin:0 0 12px;font-size:.9rem;color:var(--muted)}
+.alg-line code{color:var(--ink);font-weight:700}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.field > span{font-weight:600;font-size:.86rem}
+.field-row{display:flex;gap:8px;flex-wrap:wrap}
+.key-in{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:calc(var(--radius) - 4px);padding:8px 11px;font:13px/1.5 var(--mono);letter-spacing:0}
+input.key-in{flex:1;min-width:12em;width:auto}
+textarea.key-in{min-height:9.5em;resize:vertical;white-space:pre;overflow:auto}
+.field select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px}
+.vout{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.vres{font-weight:700}
+.vres.ok{color:var(--ins)}.vres.bad{color:var(--del)}.vres.muted{color:var(--muted);font-weight:400}
+.expect{font:.8rem/1.5 var(--mono);letter-spacing:0;word-break:break-all;color:var(--muted)}
+.fine{margin:12px 0 0;color:var(--muted);font-size:.8rem}
+
+.empty{padding:44px 16px;text-align:center;color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:var(--radius)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:980px){
+  .layout{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-template-areas:"token" "result" "verify"}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+  .cards{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  table.claims th,table.claims td{display:block;width:auto;padding:4px 12px}
+  table.claims th{padding-top:9px;border-top:1px solid var(--line)}
+  table.claims td{border-top:0;padding-bottom:9px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>JWT</b>.decode<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../jwt/jwt.html" data-path="/jwt" aria-current="page"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
+        <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+        <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="sample">Load example</button>
+      <button class="nav" id="sampleExpired">Expired example</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Decode a JWT</h1>
+    <p>Paste a JSON Web Token to see its header and claims, when it expires, and whether its signature is valid. Tokens often grant access to real accounts, so this runs entirely in your browser: the token and your keys are never sent anywhere or saved.</p>
+  </div>
+
+  <div class="layout">
+    <section class="pane a-token" aria-labelledby="tokenTitle">
+      <div class="pane-head">
+        <h2 id="tokenTitle">Encoded token</h2>
+        <span class="spacer"></span><span class="status" id="tokenStat">empty</span>
+      </div>
+      <div class="hl"><div class="hl-back" id="tokenBack" aria-hidden="true"></div><textarea id="token" autocomplete="off" autocapitalize="off" spellcheck="false" aria-labelledby="tokenTitle" placeholder="Paste a token (eyJhbGciOi…). A Bearer prefix or Authorization header is fine."></textarea></div>
+      <div class="token-foot">
+        <span class="legend"><span class="dot p0"></span>header</span>
+        <span class="legend"><span class="dot p1"></span>payload</span>
+        <span class="legend"><span class="dot p2"></span>signature</span>
+        <span class="spacer"></span>
+        <label title="Allow this much clock difference when checking exp and nbf, as many JWT libraries do">Leeway <input type="number" id="leeway" min="0" max="86400" step="1" value="0" inputmode="numeric"> s</label>
+      </div>
+    </section>
+
+    <div class="a-result" id="result"></div>
+
+    <section class="pane a-verify" aria-labelledby="verifyTitle">
+      <div class="pane-head"><h2 id="verifyTitle"><span class="dot p2"></span>Verify signature</h2></div>
+      <div class="pane-body">
+        <p class="alg-line" id="algLine">Paste a token to check its signature.</p>
+        <div id="hmacFields" hidden>
+          <label class="field"><span>Secret</span>
+            <span class="field-row">
+              <input class="key-in" id="secret" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="The shared secret the token was signed with">
+              <select id="secretEnc" aria-label="How the secret is written">
+                <option value="text">Text (UTF-8)</option>
+                <option value="base64">Base64 or Base64url</option>
+                <option value="hex">Hex</option>
+              </select>
+            </span>
+          </label>
+        </div>
+        <div id="pubFields" hidden>
+          <label class="field"><span>Public key</span>
+            <textarea class="key-in" id="pubkey" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="-----BEGIN PUBLIC KEY-----&#10;…&#10;-----END PUBLIC KEY-----&#10;&#10;or a certificate, a JWK, or a JWK Set ({&quot;keys&quot;: […]})"></textarea>
+          </label>
+        </div>
+        <div class="vout" id="vout" aria-live="polite"></div>
+        <p class="fine">Secrets and keys you enter stay on this page. They aren't saved and are gone when you close it.</p>
+      </div>
+    </section>
+  </div>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core JWT logic (pure functions, no DOM; signatures use WebCrypto) ===== -->
+<script id="core">
+/* ---------- Base64url ---------- */
+const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+/* Decode Base64url, also accepting standard Base64 and padding (which JWTs shouldn't use, so they're reported).
+   Throws with a message that completes "The header …". */
+function b64Decode(s) {
+  if (!/^[A-Za-z0-9\-_+/]*={0,2}$/.test(s)) throw new Error('contains characters that aren’t Base64url');
+  const t = s.replace(/=+$/, '');
+  if (t.length % 4 === 1) throw new Error('has a length that isn’t possible for Base64url, so part of it is probably missing');
+  const out = new Uint8Array(Math.floor(t.length * 3 / 4));
+  let acc = 0, bits = 0, o = 0;
+  for (const c of t) {
+    const v = c === '-' || c === '+' ? 62 : c === '_' || c === '/' ? 63 : B64.indexOf(c);
+    acc = ((acc << 6) | v) & 0xffffff; bits += 6;
+    if (bits >= 8) { bits -= 8; out[o++] = (acc >> bits) & 255; }
+  }
+  return { bytes: out, std: /[+/]/.test(s), padded: s.length !== t.length };
+}
+
+function b64urlEncode(bytes) {
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 3) {
+    const n = (bytes[i] << 16) | ((bytes[i + 1] ?? 0) << 8) | (bytes[i + 2] ?? 0);
+    const chars = [n >> 18, n >> 12, n >> 6, n].map(x => (B64 + '-_')[x & 63]);
+    s += chars.slice(0, Math.min(4, bytes.length - i + 1)).join('');
+  }
+  return s;
+}
+
+const utf8 = new TextEncoder();
+function utf8Decode(bytes) {
+  try { return new TextDecoder('utf-8', { fatal: true }).decode(bytes); } catch { return null; }
+}
+const toHex = bytes => Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+
+/* ---------- Decoding ---------- */
+/* Accept what people actually paste: an Authorization header, a Bearer prefix, quotes, line breaks. */
+const PREFIX_RE = /^\s*(?:authorization\s*:\s*)?(?:bearer\s+)?/i;
+function cleanToken(raw) {
+  return raw.replace(PREFIX_RE, '').replace(/\s+/g, '').replace(/^["'`]+|["'`,;]+$/g, '');
+}
+
+const ALGS = {
+  HS256: { kind: 'hmac', hash: 'SHA-256', bytes: 32, label: 'HMAC with SHA-256' },
+  HS384: { kind: 'hmac', hash: 'SHA-384', bytes: 48, label: 'HMAC with SHA-384' },
+  HS512: { kind: 'hmac', hash: 'SHA-512', bytes: 64, label: 'HMAC with SHA-512' },
+  RS256: { kind: 'rsa', name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256', label: 'RSA (PKCS#1 v1.5) with SHA-256' },
+  RS384: { kind: 'rsa', name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-384', label: 'RSA (PKCS#1 v1.5) with SHA-384' },
+  RS512: { kind: 'rsa', name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-512', label: 'RSA (PKCS#1 v1.5) with SHA-512' },
+  PS256: { kind: 'rsa', name: 'RSA-PSS', hash: 'SHA-256', salt: 32, label: 'RSA-PSS with SHA-256' },
+  PS384: { kind: 'rsa', name: 'RSA-PSS', hash: 'SHA-384', salt: 48, label: 'RSA-PSS with SHA-384' },
+  PS512: { kind: 'rsa', name: 'RSA-PSS', hash: 'SHA-512', salt: 64, label: 'RSA-PSS with SHA-512' },
+  ES256: { kind: 'ec', hash: 'SHA-256', crv: 'P-256', bytes: 64, label: 'ECDSA on P-256 with SHA-256' },
+  ES384: { kind: 'ec', hash: 'SHA-384', crv: 'P-384', bytes: 96, label: 'ECDSA on P-384 with SHA-384' },
+  ES512: { kind: 'ec', hash: 'SHA-512', crv: 'P-521', bytes: 132, label: 'ECDSA on P-521 with SHA-512' },
+  EdDSA: { kind: 'okp', crv: 'Ed25519', bytes: 64, label: 'EdDSA (Ed25519)' },
+  Ed25519: { kind: 'okp', crv: 'Ed25519', bytes: 64, label: 'EdDSA with Ed25519' },
+};
+const KTY = { rsa: 'RSA', ec: 'EC', okp: 'OKP' };
+
+/* One Base64url part as bytes, text and (if it is JSON) a value. */
+function decodePart(s, name) {
+  const r = { name, notes: [] };
+  if (!s) { r.error = `The ${name} is empty.`; return r; }
+  let d;
+  try { d = b64Decode(s); } catch (e) { r.error = `The ${name} ${e.message}.`; return r; }
+  if (d.std || d.padded) r.notes.push({ level: 'warn', text: `The ${name} is written in standard Base64${d.padded ? ' with = padding' : ''}, not Base64url. Strict JWT libraries reject it.` });
+  r.bytes = d.bytes;
+  r.text = utf8Decode(d.bytes);
+  if (r.text === null) { r.error = `The ${name} isn’t valid UTF-8 text once decoded.`; return r; }
+  try { r.json = JSON.parse(r.text); r.isJson = true; } catch (e) { r.jsonError = e.message; }
+  return r;
+}
+
+/* Decode a token without verifying it. kind: 'empty', 'invalid', 'jws' (signed) or 'jwe' (encrypted). */
+function decodeJwt(raw) {
+  const token = cleanToken(raw);
+  const r = { token, parts: token ? token.split('.') : [], notes: [] };
+  const note = (level, text) => r.notes.push({ level, text });
+  if (!token) { r.kind = 'empty'; return r; }
+  const n = r.parts.length;
+  if (n !== 3 && n !== 5) {
+    r.kind = 'invalid';
+    r.error = n === 1 ? 'This isn’t a JWT: a JWT has three parts separated by dots (header.payload.signature), and this has no dots.'
+      : `This isn’t a complete JWT: it has ${n} parts separated by dots, where a signed token has 3 and an encrypted one has 5.`;
+  } else r.kind = n === 5 ? 'jwe' : 'jws';
+
+  r.header = decodePart(r.parts[0], 'header');
+  const h = r.header.json;
+  if (r.header.isJson && (typeof h !== 'object' || h === null || Array.isArray(h))) { r.header.error = 'The header is JSON, but not an object.'; r.header.isJson = false; }
+  else if (r.header.text != null && !r.header.isJson && !r.header.error) r.header.error = `The header isn’t valid JSON (${r.header.jsonError}).`;
+  const H = r.header.isJson ? h : null;
+  if (!r.error && r.header.error) r.error = r.header.error;
+  r.alg = H && H.alg;
+
+  if (H) {
+    if (r.kind === 'jwe' || H.enc) {
+      if (r.kind !== 'jwe') note('bad', 'The header has an enc field, which belongs to an encrypted token (JWE), but the token has 3 parts, not 5.');
+      else note('info', `This is an encrypted token (JWE), encrypted with ${H.alg ?? '?'} and ${H.enc ?? '?'}. Its payload can’t be read without the recipient’s private key, so only the header is shown.`);
+    } else if (H.alg === undefined) note('bad', 'The header has no alg, so there’s no way to know how the token is signed. Libraries reject it.');
+    else if (typeof H.alg === 'string' && H.alg.toLowerCase() === 'none') note('bad', '<b>Unsigned token.</b> alg is "none", so anyone can create or change this token. Never accept it, and make sure your library rejects it.');
+    else if (!ALGS[H.alg]) note('warn', `The algorithm ${JSON.stringify(H.alg)} isn’t one this tool can verify${H.alg === 'ES256K' ? ' (browsers don’t support the secp256k1 curve)' : ''}.`);
+    if (H.jku || H.x5u) note('warn', `The header points at a URL for the key (${H.jku ? 'jku' : 'x5u'}). A verifier must only fetch keys from URLs it already trusts, or anyone can sign tokens with their own key.`);
+    if (H.jwk) note('warn', 'The header carries its own public key (jwk). Never verify a token with a key it supplies itself; that proves nothing about who signed it.');
+    if (Array.isArray(H.crit) && H.crit.length) note('info', `The header lists critical extensions (${H.crit.join(', ')}): a verifier that doesn’t understand them must reject the token.`);
+    if (H.b64 === false) note('warn', 'The header sets b64 to false (RFC 7797), so the payload isn’t Base64url-encoded and is shown as it is.');
+  }
+  if (r.kind === 'jwe' || r.kind === 'invalid' && n < 2) return r;
+
+  // payload
+  if (H && H.b64 === false) r.payload = { name: 'payload', notes: [], text: r.parts[1] };
+  else r.payload = decodePart(r.parts[1], 'payload');
+  const P = r.payload;
+  if (P.error) { if (!r.error) r.error = P.error; }
+  else if (P.isJson && (typeof P.json !== 'object' || P.json === null || Array.isArray(P.json))) note('warn', 'The payload is JSON, but not an object, so it has no claims.');
+  else if (!P.isJson) {
+    const nested = /^eyJ/.test(P.text) || H && /^jwt$/i.test(H.cty ?? '');
+    note(nested ? 'info' : 'warn', nested ? 'The payload is itself a JWT (a nested token). Paste it on its own to decode it.' : `The payload isn’t JSON (${P.jsonError}), so it’s shown as text. A JWT’s payload should be a JSON object of claims.`);
+  }
+  r.claims = P.isJson && P.json && typeof P.json === 'object' && !Array.isArray(P.json) ? P.json : null;
+
+  // signature
+  if (r.kind === 'jws') {
+    const sig = r.parts[2];
+    const none = typeof r.alg === 'string' && r.alg.toLowerCase() === 'none';
+    if (!sig) { if (!none) note('bad', 'The signature part is empty, so the token isn’t signed.'); }
+    else {
+      try {
+        const d = b64Decode(sig);
+        r.signature = d.bytes;
+        if (none) note('bad', 'alg is "none", but the token has a signature anyway. It’s malformed.');
+        const a = ALGS[r.alg];
+        if (a && a.bytes && d.bytes.length !== a.bytes && !(a.kind === 'ec' && d.bytes[0] === 0x30))
+          note('warn', `The signature is ${d.bytes.length} bytes, but ${r.alg} signatures are ${a.bytes} bytes. It may be cut short or corrupted.`);
+        if (d.std || d.padded) note('warn', 'The signature is written in standard Base64, not Base64url. Strict JWT libraries reject it.');
+      } catch (e) { note('bad', `The signature ${e.message}.`); }
+    }
+  }
+  for (const p of [r.header, r.payload]) if (p) r.notes.push(...p.notes);
+  return r;
+}
+
+/* ---------- Time claims ---------- */
+const TIME_CLAIMS = ['exp', 'nbf', 'iat', 'auth_time', 'updated_at'];
+
+/* Is the token within its validity window at `now` (seconds), allowing `leeway` seconds either way?
+   state: 'valid', 'expired', 'early' (nbf still ahead), 'noexp' or 'badexp'. */
+function checkTimes(claims, now, leeway = 0) {
+  const c = claims || {}, num = v => typeof v === 'number' && Number.isFinite(v);
+  const r = { exp: c.exp, nbf: c.nbf, iat: c.iat, notes: [] };
+  const note = (level, text) => r.notes.push({ level, text });
+  for (const k of TIME_CLAIMS) {
+    if (!(k in c)) continue;
+    if (!num(c[k])) note('bad', `${k} should be a number of seconds since 1970 (a NumericDate), but it’s ${JSON.stringify(c[k])}.`);
+    else if (Math.abs(c[k]) > 1e11) note('warn', `${k} looks like it’s in milliseconds rather than seconds, so it’s read as a date thousands of years away.`);
+  }
+  if (!('exp' in c)) { r.state = 'noexp'; note('warn', 'There’s no exp claim, so this token never expires. If it leaks, it works forever.'); }
+  else if (!num(c.exp)) r.state = 'badexp';
+  else if (now >= c.exp + leeway) r.state = 'expired';
+  else r.state = 'valid';
+  if (r.state !== 'expired' && num(c.nbf) && now < c.nbf - leeway) r.state = 'early';
+  if (r.state === 'valid' && now >= c.exp) note('info', `The token expired, but by less than the ${leeway} second leeway.`);
+  if (num(c.iat) && c.iat > now + leeway) note('warn', 'iat is in the future: the token says it was issued after now. The issuer’s clock may be wrong.');
+  if (num(c.exp) && num(c.iat) && c.exp <= c.iat) note('warn', 'exp is not after iat, so the token was already expired when it was issued.');
+  if (num(c.exp) && num(c.nbf) && c.exp <= c.nbf) note('warn', 'exp is not after nbf, so there’s no time at which the token is valid.');
+  r.lifetime = num(c.exp) && num(c.iat) && c.exp > c.iat ? c.exp - c.iat : null;
+  return r;
+}
+
+const UNITS = [['year', 31557600], ['day', 86400], ['hour', 3600], ['minute', 60], ['second', 1]];
+/* "2 days 3 hours", "59 minutes 12 seconds": the largest unit and the one after it. */
+function formatDuration(sec) {
+  sec = Math.round(Math.abs(sec));
+  const pl = (n, w) => `${n.toLocaleString('en')} ${w}${n === 1 ? '' : 's'}`;
+  for (let i = 0; i < UNITS.length; i++) {
+    const [name, size] = UNITS[i];
+    if (sec < size && i < UNITS.length - 1) continue;
+    const a = Math.floor(sec / size), rest = sec - a * size;
+    const next = UNITS[i + 1], b = next ? Math.floor(rest / next[1]) : 0;
+    return pl(a, name) + (b ? ' ' + pl(b, next[0]) : '');
+  }
+}
+function relativeTime(t, now) {
+  const d = Math.round(t - now);
+  return d === 0 ? 'now' : d > 0 ? `in ${formatDuration(d)}` : `${formatDuration(d)} ago`;
+}
+
+/* ---------- DER, just enough to read keys and certificates ---------- */
+function derRead(b, pos) {
+  if (pos + 2 > b.length) throw new Error('truncated');
+  const tag = b[pos]; let len = b[pos + 1], p = pos + 2;
+  if (len & 0x80) {
+    const k = len & 0x7f; if (!k || k > 4) throw new Error('bad length');
+    len = 0; for (let i = 0; i < k; i++) len = len * 256 + b[p++];
+  }
+  if (p + len > b.length) throw new Error('truncated');
+  return { tag, start: pos, body: p, end: p + len };
+}
+function derChildren(b, node) {
+  const out = []; let p = node.body;
+  while (p < node.end) { const c = derRead(b, p); out.push(c); p = c.end; }
+  return out;
+}
+const derLen = n => { if (n < 128) return [n]; const out = []; while (n) { out.unshift(n & 255); n = Math.floor(n / 256); } return [0x80 | out.length, ...out]; };
+const derTLV = (tag, body) => Uint8Array.of(tag, ...derLen(body.length), ...body);
+
+const OIDS = { '2a864886f70d010101': 'RSA', '2a864886f70d01010a': 'RSA', '2a8648ce3d0201': 'EC', '2b6570': 'OKP' };
+const CURVES = { '2a8648ce3d030107': 'P-256', '2b81040022': 'P-384', '2b81040023': 'P-521' };
+/* key type (and curve) from an AlgorithmIdentifier node */
+function algIdInfo(b, node) {
+  const [oid, params] = derChildren(b, node);
+  const hex = toHex(b.slice(oid.body, oid.end));
+  const kty = OIDS[hex] || null;
+  const crv = kty === 'EC' && params && params.tag === 0x06 ? CURVES[toHex(b.slice(params.body, params.end))] || 'an unsupported curve'
+    : kty === 'OKP' ? 'Ed25519' : null;
+  return { kty, crv };
+}
+function spkiInfo(der) { return algIdInfo(der, derChildren(der, derRead(der, 0))[0]); }
+function pkcs8Info(der) { return algIdInfo(der, derChildren(der, derRead(der, 0))[1]); }
+/* SubjectPublicKeyInfo from an X.509 certificate */
+function certSpki(der) {
+  const tbs = derChildren(der, derRead(der, 0))[0];
+  let f = derChildren(der, tbs);
+  if (f[0].tag === 0xa0) f = f.slice(1); // explicit version
+  const spki = f[5];
+  if (!spki || spki.tag !== 0x30) throw new Error('no public key found');
+  return der.slice(spki.start, spki.end);
+}
+/* An "RSA PUBLIC KEY" (PKCS#1) wrapped as SubjectPublicKeyInfo, which WebCrypto can import */
+function pkcs1ToSpki(pkcs1) {
+  const algId = [0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x01, 0x01, 0x05, 0x00];
+  return derTLV(0x30, [...algId, ...derTLV(0x03, [0, ...pkcs1])]);
+}
+/* ECDSA signatures in JWS are r‖s; some signers wrongly emit DER. Returns r‖s or null. */
+function ecDerToRaw(sig, size) {
+  try {
+    const seq = derRead(sig, 0);
+    if (seq.tag !== 0x30 || seq.end !== sig.length) return null;
+    const ints = derChildren(sig, seq);
+    if (ints.length !== 2 || ints.some(i => i.tag !== 0x02)) return null;
+    const out = new Uint8Array(size * 2);
+    ints.forEach((i, k) => {
+      let v = sig.slice(i.body, i.end); while (v.length > size && v[0] === 0) v = v.slice(1);
+      if (v.length > size) throw new Error('too long');
+      out.set(v, k * size + size - v.length);
+    });
+    return out;
+  } catch { return null; }
+}
+
+/* ---------- Keys ---------- */
+const keyParams = a => a.kind === 'rsa' ? { name: a.name, hash: a.hash } : a.kind === 'ec' ? { name: 'ECDSA', namedCurve: a.crv } : { name: 'Ed25519' };
+const verifyParams = a => a.kind === 'hmac' ? { name: 'HMAC' } : a.kind === 'rsa' ? (a.salt ? { name: 'RSA-PSS', saltLength: a.salt } : { name: a.name })
+  : a.kind === 'ec' ? { name: 'ECDSA', hash: a.hash } : { name: 'Ed25519' };
+const keyName = (kty, crv) => kty === 'RSA' ? 'an RSA key' : kty === 'EC' ? `an EC key on ${crv}` : kty === 'OKP' ? `an ${crv || 'OKP'} key` : 'a key of an unknown type';
+const publicJwk = j => j.kty === 'RSA' ? { kty: j.kty, n: j.n, e: j.e } : j.kty === 'EC' ? { kty: j.kty, crv: j.crv, x: j.x, y: j.y } : { kty: j.kty, crv: j.crv, x: j.x };
+
+/* Does a key of this type fit the algorithm? Throws a readable error if not. */
+function checkKeyFits(alg, kty, crv) {
+  const a = ALGS[alg];
+  if (kty !== KTY[a.kind] || a.crv && crv !== a.crv) throw new Error(`This is ${keyName(kty, crv)}, but the token is signed with ${alg}, which needs ${keyName(KTY[a.kind], a.crv)}.`);
+}
+
+async function importOrExplain(fmt, data, alg, usages = ['verify']) {
+  try { return await crypto.subtle.importKey(fmt, data, keyParams(ALGS[alg]), fmt === 'pkcs8', usages); }
+  catch (e) {
+    if (ALGS[alg].kind === 'okp' && e.name === 'NotSupportedError') throw new Error('This browser can’t check Ed25519 signatures yet. Try a current version of Chrome, Firefox or Safari.');
+    throw new Error(`Couldn’t use this key for ${alg}: ${e.message || e.name}`);
+  }
+}
+
+/* The key to check an HMAC signature: a secret written as text, Base64 or hex, or an "oct" JWK. Returns null if empty. */
+async function importHmacKey(alg, secret, enc = 'text') {
+  const a = ALGS[alg], notes = [];
+  let bytes;
+  if (enc === 'hex') {
+    const h = secret.replace(/\s+/g, '').replace(/^0x/i, '');
+    if (!/^(?:[0-9a-f]{2})*$/i.test(h)) throw new Error('The secret isn’t valid hex: it needs an even number of the digits 0–9 and a–f.');
+    bytes = Uint8Array.from(h.match(/../g) || [], x => parseInt(x, 16));
+  } else if (enc === 'base64') {
+    try { bytes = b64Decode(secret.replace(/\s+/g, '')).bytes; } catch (e) { throw new Error(`The secret isn’t valid Base64: it ${e.message}.`); }
+  } else {
+    const t = secret.trim();
+    if (t.startsWith('{')) {
+      let j; try { j = JSON.parse(t); } catch {}
+      if (j && j.kty === 'oct' && typeof j.k === 'string') { bytes = b64Decode(j.k).bytes; notes.push({ level: 'info', text: 'Used the k value of this JWK as the secret.' }); }
+    }
+    if (!bytes) {
+      if (/-----BEGIN [A-Z ]*(?:PUBLIC KEY|CERTIFICATE)-----/.test(t) || /"kty"\s*:\s*"(?:RSA|EC|OKP)"/.test(t))
+        notes.push({ level: 'bad', text: `This looks like a public key, but the token says ${alg}, which uses a shared secret. That is the algorithm-confusion attack: a verifier must never use a public key as an HMAC secret, so make sure your code fixes the algorithm rather than taking it from the token.` });
+      bytes = utf8.encode(secret);
+    }
+  }
+  if (!bytes.length) return null;
+  if (bytes.length < a.bytes) notes.push({ level: 'warn', text: `The secret is ${bytes.length} byte${bytes.length === 1 ? '' : 's'}, shorter than the ${a.bytes} bytes (${a.bytes * 8} bits) RFC 7518 requires for ${alg}. Anyone with one token can try to guess a short secret offline.` });
+  const key = await crypto.subtle.importKey('raw', bytes, { name: 'HMAC', hash: a.hash }, false, ['sign', 'verify']);
+  return { key, notes };
+}
+
+/* The key to check an RSA, ECDSA or EdDSA signature, from PEM (public key, PKCS#1, certificate or PKCS#8 private key),
+   a JWK or a JWK Set (picked by the token's kid). Returns null if empty. */
+async function importPublicKey(alg, text, kid) {
+  const a = ALGS[alg], notes = [], want = KTY[a.kind];
+  const t = text.trim();
+  if (!t) return null;
+  if (t.startsWith('{') || t.startsWith('[')) {
+    let j; try { j = JSON.parse(t); } catch (e) { throw new Error(`The key starts like a JWK but isn’t valid JSON (${e.message}).`); }
+    if (Array.isArray(j)) j = { keys: j };
+    if (Array.isArray(j.keys)) {
+      const fits = j.keys.filter(k => k && k.kty === want && (!a.crv || k.crv === a.crv));
+      if (kid !== undefined) {
+        const n = j.keys.length;
+        j = j.keys.find(k => k && k.kid === kid);
+        if (!j) throw new Error(`None of the ${n} key${n === 1 ? '' : 's'} in this JWK Set has the token’s kid (${JSON.stringify(kid)}).`);
+        notes.push({ level: 'info', text: `Used the key with kid ${JSON.stringify(kid)} from the JWK Set.` });
+      } else if (fits.length === 1) j = fits[0];
+      else throw new Error(fits.length ? `The token has no kid, and this JWK Set has ${fits.length} keys that could fit, so it isn’t clear which to use. Paste just one.` : `This JWK Set has no key that fits ${alg}.`);
+    }
+    if (!j.kty) throw new Error('This JSON isn’t a JWK: it has no kty.');
+    if (j.kty === 'oct') throw new Error(`This is a secret (oct) key, but the token is signed with ${alg}, which needs a public key.`);
+    checkKeyFits(alg, j.kty, j.crv);
+    if (j.d) notes.push({ level: 'info', text: 'This JWK includes the private key; only its public part is used.' });
+    if (j.alg && j.alg !== alg) notes.push({ level: 'warn', text: `The key is marked for ${j.alg}, but the token is signed with ${alg}.` });
+    return { key: await importOrExplain('jwk', publicJwk(j), alg), notes };
+  }
+  const pem = t.match(/-----BEGIN ([A-Z0-9 ]+)-----([\s\S]*?)-----END \1-----/);
+  if (!pem) throw new Error('Paste the key as PEM (starting -----BEGIN PUBLIC KEY-----), a certificate, a JWK or a JWK Set.');
+  let der;
+  try { der = b64Decode(pem[2].replace(/^[\w-]+:.*$/gm, '').replace(/\s+/g, '')).bytes; } catch (e) { throw new Error(`The PEM ${e.message}.`); }
+  try {
+    switch (pem[1]) {
+      case 'PUBLIC KEY': { const i = spkiInfo(der); checkKeyFits(alg, i.kty, i.crv); return { key: await importOrExplain('spki', der, alg), notes }; }
+      case 'RSA PUBLIC KEY': checkKeyFits(alg, 'RSA'); return { key: await importOrExplain('spki', pkcs1ToSpki(der), alg), notes };
+      case 'CERTIFICATE': {
+        const spki = certSpki(der), i = spkiInfo(spki); checkKeyFits(alg, i.kty, i.crv);
+        notes.push({ level: 'info', text: 'Used the public key from the certificate. The certificate itself (who issued it, and whether it has expired) isn’t checked.' });
+        return { key: await importOrExplain('spki', spki, alg), notes };
+      }
+      case 'PRIVATE KEY': {
+        const i = pkcs8Info(der); checkKeyFits(alg, i.kty, i.crv);
+        const priv = await importOrExplain('pkcs8', der, alg, ['sign']);
+        const jwk = await crypto.subtle.exportKey('jwk', priv);
+        notes.push({ level: 'info', text: 'This is a private key; only its public part is used. You only need the public key to check a signature.' });
+        return { key: await importOrExplain('jwk', publicJwk(jwk), alg), notes };
+      }
+      case 'RSA PRIVATE KEY': case 'EC PRIVATE KEY': case 'ENCRYPTED PRIVATE KEY':
+        throw new Error('This is a private key in a format browsers can’t read. Paste the public key instead (for example from openssl pkey -pubout).');
+      default: throw new Error(`A PEM "${pem[1]}" isn’t a key this tool can use. Paste a PUBLIC KEY or a CERTIFICATE.`);
+    }
+  } catch (e) {
+    if (/^(truncated|bad length|no public key found)$/.test(e.message) || e instanceof TypeError) throw new Error(`The PEM "${pem[1]}" couldn’t be read; it may be incomplete.`);
+    throw e;
+  }
+}
+
+/* ---------- Signatures ---------- */
+/* Check a signed token's signature with an imported key. */
+async function verifyJws(token, key, alg) {
+  const [h, p, s] = token.split('.'), a = ALGS[alg], notes = [];
+  let sig = b64Decode(s).bytes;
+  if (a.kind === 'ec' && sig.length !== a.bytes && sig[0] === 0x30) {
+    const raw = ecDerToRaw(sig, a.bytes / 2);
+    if (raw) { sig = raw; notes.push({ level: 'warn', text: 'The signature is DER-encoded. JWS needs the raw r‖s form, so strict libraries reject this token even if the check below passes.' }); }
+  }
+  const ok = await crypto.subtle.verify(verifyParams(a), key, sig, utf8.encode(h + '.' + p));
+  return { ok, notes };
+}
+
+/* The HMAC signature a token would have with this key (to show when a check fails). */
+async function hmacSignature(token, key) {
+  const [h, p] = token.split('.');
+  return b64urlEncode(new Uint8Array(await crypto.subtle.sign('HMAC', key, utf8.encode(h + '.' + p))));
+}
+
+/* Create an HMAC-signed token (used for the examples). */
+async function signHmac(header, payload, secretBytes) {
+  const a = ALGS[header.alg];
+  const key = await crypto.subtle.importKey('raw', secretBytes, { name: 'HMAC', hash: a.hash }, false, ['sign']);
+  const input = b64urlEncode(utf8.encode(JSON.stringify(header))) + '.' + b64urlEncode(utf8.encode(JSON.stringify(payload)));
+  return input + '.' + b64urlEncode(new Uint8Array(await crypto.subtle.sign('HMAC', key, utf8.encode(input))));
+}
+
+if (typeof module !== 'undefined') module.exports = { b64Decode, b64urlEncode, cleanToken, decodeJwt, checkTimes, formatDuration, relativeTime, importHmacKey, importPublicKey, verifyJws, hmacSignature, signHmac, certSpki, spkiInfo, pkcs1ToSpki, ecDerToRaw, ALGS };
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const nowSec = () => Date.now() / 1000;
+
+const HEADER_FIELDS = {
+  alg: ['Algorithm', 'How the token is signed (or its key encrypted)'],
+  typ: ['Type', 'What kind of token this is'],
+  cty: ['Content type', 'What the payload is'],
+  kid: ['Key ID', 'Which key signed the token'],
+  jku: ['JWK Set URL', 'Where to fetch the signing key'],
+  jwk: ['JSON Web Key', 'A public key embedded in the token'],
+  x5u: ['Certificate URL', 'Where to fetch the X.509 certificate chain'],
+  x5c: ['Certificate chain', 'X.509 certificates for the signing key'],
+  x5t: ['Certificate thumbprint', 'SHA-1 thumbprint of the certificate'],
+  'x5t#S256': ['Certificate thumbprint', 'SHA-256 thumbprint of the certificate'],
+  crit: ['Critical', 'Extensions a verifier must understand'],
+  enc: ['Encryption', 'How the content is encrypted (JWE)'],
+  zip: ['Compression', 'Compression applied before encryption'],
+  b64: ['Base64url payload', 'Whether the payload is encoded (RFC 7797)'],
+};
+const CLAIMS = {
+  iss: ['Issuer', 'Who created and signed the token'],
+  sub: ['Subject', 'Who the token is about, usually a user ID'],
+  aud: ['Audience', 'Who the token is meant for'],
+  exp: ['Expiration time', 'Must not be accepted on or after this'],
+  nbf: ['Not before', 'Must not be accepted before this'],
+  iat: ['Issued at', 'When the token was created'],
+  jti: ['JWT ID', 'Unique ID, used to stop replays'],
+  auth_time: ['Authentication time', 'When the user last signed in'],
+  nonce: ['Nonce', 'Ties an ID token to a sign-in request'],
+  acr: ['Authentication context', 'How strongly the user was authenticated'],
+  amr: ['Authentication methods', 'How the user signed in'],
+  azp: ['Authorized party', 'The client the token was issued to'],
+  sid: ['Session ID', 'The sign-in session'],
+  scope: ['Scope', 'Permissions granted'],
+  scp: ['Scopes', 'Permissions granted'],
+  client_id: ['Client ID', 'The app the token was issued to'],
+  cnf: ['Confirmation', 'The key the token is bound to'],
+  act: ['Actor', 'Who is acting for the subject'],
+  at_hash: ['Access token hash', 'Binds an ID token to an access token'],
+  c_hash: ['Code hash', 'Binds an ID token to an authorization code'],
+  name: ['Name'], given_name: ['Given name'], family_name: ['Family name'], nickname: ['Nickname'],
+  preferred_username: ['Username'], email: ['Email'], email_verified: ['Email verified'],
+  phone_number: ['Phone number'], phone_number_verified: ['Phone number verified'],
+  picture: ['Picture URL'], locale: ['Locale'], zoneinfo: ['Time zone'],
+  updated_at: ['Profile updated', 'When the user’s profile last changed'],
+  roles: ['Roles'], groups: ['Groups'], permissions: ['Permissions'],
+  tid: ['Tenant ID', 'Microsoft Entra tenant'], oid: ['Object ID', 'Microsoft Entra user ID'],
+};
+
+const state = { headerView: 'table', payloadView: 'table' };
+let R = null;      // decoded token
+let T = null;      // time check
+let V = { state: 'none' }; // signature check
+
+/* ---------- token editor ---------- */
+function tokenBackHTML(raw) {
+  const pre = raw.match(PREFIX_RE)[0].length;
+  let seg = 0, html = '', cls = null, buf = '';
+  const flush = () => { if (buf) html += cls ? `<span class="${cls}">${esc(buf)}</span>` : esc(buf); buf = ''; };
+  for (let i = 0; i < raw.length; i++) {
+    const c = raw[i];
+    let k;
+    if (i < pre || /["'`]/.test(c)) k = 'tp';
+    else if (c === '.') k = 'td';
+    else if (/\s/.test(c)) k = cls;
+    else k = 't' + Math.min(seg, 4);
+    if (k !== cls) { flush(); cls = k; }
+    buf += c;
+    if (c === '.' && i >= pre) seg++;
+  }
+  flush();
+  return html + (raw.endsWith('\n') ? ' ' : '');
+}
+
+/* ---------- rendering ---------- */
+const TYPES = { string: 's', number: 'n', boolean: 'z' };
+function jsonHTML(v, ind = '', top = false) {
+  if (v === null) return '<span class="z">null</span>';
+  if (typeof v !== 'object') return `<span class="${TYPES[typeof v] || ''}">${esc(typeof v === 'string' ? JSON.stringify(v) : String(v))}</span>`;
+  const inner = ind + '  ';
+  if (Array.isArray(v)) return v.length ? '[\n' + v.map(x => inner + jsonHTML(x, inner)).join(',\n') + '\n' + ind + ']' : '[]';
+  const ks = Object.keys(v);
+  if (!ks.length) return '{}';
+  return '{\n' + ks.map(k => {
+    let val = jsonHTML(v[k], inner);
+    if (top && TIME_CLAIMS.includes(k) && typeof v[k] === 'number') val = val.replace('<span class="n">', `<span class="n" title="${esc(fullDate(v[k]).local)}">`);
+    return `${inner}<span class="tk">${esc(JSON.stringify(k))}</span>: ${val}`;
+  }).join(',\n') + '\n' + ind + '}';
+}
+
+function fullDate(t) {
+  const d = new Date(t * 1000);
+  if (!Number.isFinite(d.getTime())) return { local: 'out of range', utc: '' };
+  return {
+    local: d.toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' }),
+    utc: d.toISOString().replace('.000Z', 'Z'),
+  };
+}
+const rel = t => `<span class="rel" data-at="${t}">${esc(relativeTime(t, nowSec()))}</span>`;
+
+function valueHTML(k, v) {
+  if (TIME_CLAIMS.includes(k) && typeof v === 'number' && Number.isFinite(v)) {
+    const d = fullDate(v);
+    return `<code>${v}</code> · ${rel(v)}<span class="when">${esc(d.local)}<span class="utc">${d.utc}</span></span>`;
+  }
+  if (typeof v === 'string') {
+    if ((k === 'scope' || k === 'scp') && /\s/.test(v.trim())) return v.trim().split(/\s+/).map(s => `<span class="chip">${esc(s)}</span>`).join('');
+    return esc(v);
+  }
+  if (Array.isArray(v) && v.every(x => typeof x !== 'object' || x === null)) return v.length ? v.map(x => `<span class="chip">${esc(typeof x === 'string' ? x : JSON.stringify(x))}</span>`).join('') : '<span class="lbl">empty list</span>';
+  if (typeof v === 'object' && v !== null) return `<pre class="json" style="padding:0">${jsonHTML(v)}</pre>`;
+  return `<code>${esc(String(v))}</code>`;
+}
+
+function fieldsTable(obj, labels) {
+  return '<table class="claims">' + Object.keys(obj).map(k => {
+    const [label, desc] = labels[k] || [];
+    let extra = '';
+    if (labels === HEADER_FIELDS && k === 'alg' && ALGS[obj.alg]) extra = `<span class="lbl">${esc(ALGS[obj.alg].label)}</span>`;
+    if (labels === CLAIMS && k === 'exp' && T) extra = T.state === 'expired' ? '<span class="badge bad">expired</span>' : T.state === 'valid' ? '<span class="badge ok">not expired</span>' : '';
+    if (labels === CLAIMS && k === 'nbf' && T && T.state === 'early') extra = '<span class="badge warn">not yet</span>';
+    return `<tr><th scope="row"><code>${esc(k)}</code>${extra.startsWith('<span class="badge') ? extra : ''}${label ? `<span class="lbl">${esc(label)}${desc ? ` · ${esc(desc)}` : ''}</span>` : ''}</th>
+      <td>${valueHTML(k, obj[k])}${extra.startsWith('<span class="lbl') ? extra : ''}</td></tr>`;
+  }).join('') + '</table>';
+}
+
+function seg(name, value) {
+  return `<span class="seg" data-seg="${name}" role="group" aria-label="Show as">` + [['table', 'Fields'], ['json', 'JSON']].map(([v, l]) =>
+    `<button type="button" data-v="${v}" aria-pressed="${value === v}">${l}</button>`).join('') + '</span>';
+}
+
+function partPane(p, name, dot, view, labels) {
+  const head = `<div class="pane-head"><h2><span class="dot ${dot}"></span>${name}</h2><span class="spacer"></span>`;
+  if (!p) return '';
+  if (p.error || !p.isJson) {
+    const body = p.error ? `<div class="part-err">${esc(p.error)}</div>` : '';
+    const raw = p.text != null ? `<pre class="json raw">${esc(p.text)}</pre>` : '';
+    return `<section class="pane">${head}${p.text != null ? `<button type="button" class="btn" data-copy="${name}">Copy</button>` : ''}</div>${body}${raw}</section>`;
+  }
+  const isObj = typeof p.json === 'object' && p.json !== null && !Array.isArray(p.json) && Object.keys(p.json).length;
+  const v = isObj ? view : 'json';
+  return `<section class="pane">${head}${isObj ? seg(name.toLowerCase() + 'View', v) : ''}<button type="button" class="btn" data-copy="${name}">Copy JSON</button></div>
+    ${v === 'table' ? fieldsTable(p.json, labels) : `<pre class="json">${jsonHTML(p.json, '', name === 'Payload')}</pre>`}</section>`;
+}
+
+function expiryCard() {
+  if (!R.claims) return R.kind === 'jwe' ? card('', '–', 'Expiry unknown', 'The claims are encrypted.') : card('', '–', 'No claims', 'There’s no JSON payload to check.');
+  const c = R.claims, at = t => `${rel(t)}, ${esc(fullDate(t).local)}`;
+  const life = T.lifetime ? ` Lifetime ${formatDuration(T.lifetime)}.` : '';
+  switch (T.state) {
+    case 'expired': return card('bad', '!', 'Expired', `Expired ${at(c.exp)}.${life}`);
+    case 'early': return card('warn', '…', 'Not valid yet', `Becomes valid ${at(c.nbf)}.`);
+    case 'valid': return card('ok', '✓', 'Not expired', `Expires ${at(c.exp)}.${life}`);
+    case 'noexp': return card('warn', '∞', 'Never expires', 'The token has no exp claim.');
+    default: return card('bad', '!', 'Invalid expiry', 'exp isn’t a number of seconds.');
+  }
+}
+function sigCard() {
+  const alg = esc(String(R.alg ?? '?'));
+  switch (V.state) {
+    case 'ok': return card('ok', '✓', 'Signature verified', `Signed with ${alg} by the ${V.kind === 'hmac' ? 'secret' : 'key'} you entered.`);
+    case 'bad': return card('bad', '✕', 'Invalid signature', `It doesn’t match the ${V.kind === 'hmac' ? 'secret' : 'key'} you entered. The token was changed, or signed with a different ${V.kind === 'hmac' ? 'secret' : 'key'}.`);
+    case 'unsigned': return card('bad', '!', 'Not signed', 'alg is "none": anyone could have made this token.');
+    case 'error': return card('warn', '?', 'Can’t check', esc(V.error));
+    case 'jwe': return card('', '–', 'Encrypted', 'An encrypted token is checked when it’s decrypted.');
+    case 'unsupported': return card('', '–', 'Not checked', `This tool can’t verify ${alg}.`);
+    default: return card('', '?', 'Signature not checked', `Enter the ${V.kind === 'hmac' ? 'secret' : 'public key'} below to check it. Until then, anyone could have written these claims.`);
+  }
+}
+const card = (cls, ico, title, text) => `<div class="card ${cls}"><span class="ico" aria-hidden="true">${ico}</span><div><b>${title}</b><p>${text}</p></div></div>`;
+
+function renderResult() {
+  const el = $('#result');
+  if (R.kind === 'empty') { el.innerHTML = '<div class="empty">Paste a token, or load an example, to see what’s inside it.</div>'; return; }
+  const notes = [...(R.error ? [{ level: 'bad', text: esc(R.error) }] : []), ...R.notes, ...(T ? T.notes.map(n => ({ ...n, text: esc(n.text) })) : [])];
+  const order = { bad: 0, warn: 1, info: 2 };
+  notes.sort((a, b) => order[a.level] - order[b.level]);
+  el.innerHTML = (R.header.isJson ? `<div class="cards">${expiryCard()}${sigCard()}</div>` : '')
+    + (notes.length ? `<ul class="flags">${notes.map(n => `<li class="${n.level}">${n.text}</li>`).join('')}</ul>` : '')
+    + partPane(R.header, 'Header', 'p0', state.headerView, HEADER_FIELDS)
+    + partPane(R.payload, 'Payload', 'p1', state.payloadView, CLAIMS);
+}
+
+function renderVerify() {
+  const a = ALGS[R.alg], kind = a && a.kind;
+  $('#hmacFields').hidden = kind !== 'hmac';
+  $('#pubFields').hidden = !kind || kind === 'hmac';
+  const line = $('#algLine');
+  if (R.kind === 'empty') line.textContent = 'Paste a token to check its signature.';
+  else if (R.kind === 'jwe') line.textContent = 'This token is encrypted rather than signed, so there’s no signature to check here.';
+  else if (!R.header.isJson) line.textContent = 'The header can’t be read, so the algorithm isn’t known.';
+  else if (a) line.innerHTML = `Algorithm <code>${esc(R.alg)}</code>: ${esc(a.label)}.${R.header.json.kid !== undefined ? ` Key ID <code>${esc(String(R.header.json.kid))}</code>.` : ''}`;
+  else if (typeof R.alg === 'string' && R.alg.toLowerCase() === 'none') line.textContent = 'This token is unsigned (alg "none"), so there’s nothing to check.';
+  else line.innerHTML = `The algorithm <code>${esc(String(R.alg))}</code> isn’t supported here.`;
+  const out = $('#vout');
+  const msg = { ok: '<span class="vres ok">✓ Signature verified</span>', bad: '<span class="vres bad">✕ Invalid signature</span>',
+    error: `<span class="vres bad">${esc(V.error || '')}</span>` }[V.state] || '';
+  const expect = V.expected ? `<span class="expect">With this secret the signature would be ${esc(V.expected)}</span>` : '';
+  out.innerHTML = msg + expect + (V.notes && V.notes.length ? `<ul class="flags">${V.notes.map(n => `<li class="${n.level}">${esc(n.text)}</li>`).join('')}</ul>` : '');
+}
+
+function render() {
+  T = R.claims ? checkTimes(R.claims, nowSec(), leeway()) : null;
+  renderResult();
+  renderVerify();
+}
+const leeway = () => Math.max(0, parseInt($('#leeway').value, 10) || 0);
+
+/* ---------- signature check ---------- */
+let verifyRun = 0;
+async function verify() {
+  const run = ++verifyRun, a = ALGS[R.alg];
+  const set = v => { if (run !== verifyRun) return; V = v; renderResult(); renderVerify(); };
+  if (R.kind === 'empty') return set({ state: 'none' });
+  if (R.kind === 'jwe') return set({ state: 'jwe' });
+  if (!R.header.isJson) return set({ state: 'none' });
+  if (typeof R.alg === 'string' && R.alg.toLowerCase() === 'none') return set({ state: 'unsigned' });
+  if (!a) return set({ state: 'unsupported' });
+  const kind = a.kind;
+  if (!R.signature || R.kind !== 'jws') return set({ state: 'error', kind, error: 'The token has no readable signature.' });
+  if (!globalThis.crypto || !crypto.subtle) return set({ state: 'error', kind, error: 'This browser only allows signature checks on https pages or local files.' });
+  try {
+    const k = kind === 'hmac' ? await importHmacKey(R.alg, $('#secret').value, $('#secretEnc').value)
+      : await importPublicKey(R.alg, $('#pubkey').value, R.header.json.kid);
+    if (!k) return set({ state: 'none', kind });
+    const res = await verifyJws(R.token, k.key, R.alg);
+    const v = { state: res.ok ? 'ok' : 'bad', kind, notes: [...k.notes, ...res.notes] };
+    if (!res.ok && kind === 'hmac') {
+      v.expected = await hmacSignature(R.token, k.key);
+      // a common mix-up: the secret is Base64 but was read as text
+      if ($('#secretEnc').value === 'text' && /^[A-Za-z0-9+/_-]{16,}={0,2}$/.test($('#secret').value.trim())) {
+        try {
+          const alt = await importHmacKey(R.alg, $('#secret').value, 'base64');
+          if (alt && (await verifyJws(R.token, alt.key, R.alg)).ok) v.notes.unshift({ level: 'info', text: 'The signature matches if the secret is read as Base64. Set the secret’s format to “Base64 or Base64url”.' });
+        } catch {}
+      }
+    }
+    set(v);
+  } catch (e) { set({ state: 'error', kind, error: e.message }); }
+}
+let vTimer;
+const scheduleVerify = () => { clearTimeout(vTimer); vTimer = setTimeout(verify, 150); };
+
+/* ---------- compute ---------- */
+function compute() {
+  const raw = $('#token').value;
+  $('#tokenBack').innerHTML = tokenBackHTML(raw);
+  R = decodeJwt(raw);
+  const st = $('#tokenStat');
+  st.textContent = R.kind === 'empty' ? 'empty' : R.kind === 'jwe' ? 'encrypted · 5 parts'
+    : `${R.parts.length} part${R.parts.length === 1 ? '' : 's'} · ${R.token.length.toLocaleString()} characters`;
+  V = { state: 'none', kind: ALGS[R.alg] && ALGS[R.alg].kind };
+  render();
+  verify();
+}
+
+/* Keep relative times and the expiry state current. */
+setInterval(() => {
+  if (!R || !R.claims || document.hidden) return;
+  const now = nowSec(), t = checkTimes(R.claims, now, leeway());
+  if (t.state !== T.state || t.notes.length !== T.notes.length) { render(); return; }
+  document.querySelectorAll('[data-at]').forEach(el => {
+    const at = +el.dataset.at;
+    el.textContent = relativeTime(at, now);
+  });
+}, 1000);
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+function copy(text, btn) {
+  const done = () => { const l = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => btn.textContent = l, 1400); };
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(() => {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); done(); } catch { toast('Couldn’t copy. Select the text and copy it yourself.'); } t.remove();
+  });
+}
+
+/* ---------- events ---------- */
+$('#token').addEventListener('input', compute);
+$('#leeway').addEventListener('input', () => R && render());
+$('#secret').addEventListener('input', scheduleVerify);
+$('#secretEnc').addEventListener('change', verify);
+$('#pubkey').addEventListener('input', scheduleVerify);
+$('#clear').onclick = () => { $('#token').value = $('#secret').value = $('#pubkey').value = ''; $('#secretEnc').value = 'text'; compute(); $('#token').focus(); };
+
+$('#result').addEventListener('click', e => {
+  const sb = e.target.closest('.seg button');
+  if (sb) {
+    const name = sb.parentElement.dataset.seg;
+    state[name] = sb.dataset.v; renderResult();
+    $(`#result [data-seg="${name}"] [aria-pressed=true]`).focus();
+    return;
+  }
+  const cb = e.target.closest('[data-copy]');
+  if (cb) {
+    const p = cb.dataset.copy === 'Header' ? R.header : R.payload;
+    copy(p.isJson ? JSON.stringify(p.json, null, 2) : p.text, cb);
+  }
+});
+
+/* Examples are signed on the spot, so their times are relative to now. */
+const EXAMPLE_SECRET = 'lxst-tools-example-secret-32byte';
+async function loadExample(expired) {
+  const now = Math.floor(Date.now() / 1000), iat = expired ? now - 3 * 86400 - 5400 : now - 90;
+  const payload = {
+    iss: 'https://auth.example.com', sub: 'user_48213', aud: 'https://api.example.com',
+    name: 'Ada Lovelace', email: 'ada@example.com', roles: ['editor', 'billing'], scope: 'read:articles write:articles',
+    iat, nbf: iat, exp: iat + 3600, jti: toHex(crypto.getRandomValues(new Uint8Array(8))),
+  };
+  try {
+    $('#token').value = await signHmac({ alg: 'HS256', typ: 'JWT', kid: 'example-key-1' }, payload, utf8.encode(EXAMPLE_SECRET));
+  } catch { toast('This browser only allows signing on https pages or local files.'); return; }
+  $('#secret').value = EXAMPLE_SECRET; $('#secretEnc').value = 'text';
+  compute();
+}
+$('#sample').onclick = () => loadExample(false);
+$('#sampleExpired').onclick = () => loadExample(true);
+
+compute();
+</script>
+</body>
+</html>
