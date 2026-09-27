@@ -75,8 +75,8 @@ const generated = {
       `<span class="brand">`,
       `  <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool">${self ? mark(self) : '<b>LXST</b>.tools'}<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>`,
       `  <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>`,
-      ...items,
       `    <a class="tm-all" href="${up}index.html" data-path="/"${current(!self)}>All tools</a>`,
+      ...items,
       `  </nav>`,
       `</span>`,
     ].join('\n');
