@@ -2,6 +2,8 @@
 # keeping the descriptively named HTML file for offline use. One pair per tool.
 /bpm-tapper    /bpm-tapper/bpm-tapper     200
 /bpm-tapper/   /bpm-tapper/bpm-tapper     200
+/hex-oklch     /hex-oklch/hex-oklch       200
+/hex-oklch/    /hex-oklch/hex-oklch       200
 /csv-json      /csv-json/csv-json         200
 /csv-json/     /csv-json/csv-json         200
 /gzip          /gzip/gzip                 200

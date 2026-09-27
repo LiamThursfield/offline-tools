@@ -10,6 +10,16 @@
     "description": "Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter."
   },
   {
+    "slug": "hex-oklch",
+    "name": "Colour converter",
+    "mark": [
+      "HEX",
+      ".oklch"
+    ],
+    "summary": "Convert colours and check contrast",
+    "description": "Convert colours between HEX, RGB, HSL, HWB, OKLCH and OKLab, adjust them with OKLCH sliders, map out-of-gamut colours into sRGB, and check text contrast against WCAG AA and AAA, with suggested fixes."
+  },
+  {
     "slug": "csv-json",
     "name": "CSV ⇄ JSON converter",
     "mark": [

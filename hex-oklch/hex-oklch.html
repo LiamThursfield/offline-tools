@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Colour converter – Convert colours and check contrast | LXST.tools</title>
+<meta name="description" content="Convert colours between HEX, RGB, HSL, HWB, OKLCH and OKLab, adjust them with OKLCH sliders, map out-of-gamut colours into sRGB, and check text contrast against WCAG AA and AAA, with suggested fixes. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/hex-oklch">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/hex-oklch">
+<meta property="og:title" content="Colour converter">
+<meta property="og:description" content="Convert colours between HEX, RGB, HSL, HWB, OKLCH and OKLab, adjust them with OKLCH sliders, map out-of-gamut colours into sRGB, and check text contrast against WCAG AA and AAA, with suggested fixes. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Colour converter","url":"https://tools.lxst.digital/hex-oklch","description":"Convert colours between HEX, RGB, HSL, HWB, OKLCH and OKLab, adjust them with OKLCH sliders, map out-of-gamut colours into sRGB, and check text contrast against WCAG AA and AAA, with suggested fixes.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  --checker:repeating-conic-gradient(color-mix(in oklab,var(--ink) 14%,var(--panel)) 0 25%,var(--panel) 0 50%) 0 0/12px 12px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:66ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.card-head select{font-size:.8rem;padding:2px 10px}
+.note{margin:0;padding:10px 14px;color:var(--muted);font-size:.84rem}
+.note code{font:.8rem var(--mono);letter-spacing:0}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,480px);gap:16px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:16px;margin-top:16px}
+
+/* colour swatches: the colour over a checkerboard, so transparency shows */
+.swatch{position:relative;flex:none;display:block;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:linear-gradient(var(--c,transparent),var(--c,transparent)),var(--checker);overflow:hidden}
+.swatch input[type=color]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0}
+.swatch:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* colour input */
+.pick-row{display:flex;gap:12px;align-items:stretch;margin:14px 14px 0}
+.pick-row .swatch{width:56px}
+.field{flex:1;min-width:0;display:flex;align-items:center;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.field.bad{border-color:var(--del)}
+.field.bad:focus-within{box-shadow:0 0 0 3px color-mix(in oklab,var(--del) 30%,transparent)}
+.c-in{flex:1;min-width:0;border:0;background:none;padding:13px 16px;font:500 1.15rem var(--mono);letter-spacing:0}
+.c-in:focus-visible{box-shadow:none}
+.c-in::placeholder{color:var(--muted);opacity:.7}
+.clear{flex:none;margin-right:6px;border:0;background:none;border-radius:var(--pill);width:30px;height:30px;color:var(--muted);font-size:1.1rem;line-height:1}
+.clear:hover{background:var(--hover);color:var(--ink)}
+.detect{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;padding:10px 16px 0;font-size:.86rem;color:var(--muted);min-height:2.1em}
+.badge{display:inline-flex;align-items:center;padding:1px 10px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 14%,transparent);color:var(--accent-text);font-size:.78rem;font-weight:700;white-space:nowrap}
+.badge.err{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.badge.warn{background:color-mix(in oklab,var(--chg) 16%,transparent);color:var(--chg)}
+.detect .msg{flex:1 1 20ch}
+.examples{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 0;font-size:.8rem;color:var(--muted);align-items:center}
+.examples button{border:1px dashed var(--line);background:none;border-radius:var(--pill);padding:1px 10px;font:500 .78rem var(--mono);letter-spacing:0;color:var(--muted)}
+.examples button:hover{border-style:solid;border-color:var(--accent);color:var(--accent-text)}
+
+/* OKLCH sliders */
+.sliders{display:grid;grid-template-columns:auto minmax(0,1fr) 5.5em;gap:12px 14px;align-items:center;margin-top:14px;padding:14px;border-top:1px solid var(--line)}
+.sliders label{font-size:.8rem;font-weight:600;color:var(--muted);white-space:nowrap}
+.sliders output{font:500 .85rem var(--mono);letter-spacing:0;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;margin:0;background:none;cursor:pointer}
+input[type=range]:focus-visible{outline:none;box-shadow:none}
+input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:var(--pill);border:1px solid var(--line);background:var(--track),var(--checker)}
+input[type=range]::-moz-range-track{height:14px;border-radius:var(--pill);border:1px solid var(--line);background:var(--track),var(--checker)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;margin-top:-4px;border-radius:50%;background:#fff;border:2px solid #000;box-shadow:0 0 0 1px #fff,0 1px 3px hsl(0 0% 0% / .4)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #000;box-shadow:0 0 0 1px #fff,0 1px 3px hsl(0 0% 0% / .4)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 1px #fff,0 0 0 4px var(--accent)}
+input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px #fff,0 0 0 4px var(--accent)}
+input[type=range]:disabled{opacity:.45;cursor:not-allowed}
+
+/* output formats */
+.fmts{margin:0}
+.fmt{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 14px;align-items:baseline;padding:9px 14px;border-top:1px solid var(--line)}
+.fmt:first-child{border-top:0}
+.fmt dt{font-size:.8rem;font-weight:600;color:var(--muted)}
+.fmt dd{margin:0;display:flex;align-items:baseline;gap:10px;min-width:0}
+.fmt .val{flex:1;min-width:0;font:500 .95rem var(--mono);letter-spacing:0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.fmt .val small{display:block;margin-top:1px;font:.8rem var(--sans);color:var(--muted)}
+.fmt .val small.warn{color:var(--chg)}
+.fmt.src dt{color:var(--accent-text)}
+.fmt.empty .val{color:var(--muted)}
+.copy{flex:none;border:1px solid var(--line);background:none;border-radius:var(--pill);padding:0 9px;font:600 .72rem var(--sans);color:var(--muted)}
+.copy:hover:not(:disabled){color:var(--accent-text);border-color:var(--accent)}
+.copy:disabled{opacity:.4;cursor:not-allowed}
+.opts{display:flex;flex-wrap:wrap;gap:10px 22px;padding:12px 14px 14px;border-top:1px solid var(--line)}
+.opt{display:flex;align-items:center;gap:10px;font-size:.86rem;color:var(--muted);min-width:0}
+.opt>span:first-child{white-space:nowrap}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px;max-width:100%;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 10px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+
+/* contrast checker */
+.ct{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+.ct-side{padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ct-field{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;gap:4px 10px}
+.ct-field>label{grid-column:1/-1;font-size:.8rem;font-weight:600;color:var(--muted)}
+.ct-field .swatch{width:44px}
+.ct-field .c-in{font-size:1rem;padding:9px 12px}
+.ct-field .msg{grid-column:1/-1;font-size:.8rem;color:var(--del);min-height:0}
+.ct-mid{display:flex;justify-content:center;margin:-6px 0}
+.ratio-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:4px}
+.ratio{font:700 2.6rem/1 var(--mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.ratio small{font-size:1.1rem;color:var(--muted);font-weight:500;margin-left:2px}
+.grade{font-size:.9rem;padding:3px 12px}
+.grade.fail{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.checks{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);overflow:hidden}
+.checks li{display:grid;grid-template-columns:4.2em minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:7px 12px;border-top:1px solid var(--line);font-size:.86rem}
+.checks li:first-child{border-top:0}
+.checks .lvl{font-weight:700}
+.checks .need{color:var(--muted);font:.8rem var(--mono);letter-spacing:0}
+.res{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.8rem;white-space:nowrap}
+.res.pass{color:var(--ins)}
+.res.fail{color:var(--del)}
+.fixes{display:flex;flex-direction:column;gap:6px;font-size:.84rem;color:var(--muted)}
+.fixes .fix-btns{display:flex;flex-wrap:wrap;gap:6px}
+.fix{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:3px 12px 3px 4px;font:600 .8rem var(--sans)}
+.fix:hover{border-color:var(--accent);color:var(--accent-text)}
+.fix .dot{width:18px;height:18px;border-radius:50%;border:1px solid var(--line);background:var(--c)}
+.fix code{font:500 .78rem var(--mono);letter-spacing:0;color:var(--muted)}
+.preview{display:flex;flex-direction:column;justify-content:center;gap:14px;padding:22px 24px;border-left:1px solid var(--line);min-width:0;overflow-wrap:anywhere}
+.preview p{margin:0}
+.pv-large{font-size:24px;line-height:1.25;font-weight:400}
+.pv-bold{font-size:18.67px;line-height:1.3;font-weight:700}
+.pv-normal{font-size:16px;line-height:1.5}
+.pv-small{font-size:13px;line-height:1.5}
+.pv-ui{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pv-btn{border:2px solid currentColor;border-radius:8px;padding:5px 14px;font-weight:600;font-size:14px;background:none;cursor:default}
+.pv-icon{width:26px;height:26px}
+.pv-cap{font-size:11px;opacity:1;font-family:var(--sans);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+
+/* theme colours */
+.tokens{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;padding:14px}
+.token{display:flex;align-items:center;gap:10px;min-width:0;padding:6px;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:none;text-align:left;transition:border-color .2s,background .2s}
+.token:hover{border-color:var(--accent);background:var(--hover)}
+.token .swatch{width:32px;height:32px;border-radius:calc(var(--radius) - 4px)}
+.token span:last-child{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.token b{font:600 .8rem var(--mono);letter-spacing:0}
+.token small{font:.72rem var(--mono);letter-spacing:0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.table-wrap{overflow-x:auto;border-top:1px solid var(--line)}
+.audit{width:100%;border-collapse:collapse;font-size:.86rem}
+.audit th{text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.audit td{padding:6px 14px;border-top:1px solid var(--line);vertical-align:middle}
+.audit tr:first-child td{border-top:0}
+.audit tbody tr{cursor:pointer;transition:background .2s}
+.audit tbody tr:hover{background:var(--hover)}
+.audit .pair{display:flex;flex-direction:column;line-height:1.3}
+.audit .pair code{font:.76rem var(--mono);letter-spacing:0;color:var(--muted)}
+.audit .pair code span{white-space:nowrap}
+.audit .num{font:600 .9rem var(--mono);letter-spacing:0;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.audit th.num{font:700 .7rem var(--sans);letter-spacing:.08em}
+.audit .need{color:var(--muted);font:.8rem var(--mono);letter-spacing:0;white-space:nowrap}
+.sample{display:inline-flex;align-items:center;justify-content:center;width:52px;height:30px;border:1px solid var(--line);border-radius:6px;font-weight:600}
+.audit .go{border:0;background:none;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.audit .go:focus-visible{outline-offset:4px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);overflow-wrap:anywhere}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1000px){
+  .main{grid-template-columns:1fr}
+  .ct{grid-template-columns:1fr}
+  .preview{border-left:0;border-top:1px solid var(--line)}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .fmt{grid-template-columns:1fr}
+  .c-in{font-size:1rem;padding:11px 12px}
+  .opt{flex-wrap:wrap}
+  .sliders{grid-template-columns:auto minmax(0,1fr) 4.6em;gap:10px}
+  .ratio{font-size:2.1rem}
+  .audit .hide-sm{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>HEX</b>.oklch<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch" aria-current="page"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="randomBtn" title="A random colour (R)">Random</button>
+      <button class="nav" id="dropperBtn" title="Pick a colour from anywhere on the screen" hidden>Pick from screen</button>
+      <button class="nav" id="clearBtn" title="Clear the input">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Convert a colour</h1>
+    <p>Paste a hex code, <code>rgb()</code>, <code>hsl()</code>, <code>oklch()</code> or a CSS colour name to see it in every format, adjust it in OKLCH, and check its contrast against WCAG. Everything runs in your browser.</p>
+  </div>
+
+  <div class="main">
+    <section class="card" aria-labelledby="inTitle">
+      <div class="card-head"><h2 id="inTitle">Colour</h2><span class="spacer"></span><button class="btn" id="toFg" title="Check this colour as the text colour">Use as text</button><button class="btn" id="toBg" title="Check this colour as the background">Use as background</button></div>
+      <div class="pick-row">
+        <label class="swatch" id="swatch" title="Choose a colour"><input type="color" id="native" aria-label="Choose a colour"></label>
+        <div class="field" id="field">
+          <input class="c-in" id="input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-labelledby="inTitle" aria-describedby="detectMsg" placeholder="#2b4c7e, rgb(43 76 126), oklch(0.7 0.15 250)…">
+          <button class="clear" id="clearX" type="button" aria-label="Clear the input" hidden>×</button>
+        </div>
+      </div>
+      <div class="detect" id="detect" aria-live="polite"><span class="badge" id="detectBadge" hidden></span><span class="badge warn" id="gamutBadge" hidden>Outside sRGB</span><span class="msg" id="detectMsg"></span></div>
+      <div class="examples" id="examples"><span>Try</span></div>
+      <div class="sliders" id="sliders" role="group" aria-label="Adjust in OKLCH">
+        <label for="sL">Lightness</label><input type="range" id="sL" min="0" max="1" step="0.001"><output id="oL" for="sL"></output>
+        <label for="sC">Chroma</label><input type="range" id="sC" min="0" max="0.4" step="0.001"><output id="oC" for="sC"></output>
+        <label for="sH">Hue</label><input type="range" id="sH" min="0" max="360" step="0.1"><output id="oH" for="sH"></output>
+        <label for="sA">Alpha</label><input type="range" id="sA" min="0" max="1" step="0.01"><output id="oA" for="sA"></output>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="fmtTitle">
+      <div class="card-head"><h2 id="fmtTitle">Formats</h2></div>
+      <dl class="fmts" id="fmts"></dl>
+      <div class="opts">
+        <div class="opt"><span id="caseLabel">Hex</span>
+          <span class="seg" role="group" aria-labelledby="caseLabel" id="caseSeg"><button type="button" data-v="lower">#abcdef</button><button type="button" data-v="upper">#ABCDEF</button></span>
+        </div>
+        <div class="opt"><span id="syntaxLabel">rgb() and hsl()</span>
+          <span class="seg" role="group" aria-labelledby="syntaxLabel" id="syntaxSeg"><button type="button" data-v="modern" title="rgb(43 76 126 / 0.5)">Spaces</button><button type="button" data-v="legacy" title="rgba(43, 76, 126, 0.5)">Commas</button></span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="stack">
+    <section class="card" id="contrast" aria-labelledby="ctTitle">
+      <div class="card-head"><h2 id="ctTitle">Contrast checker</h2><span class="spacer"></span><button class="btn" id="swapBtn" title="Swap text and background (X)">Swap</button></div>
+      <div class="ct">
+        <div class="ct-side">
+          <div class="ct-field" data-role="fg">
+            <label for="fgIn">Text</label>
+            <label class="swatch" title="Choose the text colour"><input type="color" aria-label="Choose the text colour"></label>
+            <div class="field"><input class="c-in" id="fgIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+            <span class="msg" aria-live="polite"></span>
+          </div>
+          <div class="ct-field" data-role="bg">
+            <label for="bgIn">Background</label>
+            <label class="swatch" title="Choose the background colour"><input type="color" aria-label="Choose the background colour"></label>
+            <div class="field"><input class="c-in" id="bgIn" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+            <span class="msg" aria-live="polite"></span>
+          </div>
+          <div class="ratio-row" aria-live="polite"><span class="ratio" id="ratio">–</span><span class="badge grade" id="grade" hidden></span></div>
+          <ul class="checks" id="checks"></ul>
+          <div class="fixes" id="fixes" hidden></div>
+        </div>
+        <div class="preview" id="preview" aria-label="Preview">
+          <span class="pv-cap">Preview</span>
+          <p class="pv-large">Large text, 24px regular</p>
+          <p class="pv-bold">Large text, 18.67px bold</p>
+          <p class="pv-normal">Normal text at 16px. The quick brown fox jumps over the lazy dog.</p>
+          <p class="pv-small">Small text at 13px, like captions and footnotes.</p>
+          <div class="pv-ui"><span class="pv-btn">Button</span><svg class="pv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span class="pv-normal">Icon</span></div>
+        </div>
+      </div>
+      <p class="note">Ratios follow WCAG 2.2 and aren't rounded up, so 4.49:1 doesn't pass 4.5:1. Large text is at least 24px, or 18.67px bold. Translucent text is blended over the background, and a translucent background over white.</p>
+    </section>
+
+    <section class="card" aria-labelledby="themeTitle">
+      <div class="card-head"><h2 id="themeTitle">Theme colours</h2><span class="spacer"></span><select id="auditTheme" aria-label="Theme to show"></select></div>
+      <div class="tokens" id="tokens"></div>
+      <div class="table-wrap">
+        <table class="audit">
+          <thead><tr><th>Pair</th><th>Sample</th><th class="num">Ratio</th><th class="hide-sm">Needs</th><th>Result</th></tr></thead>
+          <tbody id="audit"></tbody>
+        </table>
+      </div>
+      <p class="note">The colour tokens of this site's themes, and how the pairs the pages use score. Click a colour to convert it, or a pair to open it in the contrast checker.</p>
+    </section>
+  </div>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core colour logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* A colour is { r, g, b, alpha }: gamma-encoded sRGB channels in 0–1 and alpha in 0–1. The channels
+   aren't clamped, so an oklch() or oklab() colour outside sRGB keeps its exact value; formats that can
+   only show sRGB (hex, rgb, hsl, hwb) go through gamutMap first. */
+const clamp01 = x => Math.min(1, Math.max(0, x));
+const toLinear = c => { const a = Math.abs(c); return a <= 0.04045 ? c / 12.92 : Math.sign(c) * ((a + 0.055) / 1.055) ** 2.4; };
+const toGamma = c => { const a = Math.abs(c); return a <= 0.0031308 ? c * 12.92 : Math.sign(c) * (1.055 * a ** (1 / 2.4) - 0.055); };
+
+/* OKLab, from Björn Ottosson's reference matrices (https://bottosson.github.io/posts/oklab/). */
+function rgbToOklab({ r, g, b }) {
+  const R = toLinear(r), G = toLinear(g), B = toLinear(b);
+  const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+  const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+  const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+  return {
+    L: 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+    a: 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+    b: 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s,
+  };
+}
+function oklabToRgb({ L, a, b }) {
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3;
+  return {
+    r: toGamma(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+    g: toGamma(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+    b: toGamma(-0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s),
+  };
+}
+const normHue = h => ((h % 360) + 360) % 360;
+function labToLch({ L, a, b }) { return { L, C: Math.hypot(a, b), H: normHue(Math.atan2(b, a) * 180 / Math.PI) }; }
+function lchToLab({ L, C, H }) { const t = H * Math.PI / 180; return { L, a: C * Math.cos(t), b: C * Math.sin(t) }; }
+const rgbToOklch = c => labToLch(rgbToOklab(c));
+const oklchToRgb = c => oklabToRgb(lchToLab(c));
+
+/* HSL and HWB, as in CSS Color 4. Hue is in degrees; the rest are 0–1. */
+function hueOf({ r, g, b }) {
+  const max = Math.max(r, g, b), d = max - Math.min(r, g, b);
+  if (!d) return 0;
+  return normHue(60 * (max === r ? (g - b) / d : max === g ? (b - r) / d + 2 : (r - g) / d + 4));
+}
+function rgbToHsl(c) {
+  const max = Math.max(c.r, c.g, c.b), min = Math.min(c.r, c.g, c.b), l = (max + min) / 2;
+  const s = max === min || l <= 0 || l >= 1 ? 0 : (max - l) / Math.min(l, 1 - l);
+  return { h: hueOf(c), s, l };
+}
+function hslToRgb({ h, s, l }) {
+  const f = n => { const k = (n + h / 30) % 12; return l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1)); };
+  return { r: f(0), g: f(8), b: f(4) };
+}
+function rgbToHwb(c) { return { h: hueOf(c), w: Math.min(c.r, c.g, c.b), b: 1 - Math.max(c.r, c.g, c.b) }; }
+function hwbToRgb({ h, w, b }) {
+  if (w + b >= 1) { const g = w / (w + b); return { r: g, g, b: g }; }
+  const p = hslToRgb({ h, s: 1, l: 0.5 }), k = 1 - w - b;
+  return { r: p.r * k + w, g: p.g * k + w, b: p.b * k + w };
+}
+
+/* ---------- gamut ---------- */
+const inGamut = ({ r, g, b }, eps = 1e-5) => [r, g, b].every(c => c >= -eps && c <= 1 + eps);
+const clipRgb = c => ({ r: clamp01(c.r), g: clamp01(c.g), b: clamp01(c.b) });
+const deltaEOK = (x, y) => Math.hypot(x.L - y.L, x.a - y.a, x.b - y.b);
+/* The CSS Color 4 gamut mapping: lower the OKLCH chroma until clipping the colour into sRGB changes it
+   by less than a just-noticeable difference. Keeps lightness and hue. */
+function gamutMap(c) {
+  const rgb = { r: c.r, g: c.g, b: c.b };
+  if (inGamut(rgb)) return clipRgb(rgb);
+  const lch = rgbToOklch(rgb);
+  if (lch.L >= 1) return { r: 1, g: 1, b: 1 };
+  if (lch.L <= 0) return { r: 0, g: 0, b: 0 };
+  const JND = 0.02, EPS = 0.0001;
+  let clipped = clipRgb(rgb);
+  if (deltaEOK(rgbToOklab(clipped), rgbToOklab(rgb)) < JND) return clipped;
+  let lo = 0, hi = lch.C, minInGamut = true;
+  while (hi - lo > EPS) {
+    const C = (lo + hi) / 2, cur = oklchToRgb({ ...lch, C });
+    if (minInGamut && inGamut(cur)) { lo = C; continue; }
+    clipped = clipRgb(cur);
+    const E = deltaEOK(rgbToOklab(clipped), rgbToOklab(cur));
+    if (E < JND) {
+      if (JND - E < EPS) return clipped;
+      minInGamut = false; lo = C;
+    } else hi = C;
+  }
+  return clipped;
+}
+const to8 = c => Math.round(clamp01(c) * 255);
+/* The colour as it's shown on an sRGB screen, rounded to 8 bits per channel like a hex code. */
+const displayed = c => { const m = gamutMap(c); return { r: to8(m.r) / 255, g: to8(m.g) / 255, b: to8(m.b) / 255, alpha: c.alpha }; };
+
+/* ---------- parsing ---------- */
+const NAMED = Object.fromEntries(('aliceblue f0f8ff antiquewhite faebd7 aqua 00ffff aquamarine 7fffd4 azure f0ffff beige f5f5dc bisque ffe4c4 '
+  + 'black 000000 blanchedalmond ffebcd blue 0000ff blueviolet 8a2be2 brown a52a2a burlywood deb887 cadetblue 5f9ea0 chartreuse 7fff00 '
+  + 'chocolate d2691e coral ff7f50 cornflowerblue 6495ed cornsilk fff8dc crimson dc143c cyan 00ffff darkblue 00008b darkcyan 008b8b '
+  + 'darkgoldenrod b8860b darkgray a9a9a9 darkgreen 006400 darkgrey a9a9a9 darkkhaki bdb76b darkmagenta 8b008b darkolivegreen 556b2f '
+  + 'darkorange ff8c00 darkorchid 9932cc darkred 8b0000 darksalmon e9967a darkseagreen 8fbc8f darkslateblue 483d8b darkslategray 2f4f4f '
+  + 'darkslategrey 2f4f4f darkturquoise 00ced1 darkviolet 9400d3 deeppink ff1493 deepskyblue 00bfff dimgray 696969 dimgrey 696969 '
+  + 'dodgerblue 1e90ff firebrick b22222 floralwhite fffaf0 forestgreen 228b22 fuchsia ff00ff gainsboro dcdcdc ghostwhite f8f8ff gold ffd700 '
+  + 'goldenrod daa520 gray 808080 green 008000 greenyellow adff2f grey 808080 honeydew f0fff0 hotpink ff69b4 indianred cd5c5c indigo 4b0082 '
+  + 'ivory fffff0 khaki f0e68c lavender e6e6fa lavenderblush fff0f5 lawngreen 7cfc00 lemonchiffon fffacd lightblue add8e6 lightcoral f08080 '
+  + 'lightcyan e0ffff lightgoldenrodyellow fafad2 lightgray d3d3d3 lightgreen 90ee90 lightgrey d3d3d3 lightpink ffb6c1 lightsalmon ffa07a '
+  + 'lightseagreen 20b2aa lightskyblue 87cefa lightslategray 778899 lightslategrey 778899 lightsteelblue b0c4de lightyellow ffffe0 lime 00ff00 '
+  + 'limegreen 32cd32 linen faf0e6 magenta ff00ff maroon 800000 mediumaquamarine 66cdaa mediumblue 0000cd mediumorchid ba55d3 '
+  + 'mediumpurple 9370db mediumseagreen 3cb371 mediumslateblue 7b68ee mediumspringgreen 00fa9a mediumturquoise 48d1cc mediumvioletred c71585 '
+  + 'midnightblue 191970 mintcream f5fffa mistyrose ffe4e1 moccasin ffe4b5 navajowhite ffdead navy 000080 oldlace fdf5e6 olive 808000 '
+  + 'olivedrab 6b8e23 orange ffa500 orangered ff4500 orchid da70d6 palegoldenrod eee8aa palegreen 98fb98 paleturquoise afeeee '
+  + 'palevioletred db7093 papayawhip ffefd5 peachpuff ffdab9 peru cd853f pink ffc0cb plum dda0dd powderblue b0e0e6 purple 800080 '
+  + 'rebeccapurple 663399 red ff0000 rosybrown bc8f8f royalblue 4169e1 saddlebrown 8b4513 salmon fa8072 sandybrown f4a460 seagreen 2e8b57 '
+  + 'seashell fff5ee sienna a0522d silver c0c0c0 skyblue 87ceeb slateblue 6a5acd slategray 708090 slategrey 708090 snow fffafa '
+  + 'springgreen 00ff7f steelblue 4682b4 tan d2b48c teal 008080 thistle d8bfd8 tomato ff6347 turquoise 40e0d0 violet ee82ee wheat f5deb3 '
+  + 'white ffffff whitesmoke f5f5f5 yellow ffff00 yellowgreen 9acd32').split(' ').reduce((a, v, i, all) => (i % 2 || a.push([v, all[i + 1]]), a), []));
+
+function parseHex(h) {
+  if (h.length <= 4) h = [...h].map(x => x + x).join('');
+  const n = i => parseInt(h.slice(i, i + 2), 16) / 255;
+  return { r: n(0), g: n(2), b: n(4), alpha: h.length === 8 ? n(6) : 1 };
+}
+
+/* A number, percentage or angle. pct is what 100% means for this channel; hue channels take angles. */
+function channel(tok, { pct = 1, hue = false } = {}) {
+  if (tok === 'none') return 0;
+  const m = /^([+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?)(%|deg|rad|grad|turn)?$/.exec(tok);
+  if (!m) return NaN;
+  const v = +m[1], u = m[2];
+  if (!u) return v;
+  if (u === '%') return hue ? NaN : v / 100 * pct;
+  if (!hue) return NaN;
+  return u === 'deg' ? v : u === 'rad' ? v * 180 / Math.PI : u === 'grad' ? v * 0.9 : v * 360;
+}
+const alphaOf = tok => { const a = channel(tok); return Number.isNaN(a) ? NaN : clamp01(a); };
+
+const FUNCS = {
+  rgb: { n: 3, read: ([r, g, b]) => {
+    const c = t => clamp01(/%$/.test(t) ? channel(t) : channel(t) / 255);
+    return { r: c(r), g: c(g), b: c(b) };
+  } },
+  hsl: { n: 3, read: ([h, s, l]) => hslToRgb({ h: normHue(channel(h, { hue: true })), s: clamp01(pctOrNum(s)), l: clamp01(pctOrNum(l)) }) },
+  hwb: { n: 3, read: ([h, w, b]) => hwbToRgb({ h: normHue(channel(h, { hue: true })), w: clamp01(pctOrNum(w)), b: clamp01(pctOrNum(b)) }) },
+  oklch: { n: 3, read: ([L, C, H]) => oklchToRgb({ L: clamp01(channel(L)), C: Math.max(0, channel(C, { pct: 0.4 })), H: normHue(channel(H, { hue: true })) }) },
+  oklab: { n: 3, read: ([L, a, b]) => oklabToRgb({ L: clamp01(channel(L)), a: channel(a, { pct: 0.4 }), b: channel(b, { pct: 0.4 }) }) },
+};
+FUNCS.rgba = FUNCS.rgb; FUNCS.hsla = FUNCS.hsl;
+/* hsl() and hwb() saturation, lightness, whiteness and blackness: 50% or (in the modern syntax) 50. */
+function pctOrNum(t) { const v = channel(t); return /%$/.test(t) || t === 'none' ? v : v / 100; }
+
+const SUPPORTED = 'Try a hex code, rgb(), hsl(), hwb(), oklch(), oklab() or a CSS colour name.';
+
+/* Reads a CSS colour. Returns { r, g, b, alpha, kind, name? }, { error } or { empty: true }.
+   kind is the syntax it was written in: hex, rgb, hsl, hwb, oklch, oklab or named. */
+function parseColor(text) {
+  let s = String(text).trim().toLowerCase().replace(/\s*;\s*$/, '').replace(/\s*!important$/, '');
+  const decl = /^(?:--)?[a-z][\w-]*\s*:\s*(.+)$/.exec(s); // "color: red" or "--ink: #1b2730"
+  if (decl) s = decl[1].trim();
+  if (!s) return { empty: true };
+  if (s === 'transparent') return { r: 0, g: 0, b: 0, alpha: 0, kind: 'named', name: 'transparent' };
+  if (NAMED[s]) return { ...parseHex(NAMED[s]), kind: 'named', name: s };
+  let m = /^#?([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/.exec(s);
+  if (m) return { ...parseHex(m[1]), kind: 'hex' };
+  if (/^#/.test(s)) return { error: 'A hex code has 3, 4, 6 or 8 digits from 0–9 and a–f.' };
+  // three or four bare numbers: "43, 76, 126" or "43 76 126"
+  if (/^[\d.\s,%/]+$/.test(s)) s = `rgb(${s})`;
+  m = /^([a-z-]+)\(\s*(.*?)\s*\)$/s.exec(s);
+  if (!m) return { error: `Couldn’t read this. ${SUPPORTED}` };
+  const [, fn, body] = m, f = FUNCS[fn];
+  if (!f) return { error: `${fn}() isn’t supported here. ${SUPPORTED}` };
+  const [main, alphaTok, extra] = body.split('/').map(x => x.trim());
+  if (extra !== undefined) return { error: `There’s more than one / in ${fn}().` };
+  const args = main.split(main.includes(',') ? /\s*,\s*/ : /\s+/).filter(Boolean);
+  let a = alphaTok;
+  if (a === undefined && args.length === f.n + 1) a = args.pop(); // legacy rgba(r, g, b, a)
+  if (args.length !== f.n) return { error: `${fn}() takes ${f.n} values${fn.startsWith('ok') ? '' : ' (and an optional alpha)'}, but this has ${args.length}.` };
+  if (a === '') return { error: `Put an alpha value after the / in ${fn}().` };
+  const rgb = f.read(args), alpha = a === undefined ? 1 : alphaOf(a);
+  if ([rgb.r, rgb.g, rgb.b, alpha].some(Number.isNaN)) return { error: `One of the values in ${fn}() isn’t a number, percentage or angle that fits there.` };
+  return { ...rgb, alpha, kind: fn.replace(/a$/, '') };
+}
+
+/* ---------- formatting ---------- */
+const num = (x, dp) => { const v = +x.toFixed(dp); return String(Object.is(v, -0) ? 0 : v); };
+const hex2 = n => n.toString(16).padStart(2, '0');
+const alphaSuffix = (c, sep = ' / ') => c.alpha < 1 ? sep + num(c.alpha, 3) : '';
+
+function formatHex(c, { upper = false } = {}) {
+  const m = gamutMap(c);
+  const h = '#' + [m.r, m.g, m.b].map(v => hex2(to8(v))).join('') + (c.alpha < 1 ? hex2(Math.round(c.alpha * 255)) : '');
+  return upper ? h.toUpperCase() : h;
+}
+function formatRgb(c, { legacy = false } = {}) {
+  const [r, g, b] = (m => [m.r, m.g, m.b].map(to8))(gamutMap(c));
+  return legacy ? (c.alpha < 1 ? `rgba(${r}, ${g}, ${b}, ${num(c.alpha, 3)})` : `rgb(${r}, ${g}, ${b})`)
+    : `rgb(${r} ${g} ${b}${alphaSuffix(c)})`;
+}
+function formatHsl(c, { legacy = false } = {}) {
+  const { h, s, l } = rgbToHsl(gamutMap(c)), p = v => num(v * 100, 1) + '%', H = s ? num(h, 1) : '0';
+  return legacy ? (c.alpha < 1 ? `hsla(${H}, ${p(s)}, ${p(l)}, ${num(c.alpha, 3)})` : `hsl(${H}, ${p(s)}, ${p(l)})`)
+    : `hsl(${H} ${p(s)} ${p(l)}${alphaSuffix(c)})`;
+}
+function formatHwb(c) {
+  const m = gamutMap(c), { h, w, b } = rgbToHwb(m), p = v => num(v * 100, 1) + '%';
+  return `hwb(${w + b < 1 - 1e-9 ? num(h, 1) : '0'} ${p(w)} ${p(b)}${alphaSuffix(c)})`;
+}
+/* Four decimals, or more when four would give a different hex code when read back (about 1 colour in 1,300). */
+function shortestExact(c, write) {
+  const hex = formatHex(c);
+  for (const dp of [4, 5, 6]) { const s = write(dp); if (formatHex(parseColor(s)) === hex) return s; }
+  return write(7);
+}
+function formatOklch(c, lch = rgbToOklch(c)) {
+  return shortestExact(c, dp => {
+    const C = num(lch.C, dp);
+    return `oklch(${num(lch.L, dp)} ${C} ${+C ? num(lch.H, dp - 2) : '0'}${alphaSuffix(c)})`;
+  });
+}
+function formatOklab(c) {
+  const { L, a, b } = rgbToOklab(c);
+  return shortestExact(c, dp => `oklab(${num(L, dp)} ${num(a, dp)} ${num(b, dp)}${alphaSuffix(c)})`);
+}
+/* The colour written in the given syntax (a named colour comes back as hex). */
+function formatAs(c, kind, opts = {}) {
+  return kind === 'rgb' ? formatRgb(c, opts) : kind === 'hsl' ? formatHsl(c, opts) : kind === 'hwb' ? formatHwb(c)
+    : kind === 'oklch' ? formatOklch(c) : kind === 'oklab' ? formatOklab(c) : formatHex(c, opts);
+}
+
+/* CSS names that match the colour exactly, or else the nearest one by OKLab distance. */
+function nameOf(c) {
+  if (c.alpha === 0) return { exact: ['transparent'] };
+  const lab = rgbToOklab(displayed(c)), hex = formatHex({ ...c, alpha: 1 });
+  const exact = Object.keys(NAMED).filter(n => '#' + NAMED[n] === hex);
+  if (exact.length) return { exact };
+  let best = null;
+  for (const [n, h] of Object.entries(NAMED)) {
+    const d = deltaEOK(lab, rgbToOklab(parseHex(h)));
+    if (!best || d < best.dE) best = { nearest: n, dE: d };
+  }
+  return best;
+}
+
+/* ---------- contrast (WCAG 2.2) ---------- */
+const WHITE = { r: 1, g: 1, b: 1, alpha: 1 };
+/* Relative luminance of an sRGB colour. */
+const luminance = ({ r, g, b }) => 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+const contrastRatio = (y1, y2) => (Math.max(y1, y2) + 0.05) / (Math.min(y1, y2) + 0.05);
+/* Source-over compositing in sRGB, as browsers do. */
+function over(top, under) {
+  const a = top.alpha + under.alpha * (1 - top.alpha);
+  if (!a) return { r: 0, g: 0, b: 0, alpha: 0 };
+  const ch = k => (top[k] * top.alpha + under[k] * under.alpha * (1 - top.alpha)) / a;
+  return { r: ch('r'), g: ch('g'), b: ch('b'), alpha: a };
+}
+/* Contrast of text on a background, as displayed: the background over white, then the text over that. */
+function contrast(fg, bg) {
+  const B = over({ ...gamutMap(bg), alpha: bg.alpha }, WHITE);
+  const F = over({ ...gamutMap(fg), alpha: fg.alpha }, B);
+  return contrastRatio(luminance(F), luminance(B));
+}
+/* WCAG says not to round up, so show the ratio truncated: 4.4999 is "4.49". */
+const ratioStr = r => (Math.floor(r * 100 + 1e-9) / 100).toFixed(2);
+const CRITERIA = [
+  { level: 'AA', what: 'Normal text', min: 4.5, sc: '1.4.3' },
+  { level: 'AA', what: 'Large text', min: 3, sc: '1.4.3' },
+  { level: 'AA', what: 'UI components and graphics', min: 3, sc: '1.4.11' },
+  { level: 'AAA', what: 'Normal text', min: 7, sc: '1.4.6' },
+  { level: 'AAA', what: 'Large text', min: 4.5, sc: '1.4.6' },
+];
+const grade = r => r >= 7 ? 'AAA' : r >= 4.5 ? 'AA' : r >= 3 ? 'AA large' : 'Fail';
+
+/* The text colour with the smallest change of OKLCH lightness (keeping chroma and hue where sRGB allows)
+   whose hex value reaches the target ratio against bg; null if no lightness does. */
+function fixContrast(fg, bg, target) {
+  const lch = rgbToOklch(fg), grey = lch.C < 1e-4;
+  // greys stay grey: rounding each channel separately could otherwise give #777676
+  const make = L => grey ? (v => ({ r: v, g: v, b: v, alpha: fg.alpha }))(to8(toGamma(clamp01(L) ** 3)) / 255)
+    : { ...displayed(oklchToRgb({ ...lch, L })), alpha: fg.alpha };
+  const ok = L => contrast(make(L), bg) >= target;
+  let best = null;
+  for (const end of [0, 1]) {
+    if (!ok(end)) continue;
+    let lo = clamp01(lch.L), hi = end;
+    for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (ok(mid)) hi = mid; else lo = mid; }
+    const dL = Math.abs(hi - lch.L);
+    if (!best || dL < best.dL) best = { color: make(hi), dL };
+  }
+  return best && best.color;
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  toLinear, toGamma, rgbToOklab, oklabToRgb, labToLch, lchToLab, rgbToOklch, oklchToRgb, rgbToHsl, hslToRgb, rgbToHwb, hwbToRgb,
+  inGamut, gamutMap, displayed, NAMED, parseColor, formatHex, formatRgb, formatHsl, formatHwb, formatOklch, formatOklab, formatAs, nameOf,
+  luminance, contrastRatio, over, contrast, ratioStr, CRITERIA, grade, fixContrast,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const cssOf = c => { const m = gamutMap(c); return `rgb(${to8(m.r)} ${to8(m.g)} ${to8(m.b)} / ${num(c.alpha, 3)})`; };
+const hex6 = c => formatHex({ ...c, alpha: 1 });
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'hex-oklch.settings';
+const DEFAULTS = { hexCase: 'lower', syntax: 'modern' };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+const fmtOpts = () => ({ upper: settings.hexCase === 'upper', legacy: settings.syntax === 'legacy' });
+
+/* ---------- converter state ---------- */
+const input = $('#input');
+let current = { empty: true };
+/* The sliders keep their own OKLCH values, so hue isn't lost while chroma is 0. */
+const slide = { L: 0.5, C: 0, H: 0 };
+function reparse() {
+  current = parseColor(input.value);
+  if (current.kind) {
+    const lch = rgbToOklch(current);
+    slide.L = lch.L; slide.C = lch.C;
+    if (lch.C > 1e-4) slide.H = lch.H;
+  }
+  render();
+}
+function setInput(text) { input.value = text; reparse(); }
+
+const KIND_NAMES = { hex: 'Hex', rgb: 'RGB', hsl: 'HSL', hwb: 'HWB', oklch: 'OKLCH', oklab: 'OKLab', named: 'CSS name' };
+const FORMATS = [
+  { k: 'hex', label: 'HEX', get: c => formatHex(c, fmtOpts()), srgb: true },
+  { k: 'rgb', label: 'RGB', get: c => formatRgb(c, fmtOpts()), srgb: true },
+  { k: 'hsl', label: 'HSL', get: c => formatHsl(c, fmtOpts()), srgb: true },
+  { k: 'hwb', label: 'HWB', get: c => formatHwb(c), srgb: true },
+  { k: 'oklch', label: 'OKLCH', get: c => formatOklch(c) },
+  { k: 'oklab', label: 'OKLab', get: c => formatOklab(c) },
+  { k: 'named', label: 'CSS name', get: c => { const n = nameOf(c); return n.exact ? n.exact.join(' / ') : n.nearest; },
+    sub: c => { const n = nameOf(c); return n.exact ? 'Exact match' : `Nearest name (ΔE ${num(n.dE * 100, 1)}), not an exact match`; } },
+  { k: 'lum', label: 'Luminance', get: c => num(luminance(gamutMap(c)), 4),
+    sub: c => `${ratioStr(contrast(c, WHITE))}:1 on white · ${ratioStr(contrast(c, { r: 0, g: 0, b: 0, alpha: 1 }))}:1 on black` },
+];
+$('#fmts').innerHTML = FORMATS.map(f => `<div class="fmt" data-k="${f.k}"><dt>${esc(f.label)}</dt><dd><span class="val"></span><button class="copy" type="button" aria-label="Copy ${esc(f.label)}">copy</button></dd></div>`).join('');
+const fmtRows = new Map(FORMATS.map(f => [f.k, $(`.fmt[data-k="${f.k}"]`)]));
+
+/* ---------- render ---------- */
+const sliders = { L: $('#sL'), C: $('#sC'), H: $('#sH'), A: $('#sA') };
+function render({ fromSlider = false } = {}) {
+  const c = current, ok = !!c.kind;
+  $('#clearX').hidden = !input.value;
+  $('#field').classList.toggle('bad', !!c.error);
+  input.setAttribute('aria-invalid', String(!!c.error));
+  const outside = ok && !inGamut(c);
+
+  const badge = $('#detectBadge');
+  badge.hidden = c.empty;
+  badge.classList.toggle('err', !!c.error);
+  badge.textContent = c.error ? 'Not recognised' : KIND_NAMES[c.kind] || '';
+  $('#gamutBadge').hidden = !outside;
+  $('#detectMsg').textContent = c.empty ? 'Type or paste a colour, pick one with the swatch, or try an example.'
+    : c.error ? c.error
+    : outside ? 'Some screens can show this colour, but sRGB can’t. HEX, RGB, HSL and HWB show the closest sRGB colour, with less chroma.'
+    : '';
+
+  $('#swatch').style.setProperty('--c', ok ? cssOf(c) : 'transparent');
+  if (ok) $('#native').value = hex6(c);
+  $('#toFg').disabled = $('#toBg').disabled = !ok;
+
+  for (const f of FORMATS) {
+    const row = fmtRows.get(f.k), val = row.querySelector('.val');
+    row.classList.toggle('empty', !ok);
+    row.classList.toggle('src', ok && (c.kind === f.k || (c.kind === 'named' && f.k === 'named')));
+    row.querySelector('.copy').disabled = !ok;
+    if (!ok) { val.textContent = '–'; delete row.dataset.value; continue; }
+    const v = f.get(c), sub = f.sub ? f.sub(c) : f.srgb && outside ? 'Closest sRGB colour' : '';
+    val.innerHTML = esc(v) + (sub ? `<small class="${f.srgb && outside ? 'warn' : ''}">${esc(sub)}</small>` : '');
+    row.dataset.value = v;
+  }
+  renderSliders(fromSlider);
+}
+
+/* Slider tracks show what each slider would change the colour to. */
+function track(stops) { return `linear-gradient(to right,${stops.map(cssOf).join(',')})`; }
+function renderSliders(fromSlider) {
+  const ok = !!current.kind;
+  Object.values(sliders).forEach(s => s.disabled = !ok);
+  if (!ok) {
+    Object.values(sliders).forEach(s => s.style.setProperty('--track', 'transparent'));
+    ['oL', 'oC', 'oH', 'oA'].forEach(id => $('#' + id).textContent = '–');
+    return;
+  }
+  const a = current.alpha, at = o => ({ ...oklchToRgb({ ...slide, ...o }), alpha: 1 });
+  const n = 16, steps = [...Array(n + 1).keys()].map(i => i / n);
+  sliders.L.style.setProperty('--track', track(steps.map(t => at({ L: t }))));
+  sliders.C.style.setProperty('--track', track(steps.map(t => at({ C: t * 0.4 }))));
+  sliders.H.style.setProperty('--track', track(steps.map(t => at({ H: t * 360 }))));
+  sliders.A.style.setProperty('--track', track([{ ...at({}), alpha: 0 }, at({})]));
+  if (!fromSlider) {
+    sliders.L.value = slide.L; sliders.C.value = Math.min(slide.C, 0.4); sliders.H.value = slide.H; sliders.A.value = a;
+  }
+  $('#oL').textContent = num(slide.L, 3);
+  $('#oC').textContent = num(slide.C, 3);
+  $('#oH').textContent = num(slide.H, 1) + '°';
+  $('#oA').textContent = Math.round(a * 100) + '%';
+}
+
+/* Moving a slider rewrites the input in the syntax it was typed in (hex for a name), or as oklch()
+   once the colour leaves sRGB, since the other syntaxes can't hold it. */
+function onSlide() {
+  if (!current.kind) return;
+  slide.L = +sliders.L.value; slide.C = +sliders.C.value; slide.H = +sliders.H.value;
+  const c = { ...oklchToRgb(slide), alpha: +sliders.A.value };
+  const kind = !inGamut(c) && !['oklch', 'oklab'].includes(current.kind) ? 'oklch' : current.kind === 'named' ? 'hex' : current.kind;
+  current = { ...c, kind };
+  input.value = kind === 'oklch' ? formatOklch(c, slide) : formatAs(c, kind, fmtOpts());
+  render({ fromSlider: true });
+}
+Object.values(sliders).forEach(s => s.addEventListener('input', onSlide));
+
+/* ---------- converter input ---------- */
+input.addEventListener('input', reparse);
+$('#native').addEventListener('input', e => {
+  const a = current.kind ? current.alpha : 1;
+  setInput(a < 1 ? formatHex({ ...parseHex(e.target.value.slice(1)), alpha: a }, fmtOpts()) : formatAs(parseHex(e.target.value.slice(1)), 'hex', fmtOpts()));
+});
+const clear = () => { setInput(''); input.focus(); };
+$('#clearBtn').onclick = clear;
+$('#clearX').onclick = clear;
+const EXAMPLES = ['#2b4c7e', 'rebeccapurple', 'rgb(255 99 71 / 0.8)', 'hsl(210 50% 40%)', 'oklch(0.7 0.3 150)', '#0f08'];
+$('#examples').insertAdjacentHTML('beforeend', EXAMPLES.map(x => `<button type="button">${esc(x)}</button>`).join(''));
+$('#examples').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setInput(b.textContent); input.focus(); } });
+$('#fmts').addEventListener('click', e => { const b = e.target.closest('.copy'); if (b) copyText(b.closest('.fmt').dataset.value); });
+
+/* A random colour spread evenly around the hue circle, at a lightness and chroma sRGB can show. */
+function randomColour() {
+  const c = { ...gamutMap(oklchToRgb({ L: 0.35 + Math.random() * 0.55, C: 0.04 + Math.random() * 0.2, H: Math.random() * 360 })), alpha: 1 };
+  setInput(formatAs(c, current.kind && current.kind !== 'named' && inGamut(current) ? current.kind : 'hex', fmtOpts()));
+}
+$('#randomBtn').onclick = randomColour;
+
+if ('EyeDropper' in window) {
+  const btn = $('#dropperBtn');
+  btn.hidden = false;
+  btn.onclick = async () => {
+    try { const r = await new EyeDropper().open(); setInput(formatAs(parseColor(r.sRGBHex), 'hex', fmtOpts())); } catch {}
+  };
+}
+
+/* ---------- output options ---------- */
+function segment(id, key) {
+  const btns = [...document.querySelectorAll(`#${id} button`)];
+  if (!btns.some(b => b.dataset.v === settings[key])) settings[key] = DEFAULTS[key];
+  const sync = () => btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === settings[key])));
+  btns.forEach(b => b.onclick = () => { settings[key] = b.dataset.v; saveSettings(); sync(); render(); });
+  sync();
+}
+segment('caseSeg', 'hexCase');
+segment('syntaxSeg', 'syntax');
+
+/* ---------- contrast checker ---------- */
+const ct = Object.fromEntries(['fg', 'bg'].map(role => {
+  const root = $(`.ct-field[data-role="${role}"]`);
+  return [role, { root, input: root.querySelector('.c-in'), native: root.querySelector('input[type=color]'), swatch: root.querySelector('.swatch'),
+    field: root.querySelector('.field'), msg: root.querySelector('.msg'), color: null }];
+}));
+function renderContrast() {
+  for (const side of Object.values(ct)) {
+    const p = parseColor(side.input.value);
+    side.color = p.kind ? p : null;
+    side.field.classList.toggle('bad', !!p.error);
+    side.input.setAttribute('aria-invalid', String(!!p.error));
+    side.msg.textContent = p.error || '';
+    side.swatch.style.setProperty('--c', side.color ? cssOf(side.color) : 'transparent');
+    if (side.color) side.native.value = hex6(side.color);
+  }
+  const fg = ct.fg.color, bg = ct.bg.color, ok = fg && bg;
+  const r = ok ? contrast(fg, bg) : 0;
+  $('#ratio').innerHTML = ok ? `${ratioStr(r)}<small>:1</small>` : '–';
+  const g = $('#grade');
+  g.hidden = !ok;
+  g.textContent = ok ? grade(r) : '';
+  g.classList.toggle('fail', ok && r < 3);
+  $('#checks').innerHTML = CRITERIA.map(k => {
+    const pass = ok && r >= k.min;
+    return `<li><span class="lvl">${k.level}</span><span>${esc(k.what)} <span class="need">${k.min}:1</span></span>${ok
+      ? `<span class="res ${pass ? 'pass' : 'fail'}">${pass ? '✓ Pass' : '✗ Fail'}</span>` : '<span class="res">–</span>'}</li>`;
+  }).join('');
+
+  const pv = $('#preview');
+  pv.style.color = ok ? cssOf(fg) : '';
+  pv.style.background = ok ? `linear-gradient(${cssOf(bg)},${cssOf(bg)}),#fff` : '';
+
+  // Suggest the nearest text colours that pass AA and AAA, when the current pair doesn't.
+  const fixes = $('#fixes');
+  const wanted = ok ? [['AA', 4.5], ['AAA', 7]].filter(([, t]) => r < t) : [];
+  const found = wanted.map(([lvl, t]) => [lvl, fixContrast(fg, bg, t)]).filter(([, c]) => c);
+  fixes.hidden = !found.length;
+  if (found.length) {
+    const kind = ['named', 'oklch', 'oklab'].includes(ct.fg.kind) ? 'hex' : ct.fg.kind || 'hex';
+    fixes.innerHTML = `<span>Closest text colour that passes, with the same hue:</span><span class="fix-btns">${found.map(([lvl, c]) => {
+      const v = formatAs(c, kind, fmtOpts());
+      return `<button type="button" class="fix" data-v="${esc(v)}" style="--c:${cssOf(c)}"><span class="dot"></span>${lvl} ${ratioStr(contrast(c, bg))}:1 <code>${esc(v)}</code></button>`;
+    }).join('')}</span>`;
+  }
+}
+for (const side of Object.values(ct)) {
+  side.input.addEventListener('input', () => { side.kind = parseColor(side.input.value).kind; renderContrast(); });
+  side.native.addEventListener('input', () => setContrast(side === ct.fg ? 'fg' : 'bg', formatAs(parseHex(side.native.value.slice(1)), 'hex', fmtOpts())));
+}
+function setContrast(role, text) { ct[role].input.value = text; ct[role].kind = parseColor(text).kind; renderContrast(); }
+$('#fixes').addEventListener('click', e => { const b = e.target.closest('.fix'); if (b) { setContrast('fg', b.dataset.v); toast(`Text colour set to ${b.dataset.v}`); } });
+const swap = () => { const f = ct.fg.input.value; setContrast('fg', ct.bg.input.value); setContrast('bg', f); };
+$('#swapBtn').onclick = swap;
+const useIn = role => { if (!current.kind) return; setContrast(role, input.value.trim()); toast(`Set as the ${role === 'fg' ? 'text' : 'background'} colour`); };
+$('#toFg').onclick = () => useIn('fg');
+$('#toBg').onclick = () => useIn('bg');
+
+/* ---------- theme colours ---------- */
+const TOKENS = ['bg', 'panel', 'surface', 'ink', 'muted', 'line', 'accent', 'accent-ink', 'accent-text', 'del', 'ins', 'chg', 'typ'];
+/* The pairs the pages draw with. min is the WCAG ratio for how the pair is used. */
+const PAIRS = [
+  ['ink', 'bg', 'Text on the page', 4.5], ['ink', 'panel', 'Text on cards', 4.5], ['ink', 'surface', 'Text in fields', 4.5],
+  ['muted', 'bg', 'Secondary text on the page', 4.5], ['muted', 'panel', 'Secondary text on cards', 4.5], ['muted', 'surface', 'Placeholders in fields', 4.5],
+  ['accent-text', 'bg', 'Accent text on the page', 4.5], ['accent-text', 'panel', 'Accent text on cards', 4.5],
+  ['accent-ink', 'accent', 'Text on accent buttons', 4.5],
+  ['del', 'panel', 'Removed', 4.5], ['ins', 'panel', 'Added', 4.5], ['chg', 'panel', 'Changed', 4.5], ['typ', 'panel', 'Type changed', 4.5],
+  ['accent', 'panel', 'Focus rings and selected controls', 3], ['line', 'panel', 'Borders, where they mark a control', 3],
+];
+/* Reads a theme's tokens from its :root[data-theme="…"] rule (on top of the plain :root rule every theme starts from),
+   so any theme can be shown, not only the one in use. */
+function themeTokens(id) {
+  const out = {};
+  for (const sheet of document.styleSheets) {
+    let rules; try { rules = sheet.cssRules; } catch { continue; }
+    for (const rule of rules) {
+      if (!rule.selectorText || !rule.style) continue;
+      const sels = rule.selectorText.split(',').map(s => s.trim().replace(/'/g, '"'));
+      if (!sels.includes(':root') && !sels.includes(`:root[data-theme="${id}"]`)) continue;
+      for (const t of TOKENS) { const v = rule.style.getPropertyValue('--' + t).trim(); if (v) out[t] = v; }
+    }
+  }
+  if (Object.keys(out).length < TOKENS.length && document.documentElement.dataset.theme === id) {
+    const cs = getComputedStyle(document.documentElement);
+    for (const t of TOKENS) out[t] ??= cs.getPropertyValue('--' + t).trim();
+  }
+  return out;
+}
+const themeLabel = id => (THEMES.find(t => t.id === id) || {}).label || id;
+function renderAuditThemes() {
+  const sel = $('#auditTheme'), v = sel.value || 'current';
+  sel.innerHTML = `<option value="current">Current theme (${esc(themeLabel(document.documentElement.dataset.theme))})</option>`
+    + THEMES.filter(t => t.id !== 'auto').map(t => `<option value="${esc(t.id)}">${esc(t.label)}</option>`).join('');
+  sel.value = v;
+}
+let shownTokens = {};
+function renderTheme() {
+  const sel = $('#auditTheme').value, id = sel === 'current' ? document.documentElement.dataset.theme : sel;
+  const tokens = themeTokens(id), colors = {};
+  for (const [k, v] of Object.entries(tokens)) { const p = parseColor(v); if (p.kind) colors[k] = p; }
+  shownTokens = { id, tokens };
+  $('#tokens').innerHTML = TOKENS.filter(t => colors[t]).map(t =>
+    `<button type="button" class="token" data-t="${t}" title="Convert --${t}"><span class="swatch" style="--c:${cssOf(colors[t])}"></span><span><b>--${t}</b><small>${esc(tokens[t])}</small></span></button>`).join('');
+  $('#audit').innerHTML = PAIRS.filter(([f, b]) => colors[f] && colors[b]).map(([f, b, label, min], i) => {
+    const r = contrast(colors[f], colors[b]), pass = r >= min;
+    return `<tr data-i="${i}"><td><button type="button" class="go pair" title="Check this pair"><span>${esc(label)}</span><code><span>--${f}</span> on <span>--${b}</span></code></button></td>
+      <td><span class="sample" style="color:${cssOf(colors[f])};background:${cssOf(colors[b])}" aria-hidden="true">Aa</span></td>
+      <td class="num">${ratioStr(r)}:1</td><td class="need hide-sm">${min}:1</td>
+      <td><span class="res ${pass ? 'pass' : 'fail'}">${pass ? '✓ Pass' : '✗ Fail'}</span></td></tr>`;
+  }).join('');
+}
+$('#auditTheme').onchange = renderTheme;
+$('#tokens').addEventListener('click', e => {
+  const b = e.target.closest('.token'); if (!b) return;
+  setInput(shownTokens.tokens[b.dataset.t]);
+  toast(`Loaded --${b.dataset.t} from ${themeLabel(shownTokens.id)}`);
+  $('#inTitle').closest('.card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+$('#audit').addEventListener('click', e => {
+  const tr = e.target.closest('tr[data-i]'); if (!tr) return;
+  const [f, b] = PAIRS[+tr.dataset.i];
+  setContrast('fg', shownTokens.tokens[f]); setContrast('bg', shownTokens.tokens[b]);
+  $('#contrast').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+/* Follow the theme picker (and changes made in other tabs). */
+new MutationObserver(() => { renderAuditThemes(); renderTheme(); seedFromTheme(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const el = e.target;
+  if (el.closest && el.closest('input, select, textarea, [contenteditable]')) return;
+  if (e.key === '/') { e.preventDefault(); input.focus(); input.select(); }
+  else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); randomColour(); }
+  else if (e.key === 'x' || e.key === 'X') { e.preventDefault(); swap(); }
+});
+
+/* ---------- copy / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+async function copyText(text) {
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); toast(`Copied ${text}`); } catch { toast('Couldn’t copy to the clipboard'); }
+}
+
+/* ---------- start: the current theme's accent, and its text on its background ---------- */
+/* Until they're edited, these follow the theme when it changes. */
+let seeded = null;
+function seedFromTheme() {
+  const t = themeTokens(document.documentElement.dataset.theme);
+  const next = { input: t.accent || '#2b4c7e', fg: t.ink || '#1b2730', bg: t.bg || '#ffffff' };
+  if (!seeded || input.value === seeded.input) setInput(next.input);
+  if (!seeded || (ct.fg.input.value === seeded.fg && ct.bg.input.value === seeded.bg)) { setContrast('fg', next.fg); setContrast('bg', next.bg); }
+  seeded = next;
+}
+renderAuditThemes();
+renderTheme();
+seedFromTheme();
+input.focus({ preventScroll: true });
+</script>
+</body>
+</html>
