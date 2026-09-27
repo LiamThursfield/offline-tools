@@ -27,11 +27,11 @@ Each tool follows the same conventions so the collection stays easy to use and m
 - **No uploads.** Process all data in the browser. `localStorage` is for preferences such as the theme, and for user content only when the user explicitly saves it (for example JSON diff's saved comparisons). Never store user content silently.
 - **Keep logic separate from the UI.** Put the core logic in its own `<script>` as pure functions with no DOM access, so it can be tested on its own (JSON diff exports it via `module.exports` when loaded in Node).
 - **Responsive and accessible.** Make it usable at phone width, operable by keyboard and readable in both light and dark themes.
-- **Shared header and footer.** Include the [shared snippets](#shared-snippets): `brand` in the header in place of a logo, `footer.html` at the end of `.wrap`, and `chrome.css` in the styles. Copying the markers from an existing tool is the easiest way.
+- **Shared header, footer and themes.** Include the [shared snippets](#shared-snippets): `theme.js` in a `<script>` in the `<head>`, `themes.css` and `chrome.css` in the styles, `brand` in the header in place of a logo, and `footer.html` at the end of `.wrap`. Copying the markers from an existing tool is the easiest way.
 
 ## Shared snippets
 
-Some pieces are the same on every page: the header's back link and tool switcher, the footer, the index cards and the table above. The script `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
+Some pieces are the same on every page: the themes, the header's back link and tool switcher, the footer, the index cards and the table above. The script `scripts/sync-shared.mjs` copies them into every page between marker comments, so each page stays a single self-contained file:
 
 ```html
 <!-- shared:NAME -->
@@ -39,12 +39,14 @@ Some pieces are the same on every page: the header's back link and tool switcher
 <!-- /shared:NAME -->
 ```
 
-CSS uses `/* shared:NAME */ … /* /shared:NAME */`. A page only gets the snippets it has markers for.
+CSS and JS use `/* shared:NAME */ … /* /shared:NAME */`. A page only gets the snippets it has markers for.
 
 | Snippet | Source | Used in |
 | --- | --- | --- |
+| `theme.js` | `shared/theme.js`: theme list, saving and applying the theme | A `<script>` at the top of every page's `<head>` |
+| `themes.css` | `shared/themes.css`: one block of base tokens per theme | Top of every page's `<style>` |
 | `chrome.css` | `shared/chrome.css` | Every page's `<style>` |
-| `footer.html` | `shared/footer.html`, footer plus the link and tool-switcher script | End of `.wrap` on every page |
+| `footer.html` | `shared/footer.html`, footer plus the link, theme-picker and tool-switcher script | End of `.wrap` on every page |
 | `brand` | Generated from `shared/tools.json`: back link, logo and tool switcher | Each tool's `<header>` |
 | `tool-cards` | Generated from `shared/tools.json` | `index.html` |
 | `tool-table` | Generated from `shared/tools.json` | This README |
@@ -74,9 +76,9 @@ To preview the deployed routing locally, run `npx wrangler dev` and open http://
 
 ## Theming
 
-The tools share the look of [LXST.digital](https://lxst.digital/), and every tool includes a theme picker. Theme choice is stored per tool in `localStorage`.
+The tools share the look of [LXST.digital](https://lxst.digital/), and every page includes a theme picker. The choice is stored in `localStorage` under one key (`tools.theme`), so it carries across the index and every tool, and pages open in other tabs follow along. When the pages are opened as local files, whether they share storage depends on the browser (Chrome does; Firefox keeps each file separate).
 
-Themes are CSS custom properties on `:root[data-theme="…"]`. A theme sets only a small set of base tokens:
+Themes are CSS custom properties on `:root[data-theme="…"]`, defined once in `shared/themes.css`. A theme sets only a small set of base tokens:
 
 | Token | Purpose |
 | --- | --- |
@@ -88,13 +90,14 @@ Themes are CSS custom properties on `:root[data-theme="…"]`. A theme sets only
 | `--shadow`, `--radius`, `--pill` | Card shadow, corner radius, button/badge radius |
 | `--sans`, `--mono` | Font stacks |
 
-Everything else, such as diff highlight backgrounds, hover states and focus rings, is derived from these with `color-mix()`, so a new theme doesn't need to set it.
+Everything else, such as diff highlight backgrounds, hover states and focus rings, is derived from these with `color-mix()` in each page's CSS, so a new theme doesn't need to set it.
 
-To add a theme:
+To add or change a theme:
 
-1. Copy an existing `:root[data-theme="…"]{…}` block in the tool's CSS and give it a new id.
-2. Add `{ id: '…', label: '…' }` to the `THEMES` array in the tool's `<head>` script.
+1. Add or edit a `:root[data-theme="…"]{…}` block in `shared/themes.css`.
+2. For a new theme, add `{ id: '…', label: '…' }` to the `THEMES` array in `shared/theme.js`. If it's based on someone else's theme, also add `credit: { name: '…', url: '…' }` (`url` is optional): while the theme is active, the footer credits it and links to it.
+3. Run `node scripts/sync-shared.mjs` to copy the change into every page.
 
 The `auto` entry follows the OS light/dark setting, using the ids named in its `light` and `dark` fields.
 
-Included themes: **LXST dark**, **LXST light**, **Classic dark** and **Classic light**. The default is **Auto**, which picks LXST dark or LXST light to match the OS.
+Included themes: **LXST dark**, **LXST light**, **Classic dark**, **Classic light** and **lock-wood** (based on the [lock-wood colour scheme](https://github.com/lock-wood/lock-wood-theme)). The default is **Auto**, which picks LXST dark or LXST light to match the OS.

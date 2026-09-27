@@ -1,0 +1,51 @@
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}

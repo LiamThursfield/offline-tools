@@ -5,6 +5,7 @@
 .home svg{width:18px;height:18px}
 .site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
 .site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
 .site-foot a{color:var(--accent-text);text-decoration:none}
 .site-foot a:hover{text-decoration:underline}
 @media (max-width:800px){.home{margin-left:-8px}.site-foot{margin-top:28px}}

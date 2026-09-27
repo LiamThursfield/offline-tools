@@ -77,7 +77,7 @@ for (const page of pages) {
     for (const [open, close] of markers) {
       // Keep the opening marker's indentation for every line of the snippet.
       const re = new RegExp(`([ \\t]*)(${reEsc(open(name))})[\\s\\S]*?(${reEsc(close(name))})`, 'g');
-      after = after.replace(re, (_, ind, o, c) => `${ind}${o}\n${make(page).replace(/^/gm, ind)}\n${ind}${c}`);
+      after = after.replace(re, (_, ind, o, c) => `${ind}${o}\n${make(page).replace(/^(?=.)/gm, ind)}\n${ind}${c}`);
     }
   }
   if (after !== before) {

@@ -5,31 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BPM tapper</title>
 <script>
-/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in the CSS.
-   "auto" follows the OS light/dark setting using the two ids named below. */
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
 const THEMES = [
   { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
   { id: 'lxst-dark', label: 'LXST dark' },
   { id: 'lxst-light', label: 'LXST light' },
   { id: 'classic-dark', label: 'Classic dark' },
   { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
 ];
-const THEME_KEY = 'bpm-tapper.theme';
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
 const darkMQ = matchMedia('(prefers-color-scheme: dark)');
 function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
 function applyTheme(id) {
   const t = THEMES.find(x => x.id === id) || THEMES[0];
-  document.documentElement.dataset.theme = t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id;
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
   return t.id;
 }
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
 applyTheme(savedTheme());
 darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
 </script>
 <style>
-/* ===== Themes =====
-   Each theme sets only the base tokens below; everything else (tints, hover states,
-   focus rings) is derived from them further down. To add a theme: copy a block, give it
-   a new data-theme id, and add a matching entry to THEMES in the <head> script. */
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
 :root,:root[data-theme="lxst-dark"]{
   color-scheme:dark;
   --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
@@ -69,6 +93,16 @@ darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyThem
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
 }
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
 /* derived tokens: shared by every theme */
 :root{
   --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
@@ -102,6 +136,7 @@ header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6
 .home svg{width:18px;height:18px}
 .site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
 .site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
 .site-foot a{color:var(--accent-text);text-decoration:none}
 .site-foot a:hover{text-decoration:underline}
 @media (max-width:800px){.home{margin-left:-8px}.site-foot{margin-top:28px}}
@@ -349,11 +384,22 @@ svg.chart circle.last{stroke:var(--panel);stroke-width:2}
   <!-- shared:footer.html -->
   <footer class="site-foot">
     <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
   </footer>
   <script>
   /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
   if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
-  
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
   /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
   (() => {
     const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
@@ -620,10 +666,6 @@ $('#hist').addEventListener('click', e => {
 $('#histClear').onclick = () => { history.length = 0; renderHistory(); };
 
 /* ---------- options ---------- */
-const themeSel = $('#theme');
-themeSel.innerHTML = THEMES.map(t => `<option value="${t.id}">${esc(t.label)}</option>`).join('');
-themeSel.value = savedTheme();
-themeSel.onchange = () => { const id = applyTheme(themeSel.value); try { localStorage.setItem(THEME_KEY, id); } catch {} };
 
 function bindSelect(sel, key) {
   const el = $(sel);
