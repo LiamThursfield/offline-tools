@@ -16,5 +16,7 @@
 /json-format/  /json-format/json-format   200
 /regex         /regex/regex               200
 /regex/        /regex/regex               200
+/text-diff     /text-diff/text-diff       200
+/text-diff/    /text-diff/text-diff       200
 /timestamp     /timestamp/timestamp       200
 /timestamp/    /timestamp/timestamp       200

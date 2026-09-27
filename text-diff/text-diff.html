@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Text diff – Compare two texts line by line and word by word | LXST.tools</title>
+<meta name="description" content="Compare two texts or files line by line, with changed words or characters highlighted, unified, side-by-side and inline views, options to ignore whitespace and case, and a patch you can copy or download. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/text-diff">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/text-diff">
+<meta property="og:title" content="Text diff">
+<meta property="og:description" content="Compare two texts or files line by line, with changed words or characters highlighted, unified, side-by-side and inline views, options to ignore whitespace and case, and a patch you can copy or download. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Text diff","url":"https://tools.lxst.digital/text-diff","description":"Compare two texts or files line by line, with changed words or characters highlighted, unified, side-by-side and inline views, options to ignore whitespace and case, and a patch you can copy or download.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --del-strong:color-mix(in oklab,var(--del) var(--tint-strong),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --ins-strong:color-mix(in oklab,var(--ins) var(--tint-strong),var(--panel));
+  --hunk:color-mix(in oklab,var(--accent) 9%,var(--panel));
+  --hunk-ink:color-mix(in oklab,var(--accent-text) 75%,var(--ink));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+input[type=checkbox]{accent-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input[type=number]:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover{background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:62ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover:not(:disabled){color:var(--accent-ink);background:color-mix(in oklab,var(--accent) 88%,var(--bg))}
+
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.pane:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane.drag{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.side{font-family:var(--mono);font-weight:700;border-radius:var(--pill);padding:0 9px;font-size:.85rem}
+.side.a{background:var(--del-bg);color:var(--del)}.side.b{background:var(--ins-bg);color:var(--ins)}
+.fname{color:var(--muted);font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:40%}
+.pane-head .spacer{flex:1}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px;color:var(--muted);background:var(--surface);font-variant-numeric:tabular-nums}
+.pane-head .btn{padding:2px 11px;font-size:.8rem}
+textarea{width:100%;min-height:210px;height:260px;resize:vertical;border:0;background:transparent;padding:12px 14px;font:13px/1.55 var(--mono);color:var(--ink);outline:none;white-space:pre;overflow:auto;tab-size:4}
+textarea::placeholder{color:var(--muted);opacity:.8}
+
+.controls{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;margin:18px 4px 14px;font-size:.9rem}
+.controls label,.subbar label{display:inline-flex;align-items:center;gap:6px}
+select,input[type=number]{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px}
+.subbar input[type=number]{width:4.6em}
+
+.summary{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin:0 4px 14px;font-size:.9rem;color:var(--muted)}
+.summary b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.summary .c-add b{color:var(--ins)}.summary .c-rem b{color:var(--del)}
+.meter{flex:0 0 140px;height:8px;border-radius:var(--pill);background:var(--del-strong);overflow:hidden;align-self:center}
+.meter i{display:block;height:100%;background:var(--ins);border-radius:inherit}
+
+.out{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-height:180px;overflow:hidden}
+.subbar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-size:.88rem}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.84rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+.seg button:disabled{opacity:.4;cursor:not-allowed}
+.subbar .copies{margin-left:auto;display:inline-flex;gap:8px;flex-wrap:wrap}
+.note{padding:10px 14px;color:var(--muted);font-size:.88rem;border-bottom:1px solid var(--line)}
+.empty{padding:44px 16px;text-align:center;color:var(--muted)}
+
+/* text diff (same view as JSON diff's line diff) */
+.scroll{overflow-x:auto}
+table.diff{border-collapse:collapse;width:100%;font:12.5px/1.6 var(--mono);letter-spacing:0;tab-size:4}
+table.diff td{padding:0 8px;vertical-align:top}
+table.diff td.ln{width:1%;min-width:3.2em;text-align:right;color:var(--muted);user-select:none;opacity:.7}
+table.diff td.sg{width:1%;user-select:none;padding:0 4px;color:var(--muted)}
+table.diff td.code{white-space:pre}
+.wrapon table.diff td.code{white-space:pre-wrap;overflow-wrap:anywhere}
+table.diff.split{table-layout:fixed}
+table.diff.split col.lnc{width:3.8em}
+table.diff tr.del td,table.diff td.del{background:var(--del-bg)}
+table.diff tr.ins td,table.diff td.ins{background:var(--ins-bg)}
+table.diff tr.del td.sg{color:var(--del)} table.diff tr.ins td.sg{color:var(--ins)}
+table.diff td.void{background:repeating-linear-gradient(135deg,transparent 0 5px,var(--surface) 5px 10px)}
+table.diff mark{background:none;border-radius:3px;color:inherit}
+table.diff .del mark,table.diff tr.del mark{background:var(--del-strong)}
+table.diff .ins mark,table.diff tr.ins mark{background:var(--ins-strong)}
+table.diff tr.hunk td{background:var(--hunk);color:var(--hunk-ink);padding-top:3px;padding-bottom:3px}
+table.diff tr.skip td{background:var(--hunk);color:var(--hunk-ink);text-align:center;cursor:pointer;font-family:var(--sans);font-weight:600;font-size:.82rem;padding:4px}
+table.diff tr.skip:hover td{text-decoration:underline}
+/* inline view: one column, removed and added words interleaved */
+table.diff.inline td.code del{background:var(--del-strong);color:inherit;text-decoration:line-through;text-decoration-color:color-mix(in oklab,var(--del) 70%,transparent);border-radius:3px}
+table.diff.inline td.code ins{background:var(--ins-strong);color:inherit;text-decoration:none;border-radius:3px}
+table.diff.inline tr.chg td{background:color-mix(in oklab,var(--accent) 4%,var(--panel))}
+table.diff.inline tr.chg td.sg{color:var(--chg)}
+/* mark for a missing newline at the end of the file */
+.eol{display:inline-block;margin-left:6px;padding:0 6px;border-radius:var(--pill);background:var(--surface);color:var(--muted);font:600 .7rem/1.5 var(--sans);vertical-align:1px;white-space:nowrap;user-select:none}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:800px){
+  .inputs{grid-template-columns:1fr}
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+  textarea{height:180px;min-height:140px}
+  .subbar .copies{margin-left:0}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>TEXT</b>.diff<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+        <a href="../text-diff/text-diff.html" data-path="/text-diff" aria-current="page"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="swap" title="Swap A and B">Swap A ⇄ B</button>
+      <button class="nav" id="sample">Load example</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Compare text</h1>
+    <p>Paste or drop two files to see what changed, line by line and word by word. Everything runs in your browser; nothing is uploaded.</p>
+  </div>
+
+  <div class="inputs">
+    <div class="pane" id="paneA">
+      <div class="pane-head">
+        <span class="side a">A</span><span class="fname" id="fnameA">original</span>
+        <span class="spacer"></span><span class="status" id="statA">empty</span>
+        <button class="btn" data-open="A">Open file</button>
+        <input type="file" id="fileA" accept="text/*,.md,.txt,.csv,.json,.xml,.yaml,.yml,.log,.ini,.conf,.env,.html,.css,.js,.ts,.py,.sql" hidden>
+      </div>
+      <textarea id="inA" spellcheck="false" aria-label="Text A (original)" placeholder="Paste the original text here, or drop a file onto this box"></textarea>
+    </div>
+    <div class="pane" id="paneB">
+      <div class="pane-head">
+        <span class="side b">B</span><span class="fname" id="fnameB">changed</span>
+        <span class="spacer"></span><span class="status" id="statB">empty</span>
+        <button class="btn" data-open="B">Open file</button>
+        <input type="file" id="fileB" accept="text/*,.md,.txt,.csv,.json,.xml,.yaml,.yml,.log,.ini,.conf,.env,.html,.css,.js,.ts,.py,.sql" hidden>
+      </div>
+      <textarea id="inB" spellcheck="false" aria-label="Text B (changed)" placeholder="Paste the changed text here, or drop a file onto this box"></textarea>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label>Whitespace
+      <select id="ws">
+        <option value="none">compare exactly</option>
+        <option value="trailing">ignore at line ends</option>
+        <option value="amount">ignore changes in amount</option>
+        <option value="all">ignore all</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="ignoreCase"> Ignore case</label>
+  </div>
+
+  <div class="summary" id="summary" aria-live="polite"></div>
+  <div class="out" id="out"></div>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core diff logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* ---------- Myers diff over two arrays of comparable keys ----------
+   Keeps only the part of each round's V array that the backtrack reads, so memory grows with D² rather than D·(N+M).
+   Returns null if the edit distance passes maxD; callers then treat that stretch as replaced wholesale. */
+function myersCore(a, b, maxD = Infinity) {
+  const n = a.length, m = b.length, max = n + m, off = max + 1;
+  const v = new Int32Array(2 * max + 3);
+  const trace = [];
+  outer:
+  for (let d = 0; d <= max; d++) {
+    if (d > maxD) return null;
+    trace.push(v.slice(off - d - 1, off + d + 2)); // v[off + k] for k in -d-1 … d+1, read back as t[k + d + 1]
+    for (let k = -d; k <= d; k += 2) {
+      let x = (k === -d || (k !== d && v[off + k - 1] < v[off + k + 1])) ? v[off + k + 1] : v[off + k - 1] + 1;
+      let y = x - k;
+      while (x < n && y < m && a[x] === b[y]) { x++; y++; }
+      v[off + k] = x;
+      if (x >= n && y >= m) break outer;
+    }
+  }
+  const ops = [];
+  let x = n, y = m;
+  for (let d = trace.length - 1; d >= 0; d--) {
+    const t = trace[d], k = x - y, at = j => t[j + d + 1];
+    const pk = (k === -d || (k !== d && at(k - 1) < at(k + 1))) ? k + 1 : k - 1;
+    const px = at(pk), py = px - pk;
+    while (x > px && y > py) { ops.push(['=', x - 1, y - 1]); x--; y--; }
+    if (d > 0) { if (x === px) ops.push(['+', -1, y - 1]); else ops.push(['-', x - 1, -1]); }
+    x = px; y = py;
+  }
+  return ops.reverse();
+}
+
+/* Diff two arrays of keys: ops are ['=', i, j], ['-', i, -1] or ['+', -1, j].
+   approx is true when the middle was too different to align and was marked as replaced instead. */
+function diffSeq(ka, kb, maxD) {
+  const ids = new Map(); const id = s => { let i = ids.get(s); if (i === undefined) { i = ids.size; ids.set(s, i); } return i; };
+  const ia = ka.map(id), ib = kb.map(id);
+  // trim common prefix / suffix for speed
+  let p = 0; while (p < ia.length && p < ib.length && ia[p] === ib[p]) p++;
+  let s = 0; while (s < ia.length - p && s < ib.length - p && ia[ia.length - 1 - s] === ib[ib.length - 1 - s]) s++;
+  const ops = [];
+  for (let i = 0; i < p; i++) ops.push(['=', i, i]);
+  const midA = ia.slice(p, ia.length - s), midB = ib.slice(p, ib.length - s);
+  let mid = myersCore(midA, midB, maxD), approx = false;
+  if (!mid) { approx = true; mid = [...midA.map((_, i) => ['-', i, -1]), ...midB.map((_, j) => ['+', -1, j])]; }
+  for (const [t, x, y] of mid) ops.push([t, x < 0 ? -1 : x + p, y < 0 ? -1 : y + p]);
+  for (let i = s; i > 0; i--) ops.push(['=', ia.length - i, ib.length - i]);
+  return { ops, approx };
+}
+
+/* Split text into lines. Any of \n, \r\n and \r ends a line; the final line break, if any, doesn't start a new line. */
+function splitLines(text) {
+  const lines = text.split(/\r\n|\r|\n/);
+  const nl = lines.length > 1 && lines[lines.length - 1] === '';
+  if (nl || text === '') lines.pop();
+  return { lines, nl };
+}
+
+/* The key a line is compared by, after the whitespace and case options. */
+function lineKey(s, o) {
+  if (o.ws === 'trailing') s = s.replace(/\s+$/, '');
+  else if (o.ws === 'amount') s = s.replace(/\s+/g, ' ').replace(/ $/, '');
+  else if (o.ws === 'all') s = s.replace(/\s+/g, '');
+  return o.ignoreCase ? s.toLowerCase() : s;
+}
+
+const MAX_LINE_D = 3000, MAX_TOKEN_D = 1500;
+
+/* Line diff. blocks: { eq: [[ai, bi], …] } or { del: [ai, …], ins: [bi, …] }, in order. */
+function diffLines(aText, bText, o = {}) {
+  const a = splitLines(aText), b = splitLines(bText), A = a.lines, B = b.lines;
+  // a last line without a final line break differs from the same line with one (unless whitespace is ignored)
+  const exact = !o.ws || o.ws === 'none';
+  const key = (L, nl) => (s, i) => lineKey(s, o) + (exact && i === L.length - 1 && !nl ? '\u0000' : '');
+  const { ops, approx } = diffSeq(A.map(key(A, a.nl)), B.map(key(B, b.nl)), MAX_LINE_D);
+  const blocks = [];
+  for (const [t, x, y] of ops) {
+    let last = blocks[blocks.length - 1];
+    if (t === '=') { if (!last || !last.eq) blocks.push(last = { eq: [] }); last.eq.push([x, y]); }
+    else { if (!last || last.eq) blocks.push(last = { del: [], ins: [] }); (t === '-' ? last.del : last.ins).push(t === '-' ? x : y); }
+  }
+  let adds = 0, dels = 0, same = 0;
+  for (const bl of blocks) if (bl.eq) same += bl.eq.length; else { adds += bl.ins.length; dels += bl.del.length; }
+  return { A, B, nlA: a.nl, nlB: b.nl, blocks, adds, dels, same, approx };
+}
+
+/* ---------- words and characters inside a changed block ---------- */
+const TOKEN_RE = /\s+|[\p{L}\p{M}\p{N}_]+|[^\s\p{L}\p{M}\p{N}_]/gu;
+const NL = '\n';
+const isSpace = t => t !== NL && /^\s+$/.test(t);
+function tokenize(s, unit) { return unit === 'char' ? Array.from(s) : (s.match(TOKEN_RE) || []); }
+/* a block's lines as one token stream, with NL between lines */
+function blockTokens(lines, unit) {
+  const out = [];
+  lines.forEach((l, i) => { if (i) out.push(NL); for (const t of tokenize(l, unit)) out.push(t); });
+  return out;
+}
+function tokenKey(t, o) {
+  if (t === NL) return NL;
+  if (o.ws && o.ws !== 'none' && /^\s+$/.test(t)) return o.ws === 'all' ? '' : ' ';
+  return o.ignoreCase ? t.toLowerCase() : t;
+}
+
+/* Diff the old and new lines of a changed block as words ('word') or characters ('char').
+   Returns a changed flag per token on each side, whether the two sides are similar enough for
+   highlighting to help, and how many words each side lost or gained. */
+function diffBlock(delLines, insLines, unit, o = {}) {
+  const ta = blockTokens(delLines, unit), tb = blockTokens(insLines, unit);
+  const { ops, approx } = diffSeq(ta.map(t => tokenKey(t, o)), tb.map(t => tokenKey(t, o)), MAX_TOKEN_D);
+  const chA = new Uint8Array(ta.length).fill(1), chB = new Uint8Array(tb.length).fill(1);
+  let same = 0, total = 0;
+  for (const [t, x, y] of ops) if (t === '=') {
+    chA[x] = chB[y] = 0;
+    if (ta[x] !== NL && !isSpace(ta[x])) same += ta[x].length;
+  }
+  for (const t of [...ta, ...tb]) if (t !== NL && !isSpace(t)) total += t.length;
+  // whitespace between two changed tokens on the same line joins them into one highlight
+  const bridge = (toks, ch) => {
+    for (let i = 1; i < toks.length - 1; i++) if (!ch[i] && isSpace(toks[i]) && ch[i - 1] && ch[i + 1] && toks[i - 1] !== NL && toks[i + 1] !== NL) ch[i] = 2;
+  };
+  bridge(ta, chA); bridge(tb, chB);
+  const words = (toks, ch) => toks.reduce((n, t, i) => n + (ch[i] === 1 && t !== NL && !isSpace(t) && /[\p{L}\p{N}_]/u.test(t) ? 1 : 0), 0);
+  return { ta, tb, chA, chB, ops, similar: !approx && total > 0 && 2 * same / total >= 0.25,
+    wordsDel: unit === 'word' ? words(ta, chA) : 0, wordsIns: unit === 'word' ? words(tb, chB) : 0 };
+}
+
+/* ---------- unified diff (patch) ---------- */
+function unifiedPatch(d, context = 3, nameA = 'a', nameB = 'b') {
+  const { A, B, nlA, nlB, blocks } = d;
+  const ops = [];
+  for (const bl of blocks) {
+    if (bl.eq) for (const [x, y] of bl.eq) ops.push(['=', x, y]);
+    else { for (const x of bl.del) ops.push(['-', x, -1]); for (const y of bl.ins) ops.push(['+', -1, y]); }
+  }
+  const changed = ops.map((op, i) => op[0] !== '=' ? i : -1).filter(i => i >= 0);
+  if (!changed.length) return '';
+  const out = [`--- ${nameA}`, `+++ ${nameB}`];
+  const noNl = '\\ No newline at end of file';
+  let h = 0;
+  while (h < changed.length) {
+    let end = h;
+    while (end + 1 < changed.length && changed[end + 1] - changed[end] <= 2 * context + 1) end++;
+    const from = Math.max(0, changed[h] - context), to = Math.min(ops.length - 1, changed[end] + context);
+    const lines = [];
+    let aStart = -1, bStart = -1, aLen = 0, bLen = 0;
+    for (let i = from; i <= to; i++) {
+      const [t, x, y] = ops[i];
+      if (t !== '+') { if (aStart < 0) aStart = x; aLen++; }
+      if (t !== '-') { if (bStart < 0) bStart = y; bLen++; }
+      lines.push((t === '=' ? ' ' : t) + (t === '+' ? B[y] : A[x]));
+      if (t === '+' ? y === B.length - 1 && !nlB : x === A.length - 1 && !nlA) lines.push(noNl);
+    }
+    // an empty range is numbered by the line before it
+    const before = (i, side) => { let n = 0; for (let j = 0; j < i; j++) if (ops[j][0] !== (side === 'a' ? '+' : '-')) n++; return n; };
+    const range = (start, len, side) => `${len ? start + 1 : before(from, side)}${len === 1 ? '' : ',' + len}`;
+    out.push(`@@ -${range(aStart, aLen, 'a')} +${range(bStart, bLen, 'b')} @@`, ...lines);
+    h = end + 1;
+  }
+  return out.join('\n') + '\n';
+}
+
+if (typeof module !== 'undefined') module.exports = { myersCore, diffSeq, splitLines, lineKey, diffLines, tokenize, diffBlock, unifiedPatch };
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+const state = { view: 'unified', unit: 'word', context: 3, full: false, wrap: true, expanded: new Set() };
+let R = null; // computed results
+
+const opts = () => ({ ws: $('#ws').value, ignoreCase: $('#ignoreCase').checked });
+const plural = (n, w) => `${n.toLocaleString()} ${w}${n === 1 ? '' : 's'}`;
+
+function setStatus(side, text, lines, nl) {
+  const st = $('#stat' + side);
+  st.textContent = text ? plural(lines.length, 'line') : 'empty';
+  st.title = text ? plural([...text].length, 'character') + (nl ? '' : ', no newline at the end') : '';
+}
+
+function compute() {
+  const ta = $('#inA').value, tb = $('#inB').value, o = opts();
+  const d = diffLines(ta, tb, o);
+  setStatus('A', ta, d.A, d.nlA); setStatus('B', tb, d.B, d.nlB);
+  R = { ta, tb, o, d, empty: !ta && !tb, word: new Map(), char: new Map() };
+  R.wordsDel = R.wordsIns = 0;
+  d.blocks.forEach((bl, i) => { if (!bl.eq) { const w = blockDiff(i, 'word'); R.wordsDel += w.wordsDel; R.wordsIns += w.wordsIns; } });
+  state.expanded.clear();
+  render();
+}
+/* token diff of changed block i, cached per unit */
+function blockDiff(i, unit) {
+  const cache = R[unit];
+  if (!cache.has(i)) { const bl = R.d.blocks[i]; cache.set(i, diffBlock(bl.del.map(x => R.d.A[x]), bl.ins.map(y => R.d.B[y]), unit, R.o)); }
+  return cache.get(i);
+}
+
+/* ---------- rendering ---------- */
+function renderSummary() {
+  const el = $('#summary'), d = R.d;
+  if (R.empty) { el.innerHTML = 'Paste or open two texts to compare them.'; return; }
+  const total = d.same * 2 + d.adds + d.dels, pct = total ? Math.round(d.same * 2 / total * 100) : 100;
+  if (!d.adds && !d.dels) {
+    el.innerHTML = R.ta === R.tb ? '<span><b>Identical.</b> The two texts are exactly the same.</span>'
+      : `<span><b>No differences</b> ${ignoredNote()}.</span>`;
+    return;
+  }
+  el.innerHTML = `<span class="c-add"><b>+${d.adds.toLocaleString()}</b> ${d.adds === 1 ? 'line' : 'lines'}</span><span class="c-rem"><b>−${d.dels.toLocaleString()}</b> ${d.dels === 1 ? 'line' : 'lines'}</span>
+    <span class="c-add"><b>+${R.wordsIns.toLocaleString()}</b> ${R.wordsIns === 1 ? 'word' : 'words'}</span><span class="c-rem"><b>−${R.wordsDel.toLocaleString()}</b> ${R.wordsDel === 1 ? 'word' : 'words'}</span>
+    <span><b>${d.same.toLocaleString()}</b> unchanged ${d.same === 1 ? 'line' : 'lines'}</span>
+    <span class="meter" title="${pct}% of lines are unchanged"><i style="width:${pct}%"></i></span><span>${pct}% the same</span>`;
+}
+/* why texts that aren't identical still show no differences */
+function ignoredNote() {
+  const why = [];
+  if (R.o.ws !== 'none') why.push('whitespace');
+  if (R.o.ignoreCase) why.push('case');
+  return `once ${why.join(' and ')} ${why.length > 1 ? 'are' : 'is'} ignored`;
+}
+
+function seg(name, value, options) {
+  return `<span class="seg" data-seg="${name}" role="group">` + options.map(([v, l, t]) =>
+    `<button type="button" data-v="${v}" aria-pressed="${value === v}"${t ? ` title="${t}"` : ''}>${l}</button>`).join('') + '</span>';
+}
+
+/* One side of a changed block as HTML per line, with changed words (or characters) in <mark>.
+   Highlighting is skipped when the two sides have too little in common for it to help. */
+function markedLines(i, side) {
+  const bl = R.d.blocks[i], L = side === 'a' ? bl.del.map(x => R.d.A[x]) : bl.ins.map(y => R.d.B[y]);
+  if (state.unit === 'off' || !bl.del.length || !bl.ins.length) return L.map(esc);
+  const r = blockDiff(i, state.unit);
+  if (!r.similar) return L.map(esc);
+  const toks = side === 'a' ? r.ta : r.tb, ch = side === 'a' ? r.chA : r.chB;
+  const lines = [''];
+  let open = false;
+  toks.forEach((t, k) => {
+    if (t === NL) { if (open) { lines[lines.length - 1] += '</mark>'; open = false; } lines.push(''); return; }
+    if (ch[k] && !open) { lines[lines.length - 1] += '<mark>'; open = true; }
+    if (!ch[k] && open) { lines[lines.length - 1] += '</mark>'; open = false; }
+    lines[lines.length - 1] += esc(t);
+  });
+  if (open) lines[lines.length - 1] += '</mark>';
+  return lines;
+}
+/* The block as one stream for the inline view: kept text plain, removed text in <del>, added text in <ins>. */
+function inlineLines(i) {
+  const bl = R.d.blocks[i];
+  const unit = state.unit === 'off' ? 'word' : state.unit;
+  const r = bl.del.length && bl.ins.length ? blockDiff(i, unit) : null;
+  if (!r || !r.similar || state.unit === 'off')
+    return [...bl.del.map(x => `<del>${esc(R.d.A[x])}</del>`), ...bl.ins.map(y => `<ins>${esc(R.d.B[y])}</ins>`)];
+  const lines = [''], put = s => { lines[lines.length - 1] += s; };
+  let cur = null; // open tag
+  const tag = t => { if (cur === t) return; if (cur) put(`</${cur}>`); if (t) put(`<${t}>`); cur = t; };
+  const line = () => { const t = cur; tag(null); lines.push(''); tag(t); };
+  let x = 0, y = 0;
+  // walk both token streams in diff order; kept tokens come from B, so the result reads as the new text
+  for (const [t, ia, ib] of r.ops) {
+    if (t === '=') {
+      // flush changed tokens on either side up to this point
+      while (x < ia) emitA(x++);
+      while (y < ib) emitB(y++);
+      tag(null);
+      if (r.tb[ib] === NL) line(); else put(esc(r.tb[ib]));
+      x = ia + 1; y = ib + 1;
+    }
+  }
+  while (x < r.ta.length) emitA(x++);
+  while (y < r.tb.length) emitB(y++);
+  tag(null);
+  return lines;
+  function emitA(k) { if (r.ta[k] === NL) { tag('del'); put('<span aria-hidden="true">↵</span>'); return; } tag('del'); put(esc(r.ta[k])); }
+  function emitB(k) { if (r.tb[k] === NL) { line(); return; } tag('ins'); put(esc(r.tb[k])); }
+}
+
+/* a missing newline at the end of the file, shown when only one side has one */
+function eolMark(side, idx) {
+  const d = R.d, L = side === 'a' ? d.A : d.B, nl = side === 'a' ? d.nlA : d.nlB, other = side === 'a' ? d.nlB : d.nlA;
+  return idx === L.length - 1 && !nl && other && R.o.ws === 'none' ? '<span class="eol" title="No newline at end of file">no newline at end</span>' : '';
+}
+
+function diffTableHTML() {
+  const d = R.d, { A, B, blocks } = d;
+  if (!blocks.some(b => !b.eq)) return `<div class="empty">${R.ta === R.tb ? 'The two texts are identical.' : `No differences ${ignoredNote()}.`}</div>`;
+  const C = state.context, view = state.view, split = view === 'split';
+  let html = '';
+  const eqRow = (ai, bi) => split
+    ? `<tr><td class="ln">${ai + 1}</td><td class="code">${esc(A[ai])}${eolMark('a', ai)}</td><td class="ln">${bi + 1}</td><td class="code">${esc(B[bi])}${eolMark('b', bi)}</td></tr>`
+    : `<tr><td class="ln">${ai + 1}</td><td class="ln">${bi + 1}</td><td class="sg"> </td><td class="code">${esc(view === 'inline' ? B[bi] : A[ai])}</td></tr>`;
+  const skipRow = (runIdx, n) => `<tr class="skip" data-run="${runIdx}" tabindex="0" role="button"><td colspan="4">Show ${n.toLocaleString()} unchanged line${n > 1 ? 's' : ''}</td></tr>`;
+  const hunkRow = (ai, bi) => split ? '' : `<tr class="hunk"><td colspan="4">@@ −${ai + 1} +${bi + 1} @@</td></tr>`;
+
+  blocks.forEach((blk, idx) => {
+    if (blk.eq) {
+      const L = blk.eq, hasPrev = idx > 0, hasNext = idx < blocks.length - 1;
+      const showAll = state.full || state.expanded.has(idx) || L.length <= (hasPrev ? C : 0) + (hasNext ? C : 0) + 1;
+      if (showAll) { for (const [x, y] of L) html += eqRow(x, y); return; }
+      const head = hasPrev ? C : 0, tail = hasNext ? C : 0;
+      for (let i = 0; i < head; i++) html += eqRow(...L[i]);
+      html += skipRow(idx, L.length - head - tail);
+      if (tail) html += hunkRow(...L[L.length - tail]);
+      for (let i = L.length - tail; i < L.length; i++) html += eqRow(...L[i]);
+      return;
+    }
+    // line numbers where the block sits: the first changed line, or the line after the last one before it
+    const prev = blocks[idx - 1], at = prev ? prev.eq[prev.eq.length - 1] : [-1, -1];
+    const a0 = blk.del.length ? blk.del[0] : at[0] + 1, b0 = blk.ins.length ? blk.ins[0] : at[1] + 1;
+    if (idx === 0) html += hunkRow(a0, b0);
+    if (view === 'inline') {
+      const lines = inlineLines(idx), sign = !blk.del.length ? '+' : !blk.ins.length ? '−' : '~';
+      lines.forEach((l, i) => {
+        const ln = i === 0 ? `<td class="ln">${blk.del.length ? a0 + 1 : ''}</td><td class="ln">${blk.ins.length ? b0 + 1 : ''}</td>` : '<td class="ln"></td><td class="ln"></td>';
+        html += `<tr class="chg">${ln}<td class="sg">${i === 0 ? sign : ''}</td><td class="code">${l}</td></tr>`;
+      });
+      return;
+    }
+    const ma = markedLines(idx, 'a'), mb = markedLines(idx, 'b');
+    if (split) {
+      const n = Math.max(blk.del.length, blk.ins.length);
+      for (let i = 0; i < n; i++) {
+        const ai = blk.del[i], bi = blk.ins[i];
+        html += '<tr>' + (ai !== undefined ? `<td class="ln del">${ai + 1}</td><td class="code del">${ma[i]}${eolMark('a', ai)}</td>` : '<td class="ln void"></td><td class="void"></td>')
+          + (bi !== undefined ? `<td class="ln ins">${bi + 1}</td><td class="code ins">${mb[i]}${eolMark('b', bi)}</td>` : '<td class="ln void"></td><td class="void"></td>') + '</tr>';
+      }
+    } else {
+      blk.del.forEach((ai, i) => html += `<tr class="del"><td class="ln">${ai + 1}</td><td class="ln"></td><td class="sg">−</td><td class="code">${ma[i]}${eolMark('a', ai)}</td></tr>`);
+      blk.ins.forEach((bi, i) => html += `<tr class="ins"><td class="ln"></td><td class="ln">${bi + 1}</td><td class="sg">+</td><td class="code">${mb[i]}${eolMark('b', bi)}</td></tr>`);
+    }
+  });
+  const cols = split ? '<colgroup><col class="lnc"><col><col class="lnc"><col></colgroup>' : '';
+  return `<div class="scroll ${state.wrap ? 'wrapon' : ''}"><table class="diff ${view === 'unified' ? '' : view}">${cols}${html}</table></div>`;
+}
+
+function renderOut() {
+  const d = R.d, changed = d.adds + d.dels > 0;
+  const bar = `<div class="subbar">
+    ${seg('view', state.view, [['unified', 'Unified'], ['split', 'Side by side'], ['inline', 'Inline', 'Removed and added words mixed into one text']])}
+    <label>Highlight ${seg('unit', state.unit, [['word', 'Words'], ['char', 'Characters'], ['off', 'Off']])}</label>
+    <label>Context <input type="number" min="0" max="50" data-ctl="context" value="${state.context}"></label>
+    <label><input type="checkbox" data-ctl="full" ${state.full ? 'checked' : ''}> Whole file</label>
+    <label><input type="checkbox" data-ctl="wrap" ${state.wrap ? 'checked' : ''}> Wrap lines</label>
+    <span class="copies"><button type="button" class="btn" data-copy="patch" data-label="Copy patch" title="Copies a unified diff (diff -u) with ${state.context} lines of context"${changed ? '' : ' disabled'}>Copy patch</button><button type="button" class="btn" data-download${changed ? '' : ' disabled'}>Download .patch</button></span>
+  </div>`;
+  const notes = [];
+  if (d.approx) notes.push('These texts are very different, so part of the comparison is shown as a block replaced wholesale rather than aligned line by line.');
+  if (state.view === 'inline' && changed) notes.push('Changed lines show the new text, with removed parts struck through and added parts highlighted. Line numbers are A’s and B’s first line in each change.');
+  if (changed && (R.o.ws !== 'none' || R.o.ignoreCase)) notes.push(`With ${R.o.ws !== 'none' ? 'whitespace' : 'case'}${R.o.ws !== 'none' && R.o.ignoreCase ? ' and case' : ''} ignored, unchanged lines show A’s version, and the patch may not apply cleanly to B.`);
+  return bar + notes.map(n => `<div class="note">${n}</div>`).join('') + diffTableHTML();
+}
+
+function render() {
+  renderSummary();
+  const out = $('#out');
+  if (R.empty) { out.innerHTML = '<div class="empty">Paste text into A and B, open files, or load the example to see how it works.</div>'; return; }
+  out.innerHTML = renderOut();
+}
+
+const patchName = side => { const n = $('#fname' + side).textContent; return n === 'original' || n === 'changed' ? side.toLowerCase() : n; };
+const patchText = () => unifiedPatch(R.d, state.context, patchName('A'), patchName('B'));
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* ---------- events ---------- */
+let timer;
+const schedule = () => { clearTimeout(timer); timer = setTimeout(compute, 220); };
+['A', 'B'].forEach(side => {
+  const ta = $('#in' + side), pane = $('#pane' + side), file = $('#file' + side);
+  ta.addEventListener('input', schedule);
+  const load = f => { if (!f) return; const r = new FileReader(); r.onload = () => { ta.value = r.result; $('#fname' + side).textContent = f.name; $('#fname' + side).title = f.name; compute(); }; r.readAsText(f); };
+  file.addEventListener('change', () => { load(file.files[0]); file.value = ''; });
+  pane.addEventListener('dragover', e => { e.preventDefault(); pane.classList.add('drag'); });
+  pane.addEventListener('dragleave', e => { if (!pane.contains(e.relatedTarget)) pane.classList.remove('drag'); });
+  pane.addEventListener('drop', e => { e.preventDefault(); pane.classList.remove('drag'); load(e.dataTransfer.files[0]); });
+});
+document.querySelectorAll('[data-open]').forEach(b => b.onclick = () => $('#file' + b.dataset.open).click());
+$('#swap').onclick = () => {
+  const a = $('#inA'), b = $('#inB'); [a.value, b.value] = [b.value, a.value];
+  const fa = $('#fnameA'), fb = $('#fnameB');
+  [fa.textContent, fb.textContent] = [fb.textContent === 'changed' ? 'original' : fb.textContent, fa.textContent === 'original' ? 'changed' : fa.textContent];
+  compute();
+};
+$('#clear').onclick = () => { $('#inA').value = $('#inB').value = ''; $('#fnameA').textContent = 'original'; $('#fnameB').textContent = 'changed'; compute(); };
+$('#ws').onchange = compute;
+$('#ignoreCase').onchange = compute;
+
+const out = $('#out');
+out.addEventListener('click', e => {
+  const sb = e.target.closest('.seg button');
+  if (sb) { state[sb.parentElement.dataset.seg] = sb.dataset.v; render(); out.querySelector(`[data-seg="${sb.parentElement.dataset.seg}"] [aria-pressed=true]`).focus(); return; }
+  const skip = e.target.closest('tr.skip');
+  if (skip) { state.expanded.add(+skip.dataset.run); render(); return; }
+  if (e.target.closest('[data-download]')) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([patchText()], { type: 'text/x-diff' }));
+    a.download = (patchName('B') === 'b' ? 'changes' : patchName('B').replace(/\.[^.]*$/, '')) + '.patch';
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return;
+  }
+  const btn = e.target.closest('[data-copy]');
+  if (btn) {
+    const txt = patchText();
+    const done = () => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = btn.dataset.label, 1400); };
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(done).catch(() => {
+      const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); done(); } catch { toast('Couldn’t copy. Select the text and copy it yourself.'); } t.remove();
+    });
+  }
+});
+out.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr.skip')) { e.preventDefault(); e.target.click(); } });
+out.addEventListener('change', e => {
+  const c = e.target.dataset.ctl; if (!c) return;
+  if (e.target.type === 'checkbox') state[c] = e.target.checked;
+  else if (c === 'context') state.context = Math.max(0, Math.min(50, parseInt(e.target.value, 10) || 0));
+  render();
+  const el = out.querySelector(`[data-ctl="${c}"]`); if (el) el.focus();
+});
+
+$('#sample').onclick = () => {
+  $('#inA').value = [
+    '# Harbour Café',
+    '',
+    'A small café on the quay, serving coffee and brunch every day.',
+    '',
+    '## Opening hours',
+    '',
+    'Monday to Friday: 8am to 4pm',
+    'Saturday: 9am to 4pm',
+    'Sunday: closed',
+    '',
+    '## Getting here',
+    '',
+    'We are a five minute walk from the train station. Follow the',
+    'river west and look for the blue door.',
+    '',
+    'There is no parking at the café itself.',
+    '',
+    'Contact: hello@harbour.example',
+  ].join('\n') + '\n';
+  $('#inB').value = [
+    '# Harbour Café',
+    '',
+    'A small, dog-friendly café on the quay, serving coffee, brunch and cake every day.',
+    '',
+    '## Opening hours',
+    '',
+    'Monday to Friday: 8am to 5pm',
+    'Saturday: 9am to 5pm',
+    'Sunday: 9am to 2pm',
+    '',
+    '## Getting here',
+    '',
+    'We are a ten minute walk from the train station. Follow the river west and look for the green door.',
+    '',
+    'There is no parking at the café itself.',
+    'The nearest car park is on Quay Street.',
+    '',
+    'Contact: hello@harbour.example',
+  ].join('\n') + '\n';
+  $('#fnameA').textContent = 'cafe-v1.md'; $('#fnameB').textContent = 'cafe-v2.md';
+  compute();
+};
+
+compute();
+</script>
+</body>
+</html>

@@ -17,6 +17,7 @@ The tools are also hosted at [tools.lxst.digital](https://tools.lxst.digital/).
 | [JSON diff](json-diff/) | Compare two JSON documents (or any text) structurally: changes by path, shared properties, JSON Patch, combinable field filters and saved comparisons. |
 | [JSON formatter](json-format/) | Format, minify and validate JSON with exact error locations, repair common mistakes (comments, trailing commas, single quotes), browse it as a collapsible tree and query it by path. |
 | [Regex tester](regex/) | Test JavaScript regular expressions with matches highlighted live as you type, capture groups (numbered and named) with their positions, a replacement preview with $1 and named group references, a plain explanation of every flag, and protection against runaway patterns. |
+| [Text diff](text-diff/) | Compare two texts or files line by line, with changed words or characters highlighted, unified, side-by-side and inline views, options to ignore whitespace and case, and a patch you can copy or download. |
 | [Timestamp converter](timestamp/) | Convert between Unix seconds, milliseconds, microseconds and nanoseconds, ISO 8601, RFC 2822 and dates in any time zone, in either direction, with a live clock and relative times such as “3 hours ago” or “in 2 days”. |
 <!-- /shared:tool-table -->
 
