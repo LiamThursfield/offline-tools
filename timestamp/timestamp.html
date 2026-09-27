@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Timestamp converter – Convert Unix times, ISO 8601 and time zones | LXST.tools</title>
+<meta name="description" content="Convert between Unix seconds, milliseconds, microseconds and nanoseconds, ISO 8601, RFC 2822 and dates in any time zone, in either direction, with a live clock and relative times such as “3 hours ago” or “in 2 days”. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/timestamp">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/timestamp">
+<meta property="og:title" content="Timestamp converter">
+<meta property="og:description" content="Convert between Unix seconds, milliseconds, microseconds and nanoseconds, ISO 8601, RFC 2822 and dates in any time zone, in either direction, with a live clock and relative times such as “3 hours ago” or “in 2 days”. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Timestamp converter","url":"https://tools.lxst.digital/timestamp","description":"Convert between Unix seconds, milliseconds, microseconds and nanoseconds, ISO 8601, RFC 2822 and dates in any time zone, in either direction, with a live clock and relative times such as “3 hours ago” or “in 2 days”.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px);padding-top:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:66ch}
+kbd{font:600 .82em var(--mono);letter-spacing:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel);color:var(--ink)}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.note{margin:0;padding:10px 14px;color:var(--muted);font-size:.84rem}
+
+/* live now */
+.live{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-text)}
+.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.now{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line)}
+.now button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;padding:10px 14px;border:0;border-radius:0;background:var(--panel);text-align:left;transition:background .2s}
+.now button:hover{background:var(--accent-bg)}
+.now button:focus-visible{outline-offset:-2px}
+.k{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.now .v{max-width:100%;font:600 1.12rem var(--mono);letter-spacing:0;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:16px;align-items:start;margin-top:16px}
+
+/* input */
+.field{display:flex;align-items:center;margin:14px 14px 0;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.field.bad{border-color:var(--del)}
+.field.bad:focus-within{box-shadow:0 0 0 3px color-mix(in oklab,var(--del) 30%,transparent)}
+.ts-in{flex:1;min-width:0;border:0;background:none;padding:13px 16px;font:500 1.2rem var(--mono);letter-spacing:0}
+.ts-in:focus-visible{box-shadow:none}
+.ts-in::placeholder{color:var(--muted);opacity:.7}
+.clear{flex:none;margin-right:6px;border:0;background:none;border-radius:var(--pill);width:30px;height:30px;color:var(--muted);font-size:1.1rem;line-height:1}
+.clear:hover{background:var(--hover);color:var(--ink)}
+.detect{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;padding:10px 16px 0;font-size:.86rem;color:var(--muted);min-height:2.1em}
+.badge{display:inline-flex;align-items:center;padding:1px 10px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 14%,transparent);color:var(--accent-text);font-size:.78rem;font-weight:700}
+.badge.err{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.detect .msg{flex:1 1 20ch}
+.examples{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 0;font-size:.8rem;color:var(--muted);align-items:center}
+.examples button{border:1px dashed var(--line);background:none;border-radius:var(--pill);padding:1px 10px;font:500 .78rem var(--mono);letter-spacing:0;color:var(--muted)}
+.examples button:hover{border-style:solid;border-color:var(--accent);color:var(--accent-text)}
+.opts{display:flex;flex-wrap:wrap;gap:10px 22px;padding:12px 14px 14px;margin-top:12px;border-top:1px solid var(--line)}
+.opt{display:flex;align-items:center;gap:10px;font-size:.86rem;color:var(--muted);min-width:0}
+.opt>span:first-child{white-space:nowrap}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:4px 11px;max-width:100%;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 10px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+
+/* output formats */
+.fmts{margin:0}
+.fmt{display:grid;grid-template-columns:170px minmax(0,1fr);gap:4px 14px;align-items:baseline;padding:9px 14px;border-top:1px solid var(--line)}
+.fmt:first-child{border-top:0}
+.fmt dt{font-size:.8rem;font-weight:600;color:var(--muted);overflow-wrap:anywhere}
+.fmt dd{margin:0;display:flex;align-items:baseline;gap:10px;min-width:0}
+.fmt .val{flex:1;min-width:0;font:500 .95rem var(--mono);letter-spacing:0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.fmt .val small{display:block;margin-top:1px;font:.8rem var(--sans);color:var(--muted)}
+.fmt.src dt{color:var(--accent-text)}
+.fmt.empty .val{color:var(--muted)}
+.copy{flex:none;border:1px solid var(--line);background:none;border-radius:var(--pill);padding:0 9px;font:600 .72rem var(--sans);color:var(--muted)}
+.copy:hover:not(:disabled){color:var(--accent-text);border-color:var(--accent)}
+.copy:disabled{opacity:.4;cursor:not-allowed}
+
+/* time zones */
+.zones{list-style:none;margin:0;padding:0}
+.zone{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.zone-name{grid-column:1;grid-row:1;display:flex;align-items:baseline;gap:8px;min-width:0;flex-wrap:wrap}
+.zone-name b{font-weight:700}
+.zone-name .region{font-size:.78rem;color:var(--muted)}
+.tag{font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:0 7px;border-radius:var(--pill);background:var(--surface);color:var(--muted)}
+.zone-meta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:2px 10px;font-size:.78rem;color:var(--muted)}
+.zone-meta .dd{color:var(--chg);font-weight:600}
+.zone-tools{grid-column:2;grid-row:1;display:flex;align-items:center;gap:6px}
+.zone-when{grid-column:1/-1;display:flex;gap:8px;align-items:center}
+.zone-when input{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:calc(var(--radius) - 4px);padding:5px 9px;font:500 .9rem var(--mono);letter-spacing:0;color-scheme:inherit}
+.zone-when input:disabled{opacity:.5}
+.rm{border:0;background:none;border-radius:var(--pill);width:26px;height:26px;color:var(--muted);font-size:1.05rem;line-height:1}
+.rm:hover{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.add{display:flex;gap:8px;padding:12px 14px}
+.add input{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:var(--pill);padding:5px 12px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);overflow-wrap:anywhere}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media (max-width:1000px){
+  .main{grid-template-columns:1fr}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+  .now{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .fmt{grid-template-columns:1fr}
+  .ts-in{font-size:1.05rem;padding:11px 12px}
+  .opt{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.live::before{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>TIME</b>.stamp<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp" aria-current="page"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="nowBtn" title="Convert the current time (N)">Now</button>
+      <button class="nav" id="clearBtn" title="Clear the input">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Convert a timestamp</h1>
+    <p>Paste a Unix time, an ISO 8601 date or something like “3 days ago”, and see it in every format and time zone. Edit the time in any zone to convert the other way. Everything runs in your browser.</p>
+  </div>
+
+  <section class="card" aria-labelledby="nowTitle">
+    <div class="card-head"><h2 id="nowTitle">Now</h2><span class="live">Live</span><span class="spacer"></span><button class="btn" id="useNow" title="Convert this moment">Use now</button></div>
+    <div class="now" id="nowTiles">
+      <button type="button" data-k="s"><span class="k">Unix seconds</span><span class="v"></span></button>
+      <button type="button" data-k="ms"><span class="k">Unix milliseconds</span><span class="v"></span></button>
+      <button type="button" data-k="iso"><span class="k">ISO 8601 (UTC)</span><span class="v"></span></button>
+      <button type="button" data-k="local"><span class="k" id="nowLocalLabel">Local time</span><span class="v"></span></button>
+    </div>
+  </section>
+
+  <div class="main">
+    <section class="card" aria-labelledby="inTitle">
+      <div class="card-head"><h2 id="inTitle">Timestamp</h2></div>
+      <div class="field" id="field">
+        <input class="ts-in" id="input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-labelledby="inTitle" aria-describedby="detectMsg" placeholder="1700000000, 2024-05-01T12:00:00Z, in 2 hours…">
+        <button class="clear" id="clearX" type="button" aria-label="Clear the input" hidden>×</button>
+      </div>
+      <div class="detect" id="detect" aria-live="polite"><span class="badge" id="detectBadge" hidden></span><span class="msg" id="detectMsg"></span></div>
+      <div class="examples" id="examples"><span>Try</span></div>
+      <div class="opts">
+        <div class="opt"><span id="unitLabel">Numbers are</span>
+          <span class="seg" role="group" aria-labelledby="unitLabel" id="unitSeg">
+            <button type="button" data-v="auto" title="Guess from the number of digits">auto</button><button type="button" data-v="s" title="Seconds">s</button><button type="button" data-v="ms" title="Milliseconds">ms</button><button type="button" data-v="us" title="Microseconds">µs</button><button type="button" data-v="ns" title="Nanoseconds">ns</button>
+          </span>
+        </div>
+        <label class="opt"><span>Times without an offset are in</span> <select id="readZone"></select></label>
+      </div>
+      <dl class="fmts" id="fmts"></dl>
+    </section>
+
+    <section class="card" aria-labelledby="zonesTitle">
+      <div class="card-head"><h2 id="zonesTitle">Time zones</h2><span class="spacer"></span><button class="btn" id="zonesReset" title="Go back to the default list">Reset</button></div>
+      <ul class="zones" id="zones"></ul>
+      <form class="add" id="addZone">
+        <input id="addZoneIn" list="zoneList" placeholder="Add a zone or city, e.g. Tokyo" aria-label="Time zone to add" autocomplete="off" spellcheck="false">
+        <button class="btn" type="submit">Add</button>
+      </form>
+      <datalist id="zoneList"></datalist>
+      <p class="note">Change the date or time in any zone to convert from it. The list is saved in this browser.</p>
+    </section>
+  </div>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core time logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* An instant is a BigInt count of nanoseconds since the Unix epoch, so µs and ns inputs round-trip
+   exactly. Date and Intl only handle milliseconds, so wall-clock maths goes through msOf(ns). */
+const NS = { s: 1000000000n, ms: 1000000n, us: 1000n, ns: 1n };
+const UNIT_NAMES = { s: 'Unix seconds', ms: 'Unix milliseconds', us: 'Unix microseconds', ns: 'Unix nanoseconds' };
+const MAX_MS = 8.64e15; // the range of a JS Date: ±100,000,000 days around 1970
+const DAY = 864e5;
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const floorDiv = (a, b) => { const q = a / b; return a % b && (a < 0n) !== (b < 0n) ? q - 1n : q; };
+const msOf = ns => Number(floorDiv(ns, NS.ms));
+const pad = (n, w = 2) => String(Math.abs(n)).padStart(w, '0');
+
+/* Unit for a bare number, from its size: 1e11 s is the year 5138, 1e11 ms is 1973. */
+const guessUnit = abs => abs < 1e11 ? 's' : abs < 1e14 ? 'ms' : abs < 1e17 ? 'us' : 'ns';
+
+function parseNumber(str, unit = 'auto') {
+  const m = /^([+-]?)(\d+)(?:\.(\d*))?$/.exec(str);
+  if (!m) return null;
+  const [, sign, int, frac = ''] = m;
+  const u = unit === 'auto' ? guessUnit(Number(int)) : unit;
+  const digits = String(NS[u]).length - 1; // fraction digits that still fit in whole nanoseconds
+  let ns = BigInt(int) * NS[u] + (digits ? BigInt((frac + '0'.repeat(digits)).slice(0, digits)) : 0n);
+  if (sign === '-') ns = -ns;
+  return { ns, unit: u };
+}
+
+/* ---------- time zones (via Intl) ---------- */
+const LOCAL_ZONE = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { return 'UTC'; } })();
+const partsFmt = new Map();
+function partsFormatter(zone) {
+  let f = partsFmt.get(zone);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23', era: 'short', weekday: 'short',
+      year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+    partsFmt.set(zone, f);
+  }
+  return f;
+}
+function isValidZone(zone) { try { partsFormatter(zone); return true; } catch { return false; } }
+function canonicalZone(zone) { return new Intl.DateTimeFormat('en-US', { timeZone: zone }).resolvedOptions().timeZone; }
+
+/* Wall-clock fields of an instant (ms) in a zone. wd: 0 = Sunday. */
+function wallParts(ms, zone) {
+  const p = {};
+  for (const { type, value } of partsFormatter(zone).formatToParts(ms)) p[type] = value;
+  let y = +p.year;
+  if (/^b/i.test(p.era)) y = 1 - y; // 1 BC is year 0 in ISO 8601
+  return { y, mo: +p.month, d: +p.day, h: +p.hour % 24, mi: +p.minute, s: +p.second, wd: WEEKDAYS.indexOf(p.weekday) };
+}
+/* Like Date.UTC, but years 0–99 aren't moved to the 1900s, and out-of-range fields roll over. */
+function utcMs(y, mo, d, h = 0, mi = 0, s = 0, ms = 0) {
+  const t = new Date(0);
+  t.setUTCFullYear(y, mo - 1, d);
+  t.setUTCHours(h, mi, s, ms);
+  return t.getTime();
+}
+/* Offset of a zone from UTC at an instant, in seconds (east is positive). */
+function offsetSec(ms, zone) {
+  const w = wallParts(ms, zone), base = Math.floor(ms / 1000) * 1000;
+  return (utcMs(w.y, w.mo, w.d, w.h, w.mi, w.s) - base) / 1000;
+}
+/* The instant a wall-clock time happens in a zone. Around DST changes a wall time can be missing
+   (gap: we move it forward by the gap, as Temporal's "compatible" does) or happen twice
+   (ambiguous: we take the earlier one and list both). */
+function wallToMs({ y, mo, d, h = 0, mi = 0, s = 0, ms = 0 }, zone) {
+  const naive = utcMs(y, mo, d, h, mi, s, ms);
+  const offs = new Set([-DAY, 0, DAY].map(k => offsetSec(naive + k, zone)));
+  const hits = [...new Set([...offs].map(o => naive - o * 1000).filter(t => offsetSec(t, zone) * 1000 === naive - t))].sort((a, b) => a - b);
+  if (hits.length === 1) return { ms: hits[0] };
+  if (hits.length > 1) return { ms: hits[0], ambiguous: hits };
+  return { ms: naive - offsetSec(naive - DAY, zone) * 1000, gap: true };
+}
+
+/* ---------- parsing ---------- */
+const ISO_RE = /^([+-]\d{6}|\d{4})-(\d{2})-(\d{2})(?:(?:T|\s+)(\d{2}):(\d{2})(?::(\d{2})(?:[.,](\d+))?)?)?\s*(Z|UTC|GMT|[+-]\d{2}(?::?\d{2})?)?$/i;
+const daysIn = (y, mo) => new Date(utcMs(y, mo + 1, 0)).getUTCDate();
+const wallStr = f => `${yearStr(f.y)}-${pad(f.mo)}-${pad(f.d)} ${pad(f.h)}:${pad(f.mi)}${f.s ? ':' + pad(f.s) : ''}`;
+
+function parseISO(str, zone) {
+  const m = ISO_RE.exec(str);
+  if (!m) return null;
+  const [, Y, MO, D, H, MI, S, F = '', OFF] = m;
+  const f = { y: +Y, mo: +MO, d: +D, h: +(H || 0), mi: +(MI || 0), s: +(S || 0) };
+  const frac = (F + '000000000').slice(0, 9);
+  f.ms = +frac.slice(0, 3);
+  if (f.mo < 1 || f.mo > 12) return { error: `There's no month ${MO}.` };
+  if (f.d < 1 || f.d > daysIn(f.y, f.mo)) return { error: `${MONTHS[f.mo - 1]} ${f.y} has no day ${D}.` };
+  if (f.h > 24 || (f.h === 24 && (f.mi || f.s || +frac))) return { error: 'Hours go from 00 to 23 (or 24:00:00 for the end of the day).' };
+  if (f.mi > 59) return { error: 'Minutes go from 00 to 59.' };
+  if (f.s > 59) return { error: 'Seconds go from 00 to 59. Unix time has no leap seconds.' };
+  const r = { kind: 'ISO 8601' };
+  if (Math.abs(utcMs(f.y, f.mo, f.d)) > MAX_MS - 2 * DAY) return { error: 'That date is outside the range this tool can handle (about 270,000 years either side of 1970).' };
+  let ms;
+  if (OFF) {
+    const o = /^([+-])(\d{2}):?(\d{2})?$/.exec(OFF);
+    const sec = o ? (o[1] === '-' ? -1 : 1) * (+o[2] * 3600 + +(o[3] || 0) * 60) : 0;
+    if (o && (+o[2] > 23 || +(o[3] || 0) > 59)) return { error: `${OFF} isn't a valid UTC offset.` };
+    ms = utcMs(f.y, f.mo, f.d, f.h, f.mi, f.s, f.ms) - sec * 1000;
+  } else {
+    const w = wallToMs(f, zone);
+    ms = w.ms;
+    r.zone = zone;
+    if (!H) r.note = `A date on its own, so midnight at the start of the day in ${zone}.`;
+    else if (w.gap) r.note = `${wallStr(f)} doesn't exist in ${zone}, because the clocks went forward then. This is the time it would have been if they hadn't.`;
+    else if (w.ambiguous) r.note = `${wallStr(f)} happened twice in ${zone}, because the clocks went back. This is the first one; the second is ${toISO(BigInt(w.ambiguous.at(-1)) * NS.ms, zone)}.`;
+    else r.note = `No offset given, so read as ${zone} time.`;
+  }
+  r.ns = BigInt(ms) * NS.ms + BigInt(frac.slice(3));
+  return r;
+}
+
+/* Relative times: "now", "today", "yesterday", "tomorrow", "in 3 days", "2h 30m ago", "+90 min", "-1 week".
+   Seconds, minutes and hours are exact; days, weeks, months and years follow the calendar in the zone
+   (so "in 1 day" keeps the clock time across a DST change, and "Jan 31 + 1 month" is the end of February). */
+const REL_UNITS = {};
+for (const [u, names] of Object.entries({
+  s: 's sec secs second seconds', m: 'm min mins minute minutes', h: 'h hr hrs hour hours',
+  d: 'd day days', w: 'w wk wks week weeks', mo: 'mo mos mon month months', y: 'y yr yrs year years' })) for (const n of names.split(' ')) REL_UNITS[n] = u;
+
+function parseRelative(str, zone, now) {
+  let t = str.toLowerCase().replace(/\s+/g, ' ').trim();
+  if (t === 'now') return { ns: BigInt(now) * NS.ms, kind: 'Relative', live: true };
+  const day = { today: 0, yesterday: -1, tomorrow: 1 }[t];
+  if (day !== undefined) {
+    const w = wallParts(now, zone);
+    return { ns: BigInt(wallToMs({ y: w.y, mo: w.mo, d: w.d + day }, zone).ms) * NS.ms, kind: 'Relative', live: true, note: `Midnight at the start of ${t} in ${zone}.` };
+  }
+  let sign = 0;
+  if (/^in /.test(t)) { sign = 1; t = t.slice(3); }
+  else if (/ ago$/.test(t)) { sign = -1; t = t.slice(0, -4); }
+  const re = /\s*(?:,\s*|and\s+)?([+-]?)(\d+(?:\.\d+)?)\s*([a-z]+)/y;
+  const add = { exact: 0, d: 0, mo: 0 };
+  let m, pos = 0, any = false;
+  while ((m = re.exec(t))) {
+    const u = REL_UNITS[m[3]];
+    if (!u) return null;
+    if (sign && m[1]) return null;          // "in -3 days" is too odd to guess at
+    if (!sign && !m[1] && !any) return null; // a bare "5 days" could be either way
+    const v = (sign || (m[1] === '-' ? -1 : 1)) * +m[2];
+    if (['d', 'w', 'mo', 'y'].includes(u) && !Number.isInteger(v)) return { error: 'Use whole numbers for days, weeks, months and years.' };
+    if (u === 's') add.exact += v * 1000; else if (u === 'm') add.exact += v * 60000; else if (u === 'h') add.exact += v * 3600000;
+    else if (u === 'd') add.d += v; else if (u === 'w') add.d += 7 * v; else if (u === 'mo') add.mo += v; else add.mo += 12 * v;
+    pos = re.lastIndex; any = true;
+  }
+  if (!any || pos !== t.length) return null;
+  let ms = now;
+  if (add.d || add.mo) {
+    const w = wallParts(now, zone), months = w.y * 12 + w.mo - 1 + add.mo, y = Math.floor(months / 12), mo = months - y * 12 + 1;
+    ms = wallToMs({ y, mo, d: Math.min(w.d, daysIn(y, mo)) + add.d, h: w.h, mi: w.mi, s: w.s, ms: ((now % 1000) + 1000) % 1000 }, zone).ms;
+  }
+  return { ns: BigInt(Math.round(ms + add.exact)) * NS.ms, kind: 'Relative', live: true };
+}
+
+/* Reads any supported input. Returns { ns, ms, kind, unit?, guessed?, note?, live? }, { error } or { empty: true }.
+   zone is used for date-times without an offset; now (ms) for relative input. */
+function parseTimestamp(text, { unit = 'auto', zone = LOCAL_ZONE, now = Date.now() } = {}) {
+  const s = String(text).trim();
+  if (!s) return { empty: true };
+  let r;
+  try {
+    let num = s.replace(/^@/, '').replace(/[\s_]/g, '');
+    if (/^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/.test(num)) num = num.replace(/,/g, ''); // 1,700,000,000
+    if (/^[+-]?\d+(\.\d*)?$/.test(num)) {
+      const p = parseNumber(num, unit);
+      r = { ns: p.ns, kind: UNIT_NAMES[p.unit], unit: p.unit, guessed: unit === 'auto' };
+    } else {
+      r = parseISO(s, zone) || parseRelative(s, zone, now);
+      if (!r && /[a-z]/i.test(s)) {
+        const ms = Date.parse(s);
+        if (Number.isFinite(ms)) r = { ns: BigInt(ms) * NS.ms, kind: 'Date string', note: /\b(GMT|UTC|Z)\b|[+-]\d\d:?\d\d\b/i.test(s)
+          ? 'Read by your browser’s date parser.' : 'Read by your browser’s date parser. There’s no offset, so it counts as your local time.' };
+      }
+    }
+  } catch (e) {
+    if (e instanceof RangeError) return { error: 'That time is outside the range this tool can handle (about 270,000 years either side of 1970).' };
+    throw e;
+  }
+  if (!r) return { error: 'Couldn’t read this. Try Unix seconds or milliseconds, ISO 8601 (2024-05-01T12:00:00Z), a date like “1 May 2024 12:00 GMT”, or “3 days ago”.' };
+  if (r.error) return r;
+  const ms = msOf(r.ns);
+  if (!(Math.abs(ms) <= MAX_MS)) return { error: 'That time is outside the range this tool can handle (about 270,000 years either side of 1970).' };
+  return { ...r, ms };
+}
+
+/* ---------- formatting ---------- */
+const yearStr = y => y >= 0 && y <= 9999 ? pad(y, 4) : (y < 0 ? '-' : '+') + pad(y, 6);
+/* Fraction of a second, shortest of 3, 6 or 9 digits that's exact; empty for whole seconds. */
+function fracStr(ns) {
+  const f = String(ns - floorDiv(ns, NS.s) * NS.s).padStart(9, '0');
+  return f === '000000000' ? '' : '.' + (f.endsWith('000000') ? f.slice(0, 3) : f.endsWith('000') ? f.slice(0, 6) : f);
+}
+function offsetStr(sec, sep = ':') {
+  const a = Math.abs(sec);
+  return (sec < 0 ? '-' : '+') + pad(Math.floor(a / 3600)) + sep + pad(Math.floor(a % 3600 / 60)) + (a % 60 ? sep + pad(a % 60) : '');
+}
+const unixStr = (ns, unit) => String(floorDiv(ns, NS[unit]));
+function toISO(ns, zone = 'UTC') {
+  const ms = msOf(ns), w = wallParts(ms, zone);
+  return `${yearStr(w.y)}-${pad(w.mo)}-${pad(w.d)}T${pad(w.h)}:${pad(w.mi)}:${pad(w.s)}${fracStr(ns)}${zone === 'UTC' ? 'Z' : offsetStr(offsetSec(ms, zone))}`;
+}
+function toRFC2822(ns, zone) {
+  const ms = msOf(ns), w = wallParts(ms, zone);
+  return `${WEEKDAYS[w.wd]}, ${pad(w.d)} ${MONTHS[w.mo - 1]} ${w.y} ${pad(w.h)}:${pad(w.mi)}:${pad(w.s)} ${offsetStr(offsetSec(ms, zone), '')}`;
+}
+/* ISO 8601 week-numbering year and week of a calendar date. */
+function isoWeek(y, mo, d) {
+  const t = utcMs(y, mo, d), wd = (new Date(t).getUTCDay() + 6) % 7; // Monday = 0
+  const thu = t + (3 - wd) * DAY, wy = new Date(thu).getUTCFullYear();
+  return { year: wy, week: 1 + Math.floor((thu - utcMs(wy, 1, 1)) / (7 * DAY)) };
+}
+const dayOfYear = (y, mo, d) => Math.round((utcMs(y, mo, d) - utcMs(y, 1, 1)) / DAY) + 1;
+
+let rtf;
+/* "3 hours ago", "in 2 days", "now". Rounds to the largest sensible unit. */
+function fuzzyRelative(ms, now) {
+  rtf = rtf || new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+  const s = (ms - now) / 1000, a = Math.abs(s);
+  const [v, u] = a < 45 ? [s, 'second'] : a < 7200 ? [s / 60, 'minute'] : a < 129600 ? [s / 3600, 'hour']
+    : a < 26 * 86400 ? [s / 86400, 'day'] : a < 320 * 86400 ? [s / 2629746, 'month'] : [s / 31556952, 'year'];
+  return rtf.format(Math.round(v) || 0, u);
+}
+/* "in 2 d 3 h 0 m 5 s" / "2 d 3 h 0 m 5 s ago", whole seconds. */
+function exactRelative(ms, now) {
+  let s = Math.floor(Math.abs(ms - now) / 1000);
+  if (!s) return 'less than a second away';
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60); s %= 60;
+  const parts = [[d, 'd'], [h, 'h'], [m, 'm'], [s, 's']];
+  const txt = parts.slice(parts.findIndex(p => p[0])).map(([n, u]) => `${n.toLocaleString('en')} ${u}`).join(' ');
+  return ms > now ? `in ${txt}` : `${txt} ago`;
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  NS, floorDiv, msOf, guessUnit, parseNumber, LOCAL_ZONE, isValidZone, canonicalZone, wallParts, utcMs, offsetSec, wallToMs,
+  parseISO, parseRelative, parseTimestamp, yearStr, fracStr, offsetStr, unixStr, toISO, toRFC2822, isoWeek, dayOfYear, fuzzyRelative, exactRelative,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'timestamp.settings';
+const DEFAULT_ZONES = [...new Set([LOCAL_ZONE, 'UTC', 'America/Los_Angeles', 'America/New_York', 'Europe/London', 'Asia/Kolkata', 'Asia/Tokyo'])];
+const DEFAULTS = { unit: 'auto', readZone: 'local', zones: DEFAULT_ZONES };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+if (!Array.isArray(settings.zones)) settings.zones = DEFAULT_ZONES;
+settings.zones = settings.zones.filter(isValidZone);
+if (settings.readZone !== 'local' && !isValidZone(settings.readZone)) settings.readZone = 'local';
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+const readZone = () => settings.readZone === 'local' ? LOCAL_ZONE : settings.readZone;
+
+const ALL_ZONES = (() => {
+  let z = [];
+  try { z = Intl.supportedValuesOf('timeZone'); } catch {}
+  return [...new Set(['UTC', ...z])];
+})();
+const cityOf = zone => zone.split('/').at(-1).replace(/_/g, ' ');
+
+/* ---------- state ---------- */
+const input = $('#input');
+let current = { empty: true };
+function reparse() {
+  current = parseTimestamp(input.value, { unit: settings.unit, zone: readZone(), now: Date.now() });
+  render();
+}
+function setInput(text) { input.value = text; reparse(); }
+
+/* ---------- output formats ---------- */
+const readableFmt = new Map();
+function readable(ms, zone) {
+  let f = readableFmt.get(zone);
+  if (!f) readableFmt.set(zone, f = new Intl.DateTimeFormat(undefined, { dateStyle: 'full', timeStyle: 'long', timeZone: zone }));
+  return f.format(ms);
+}
+const FULL_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const FORMATS = [
+  { k: 's', label: 'Unix seconds', get: r => unixStr(r.ns, 's') },
+  { k: 'ms', label: 'Unix milliseconds', get: r => unixStr(r.ns, 'ms') },
+  { k: 'us', label: 'Unix microseconds', get: r => unixStr(r.ns, 'us') },
+  { k: 'ns', label: 'Unix nanoseconds', get: r => unixStr(r.ns, 'ns') },
+  { k: 'iso', label: 'ISO 8601 (UTC)', get: r => toISO(r.ns, 'UTC') },
+  { k: 'isoLocal', label: `ISO 8601 (${LOCAL_ZONE})`, get: r => toISO(r.ns, LOCAL_ZONE) },
+  { k: 'rfc', label: 'RFC 2822', get: r => toRFC2822(r.ns, LOCAL_ZONE) },
+  { k: 'http', label: 'HTTP date', get: r => new Date(r.ms).toUTCString() },
+  { k: 'readable', label: 'Readable', get: r => readable(r.ms, LOCAL_ZONE) },
+  { k: 'rel', label: 'Relative to now', get: r => fuzzyRelative(r.ms, Date.now()), sub: r => exactRelative(r.ms, Date.now()) },
+  { k: 'cal', label: 'Calendar', get: r => {
+      const w = wallParts(r.ms, LOCAL_ZONE), wk = isoWeek(w.y, w.mo, w.d);
+      return `${FULL_DAYS[w.wd]} · week ${wk.year}-W${pad(wk.week)} · day ${dayOfYear(w.y, w.mo, w.d)} of ${dayOfYear(w.y, 12, 31)}`;
+    }, sub: () => `ISO week date and day of the year, in ${LOCAL_ZONE}` },
+];
+const SOURCE_ROW = { 'Unix seconds': 's', 'Unix milliseconds': 'ms', 'Unix microseconds': 'us', 'Unix nanoseconds': 'ns' };
+
+$('#fmts').innerHTML = FORMATS.map(f => `<div class="fmt" data-k="${f.k}"><dt>${esc(f.label)}</dt><dd><span class="val"></span><button class="copy" type="button" aria-label="Copy ${esc(f.label)}">copy</button></dd></div>`).join('');
+const fmtRows = new Map(FORMATS.map(f => [f.k, $(`.fmt[data-k="${f.k}"]`)]));
+
+/* ---------- render ---------- */
+function render() {
+  const r = current, ok = r && r.ns !== undefined;
+  $('#clearX').hidden = !input.value;
+  $('#field').classList.toggle('bad', !!r.error);
+  input.setAttribute('aria-invalid', String(!!r.error));
+
+  const badge = $('#detectBadge'), msg = $('#detectMsg');
+  badge.hidden = r.empty;
+  badge.classList.toggle('err', !!r.error);
+  badge.textContent = r.error ? 'Not recognised' : r.kind || '';
+  msg.textContent = r.empty ? 'Type or paste a timestamp, or pick an example.'
+    : r.error ? r.error
+    : r.note ? r.note
+    : r.guessed ? `Guessed from the number of digits. If it's wrong, pick the unit below.`
+    : r.live ? 'Follows the current time.' : '';
+
+  for (const f of FORMATS) {
+    const row = fmtRows.get(f.k), val = row.querySelector('.val');
+    row.classList.toggle('empty', !ok);
+    row.classList.toggle('src', ok && SOURCE_ROW[r.kind] === f.k);
+    row.querySelector('.copy').disabled = !ok;
+    if (!ok) { val.textContent = '–'; continue; }
+    const v = f.get(r), sub = f.sub && f.sub(r);
+    val.innerHTML = esc(v) + (sub ? `<small>${esc(sub)}</small>` : '');
+    row.dataset.value = v;
+  }
+  renderZoneTimes();
+}
+
+/* ---------- time zones ---------- */
+const abbrFmt = new Map();
+/* Short name such as "EST" or "BST", when the browser knows one (otherwise it's "GMT+5", which the offset already says). */
+function zoneAbbr(ms, zone) {
+  for (const loc of ['en-US', 'en-GB']) {
+    const key = loc + zone;
+    let f = abbrFmt.get(key);
+    if (!f) abbrFmt.set(key, f = new Intl.DateTimeFormat(loc, { timeZone: zone, timeZoneName: 'short' }));
+    const n = f.formatToParts(ms).find(p => p.type === 'timeZoneName')?.value;
+    if (n && !/^(GMT|UTC)/.test(n)) return n;
+  }
+  return '';
+}
+
+function renderZoneList() {
+  $('#zones').innerHTML = settings.zones.map((z, i) => {
+    const region = z.includes('/') ? z.slice(0, z.lastIndexOf('/')).replace(/_/g, ' ') : '';
+    return `<li class="zone" data-i="${i}">
+      <span class="zone-name"><b>${esc(cityOf(z))}</b>${region ? `<span class="region">${esc(region)}</span>` : ''}${z === LOCAL_ZONE ? '<span class="tag">You</span>' : ''}</span>
+      <span class="zone-tools"><button class="copy" type="button" data-act="copy" aria-label="Copy ${esc(cityOf(z))} time as ISO 8601">copy</button><button class="rm" type="button" data-act="rm" aria-label="Remove ${esc(z)}" title="Remove">×</button></span>
+      <span class="zone-when"><input type="datetime-local" step="1" aria-label="Date and time in ${esc(z)}"></span>
+      <span class="zone-meta"></span>
+    </li>`;
+  }).join('') || '<li class="note">No time zones. Add one below.</li>';
+  renderZoneTimes();
+}
+
+function renderZoneTimes() {
+  const r = current, ok = r && r.ns !== undefined;
+  const local = ok ? wallParts(r.ms, LOCAL_ZONE) : null;
+  document.querySelectorAll('.zone[data-i]').forEach(li => {
+    const z = settings.zones[+li.dataset.i], inp = li.querySelector('input'), meta = li.querySelector('.zone-meta');
+    li.querySelector('[data-act=copy]').disabled = !ok;
+    if (!ok) {
+      if (document.activeElement !== inp) inp.value = '';
+      const off = offsetSec(Date.now(), z);
+      meta.innerHTML = esc(`UTC${off ? offsetStr(off) : ''}`);
+      return;
+    }
+    const w = wallParts(r.ms, z), off = offsetSec(r.ms, z), abbr = zoneAbbr(r.ms, z);
+    const inRange = w.y >= 1 && w.y <= 9999;
+    inp.disabled = !inRange;
+    if (document.activeElement !== inp) inp.value = inRange ? `${pad(w.y, 4)}-${pad(w.mo)}-${pad(w.d)}T${pad(w.h)}:${pad(w.mi)}:${pad(w.s)}` : '';
+    const dayDiff = Math.round((utcMs(w.y, w.mo, w.d) - utcMs(local.y, local.mo, local.d)) / DAY);
+    meta.innerHTML = [
+      abbr && esc(abbr),
+      esc(`UTC${off ? offsetStr(off) : ''}`),
+      esc(`${WEEKDAYS[w.wd]} ${w.d} ${MONTHS[w.mo - 1]}${inRange ? '' : ' ' + w.y}`),
+      dayDiff && z !== LOCAL_ZONE ? `<span class="dd">${dayDiff > 0 ? '+' : '−'}${Math.abs(dayDiff)} day${Math.abs(dayDiff) === 1 ? '' : 's'}</span>` : '',
+    ].filter(Boolean).map(s => `<span>${s}</span>`).join('');
+    li.dataset.value = toISO(r.ns, z);
+  });
+}
+
+/* Editing a zone's wall time converts from it: the input becomes that time with its offset. */
+$('#zones').addEventListener('change', e => {
+  const inp = e.target.closest('input'); if (!inp) return;
+  const z = settings.zones[+inp.closest('.zone').dataset.i];
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/.exec(inp.value);
+  if (!m) return;
+  const w = wallToMs({ y: +m[1], mo: +m[2], d: +m[3], h: +m[4], mi: +m[5], s: +(m[6] || 0) }, z);
+  // keep any fraction of a second from the current value, so editing the hour doesn't drop the milliseconds
+  const sub = current.ns !== undefined ? current.ns - floorDiv(current.ns, NS.s) * NS.s : 0n;
+  const ns = BigInt(Math.floor(w.ms / 1000)) * NS.s + sub;
+  input.value = toISO(ns, z);
+  reparse();
+  if (w.gap) toast(`That time doesn't exist in ${cityOf(z)} (clocks went forward), so it moved on`);
+  else if (w.ambiguous) toast(`That time happens twice in ${cityOf(z)}; using the first`);
+});
+$('#zones').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const li = b.closest('.zone');
+  if (b.dataset.act === 'copy') copyText(li.dataset.value);
+  if (b.dataset.act === 'rm') {
+    const i = +li.dataset.i, z = settings.zones[i];
+    settings.zones.splice(i, 1); saveSettings(); renderZoneList(); renderReadZones();
+    const next = $(`.zone[data-i="${Math.min(i, settings.zones.length - 1)}"] .rm`);
+    (next || $('#addZoneIn')).focus();
+    toast(`Removed ${cityOf(z)}`);
+  }
+});
+
+$('#zoneList').innerHTML = ALL_ZONES.map(z => `<option value="${esc(z)}">${esc(cityOf(z))}</option>`).join('');
+/* Accepts an IANA name in any case, a city ("tokyo", "new york"), or anything else the browser accepts (e.g. "+05:30"). */
+function findZone(text) {
+  const t = text.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!t) return null;
+  const hit = ALL_ZONES.find(z => z.toLowerCase() === t) || ALL_ZONES.find(z => cityOf(z).toLowerCase() === t)
+    || ALL_ZONES.find(z => z.toLowerCase().replace(/_/g, ' ').includes(t));
+  if (hit) return hit;
+  try { return isValidZone(text.trim()) ? canonicalZone(text.trim()) : null; } catch { return null; }
+}
+$('#addZone').addEventListener('submit', e => {
+  e.preventDefault();
+  const el = $('#addZoneIn'), z = findZone(el.value);
+  if (!z) return toast(el.value.trim() ? `No time zone matches “${el.value.trim()}”` : 'Type a time zone or city first');
+  if (settings.zones.includes(z)) return toast(`${z} is already in the list`);
+  settings.zones.push(z); saveSettings(); renderZoneList(); renderReadZones();
+  el.value = '';
+  toast(`Added ${z}`);
+});
+$('#zonesReset').onclick = () => { settings.zones = [...DEFAULT_ZONES]; saveSettings(); renderZoneList(); renderReadZones(); };
+
+/* "Times without an offset are in": your zone, UTC, the zones in the list, then every zone. */
+function renderReadZones() {
+  const sel = $('#readZone');
+  const opt = z => `<option value="${esc(z)}">${esc(z)}</option>`;
+  const listed = settings.zones.filter(z => z !== LOCAL_ZONE && z !== 'UTC');
+  sel.innerHTML = `<option value="local">Your zone (${esc(LOCAL_ZONE)})</option>${LOCAL_ZONE === 'UTC' ? '' : opt('UTC')}`
+    + (listed.length ? `<optgroup label="Your list">${listed.map(opt).join('')}</optgroup>` : '')
+    + `<optgroup label="All time zones">${ALL_ZONES.filter(z => z !== 'UTC').map(opt).join('')}</optgroup>`;
+  if (settings.readZone !== 'local' && !ALL_ZONES.includes(settings.readZone) && !listed.includes(settings.readZone)) sel.insertAdjacentHTML('beforeend', opt(settings.readZone));
+  sel.value = settings.readZone;
+}
+$('#readZone').onchange = e => { settings.readZone = e.target.value; saveSettings(); reparse(); };
+
+/* ---------- unit ---------- */
+const unitBtns = [...document.querySelectorAll('#unitSeg button')];
+const syncUnit = () => unitBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === settings.unit)));
+if (!unitBtns.some(b => b.dataset.v === settings.unit)) settings.unit = 'auto';
+unitBtns.forEach(b => b.onclick = () => { settings.unit = b.dataset.v; saveSettings(); syncUnit(); reparse(); });
+syncUnit();
+
+/* ---------- live now ---------- */
+const nowTiles = Object.fromEntries([...document.querySelectorAll('#nowTiles button')].map(b => [b.dataset.k, b.querySelector('.v')]));
+$('#nowLocalLabel').textContent = `Local (${cityOf(LOCAL_ZONE)})`;
+const nowValue = (k, ms) => {
+  const ns = BigInt(ms) * NS.ms;
+  return k === 's' ? unixStr(ns, 's') : k === 'ms' ? String(ms) : k === 'iso' ? toISO(ns, 'UTC')
+    : (w => `${pad(w.y, 4)}-${pad(w.mo)}-${pad(w.d)} ${pad(w.h)}:${pad(w.mi)}:${pad(w.s)}`)(wallParts(ms, LOCAL_ZONE));
+};
+let lastSecond = 0;
+function tick() {
+  const ms = Date.now(), sec = Math.floor(ms / 1000);
+  nowTiles.ms.textContent = ms;
+  nowTiles.iso.textContent = nowValue('iso', ms);
+  if (sec !== lastSecond) {
+    lastSecond = sec;
+    nowTiles.s.textContent = sec;
+    nowTiles.local.textContent = nowValue('local', ms);
+    // relative input ("now", "in 2 hours") follows the clock; everything else only needs "Relative to now" refreshed
+    if (current.live) reparse();
+    else if (current.ns !== undefined) { const f = FORMATS.find(f => f.k === 'rel'); fmtRows.get('rel').querySelector('.val').innerHTML = `${esc(f.get(current))}<small>${esc(f.sub(current))}</small>`; }
+  }
+  requestAnimationFrame(tick);
+}
+$('#nowTiles').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (b) copyText(nowValue(b.dataset.k, Date.now()));
+});
+const useNow = () => { setInput(String(Date.now())); input.focus(); };
+$('#useNow').onclick = useNow;
+$('#nowBtn').onclick = useNow;
+
+/* ---------- input ---------- */
+input.addEventListener('input', reparse);
+const clear = () => { setInput(''); input.focus(); };
+$('#clearBtn').onclick = clear;
+$('#clearX').onclick = clear;
+const EXAMPLES = ['now', '1700000000', '1700000000123', '2024-02-29T12:00:00Z', '2024-06-01 09:30', 'in 90 minutes', '3 days ago', 'tomorrow'];
+$('#examples').insertAdjacentHTML('beforeend', EXAMPLES.map(x => `<button type="button">${esc(x)}</button>`).join(''));
+$('#examples').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setInput(b.textContent); input.focus(); } });
+
+$('#fmts').addEventListener('click', e => {
+  const b = e.target.closest('.copy'); if (b) copyText(b.closest('.fmt').dataset.value);
+});
+
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const el = e.target;
+  if (el.closest && el.closest('input, select, textarea, [contenteditable]')) return;
+  if (e.key === '/') { e.preventDefault(); input.focus(); input.select(); }
+  else if (e.key === 'n' || e.key === 'N') { e.preventDefault(); useNow(); }
+});
+
+/* ---------- copy / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+async function copyText(text) {
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); toast(`Copied ${text}`); } catch { toast('Couldn’t copy to the clipboard'); }
+}
+
+/* ---------- start ---------- */
+renderReadZones();
+renderZoneList();
+setInput(String(Math.floor(Date.now() / 1000)));
+tick();
+input.focus({ preventScroll: true });
+</script>
+</body>
+</html>

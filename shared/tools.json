@@ -38,5 +38,15 @@
     ],
     "summary": "Format, validate and explore JSON",
     "description": "Format, minify and validate JSON with exact error locations, repair common mistakes (comments, trailing commas, single quotes), browse it as a collapsible tree and query it by path."
+  },
+  {
+    "slug": "timestamp",
+    "name": "Timestamp converter",
+    "mark": [
+      "TIME",
+      ".stamp"
+    ],
+    "summary": "Convert Unix times, ISO 8601 and time zones",
+    "description": "Convert between Unix seconds, milliseconds, microseconds and nanoseconds, ISO 8601, RFC 2822 and dates in any time zone, in either direction, with a live clock and relative times such as “3 hours ago” or “in 2 days”."
   }
 ]
