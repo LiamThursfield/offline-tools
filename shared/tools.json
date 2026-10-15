@@ -1,5 +1,15 @@
 [
   {
+    "slug": "basic-auth",
+    "name": "Basic auth generator",
+    "mark": [
+      "BASIC",
+      ".auth"
+    ],
+    "summary": "Build and decode Basic auth headers",
+    "description": "Turn a username and password into an Authorization: Basic header, or decode one back to the credentials, with ready-made curl, fetch, Python and HTTPie snippets, UTF-8 or ISO-8859-1 encoding, a WWW-Authenticate challenge builder, and warnings about colons, hidden characters and plain HTTP."
+  },
+  {
     "slug": "bpm-tapper",
     "name": "BPM tapper",
     "mark": [

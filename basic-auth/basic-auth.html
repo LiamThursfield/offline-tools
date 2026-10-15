@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Basic auth generator – Build and decode Basic auth headers | LXST.tools</title>
+<meta name="description" content="Turn a username and password into an Authorization: Basic header, or decode one back to the credentials, with ready-made curl, fetch, Python and HTTPie snippets, UTF-8 or ISO-8859-1 encoding, a WWW-Authenticate challenge builder, and warnings about colons, hidden characters and plain HTTP. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/basic-auth">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/basic-auth">
+<meta property="og:title" content="Basic auth generator">
+<meta property="og:description" content="Turn a username and password into an Authorization: Basic header, or decode one back to the credentials, with ready-made curl, fetch, Python and HTTPie snippets, UTF-8 or ISO-8859-1 encoding, a WWW-Authenticate challenge builder, and warnings about colons, hidden characters and plain HTTP. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Basic auth generator","url":"https://tools.lxst.digital/basic-auth","description":"Turn a username and password into an Authorization: Basic header, or decode one back to the credentials, with ready-made curl, fetch, Python and HTTPie snippets, UTF-8 or ISO-8859-1 encoding, a WWW-Authenticate challenge builder, and warnings about colons, hidden characters and plain HTTP.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible,textarea:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+code{font:.92em var(--mono);letter-spacing:0}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-bottom:4px;border-bottom:1px solid var(--line);border-radius:calc(var(--radius) - 4px) calc(var(--radius) - 4px) 0 0;padding-bottom:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:72ch}
+kbd{font:600 .82em var(--mono);letter-spacing:0;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;background:var(--panel);color:var(--ink)}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer,.snip-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.card-head.sub{border-top:1px solid var(--line);background:color-mix(in oklab,var(--ink) 2%,transparent)}
+.card-head.sub h3{margin:0;font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.note{margin:0;padding:10px 14px;color:var(--muted);font-size:.84rem}
+.note code{color:var(--ink)}
+.k{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:16px;align-items:start;margin-top:16px}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+/* inputs */
+.rows{display:flex;flex-direction:column;gap:10px;padding:14px}
+.row{display:grid;grid-template-columns:116px minmax(0,1fr);gap:4px 12px;align-items:center}
+.row>label{font-size:.86rem;font-weight:600;color:var(--muted)}
+.row>label small{display:block;font-size:.76rem;font-weight:500;opacity:.8}
+.field{display:flex;align-items:center;min-width:0;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:var(--surface);transition:border-color .2s,box-shadow .2s}
+.field:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.field.bad{border-color:var(--del)}
+.field.bad:focus-within{box-shadow:0 0 0 3px color-mix(in oklab,var(--del) 30%,transparent)}
+.field input,.field textarea{flex:1;min-width:0;border:0;background:none;padding:10px 13px;font:500 1rem var(--mono);letter-spacing:0;resize:vertical}
+.field input:focus-visible,.field textarea:focus-visible{box-shadow:none}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted);opacity:.7}
+.field.block{display:block;margin:14px 14px 0}
+.field.block textarea{display:block;width:100%;line-height:1.5}
+.eye{flex:none;margin-right:7px;border:1px solid var(--line);background:none;border-radius:var(--pill);padding:1px 10px;font:600 .74rem var(--sans);color:var(--muted)}
+.eye:hover{border-color:var(--accent);color:var(--accent-text)}
+.eye[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.detect{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;padding:10px 16px 0;font-size:.86rem;color:var(--muted);min-height:2.1em}
+.badge{display:inline-flex;align-items:center;padding:1px 10px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 14%,transparent);color:var(--accent-text);font-size:.78rem;font-weight:700}
+.badge.err{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.detect .msg{flex:1 1 20ch}
+.examples{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 0;font-size:.8rem;color:var(--muted);align-items:center}
+.examples button{border:1px dashed var(--line);background:none;border-radius:var(--pill);padding:1px 10px;font:500 .78rem var(--mono);letter-spacing:0;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.examples button:hover{border-style:solid;border-color:var(--accent);color:var(--accent-text)}
+.opts{display:flex;flex-wrap:wrap;gap:10px 22px;padding:12px 14px;border-top:1px solid var(--line)}
+.opt{display:flex;align-items:center;gap:10px;font-size:.86rem;color:var(--muted);min-width:0}
+.opt>span:first-child{white-space:nowrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 10px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+
+/* the header itself */
+.big{display:block;width:calc(100% - 28px);margin:14px;padding:12px 14px;text-align:left;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:var(--surface);transition:border-color .2s}
+.big:hover:not(:disabled){border-color:var(--accent)}
+.big:disabled{cursor:default}
+.big code{display:block;font:600 1.02rem/1.45 var(--mono);letter-spacing:0;overflow-wrap:anywhere}
+.big .scheme{color:var(--muted);font-weight:500}
+.big .b64{color:var(--accent-text)}
+.big.empty code{color:var(--muted);font-weight:500}
+.facts{margin:-4px 14px 12px;color:var(--muted);font-size:.8rem}
+
+/* value rows */
+.fmts{margin:0}
+.fmt{display:grid;grid-template-columns:150px minmax(0,1fr);gap:4px 14px;align-items:baseline;padding:9px 14px;border-top:1px solid var(--line)}
+.fmt dt{font-size:.8rem;font-weight:600;color:var(--muted);overflow-wrap:anywhere}
+.fmt dd{margin:0;display:flex;align-items:baseline;gap:10px;min-width:0}
+.fmt .val{flex:1;min-width:0;font:500 .95rem var(--mono);letter-spacing:0;overflow-wrap:anywhere}
+.fmt .val small{display:block;margin-top:1px;font:.8rem var(--sans);color:var(--muted)}
+.fmt.empty .val{color:var(--muted);font-weight:400}
+.fmts.stack .fmt{grid-template-columns:1fr;gap:2px}
+.copy{flex:none;border:1px solid var(--line);background:none;border-radius:var(--pill);padding:0 9px;font:600 .72rem var(--sans);color:var(--muted)}
+.copy:hover:not(:disabled){color:var(--accent-text);border-color:var(--accent)}
+.copy:disabled{opacity:.4;cursor:not-allowed}
+
+/* notes */
+.notes{list-style:none;margin:0;display:flex;flex-direction:column;gap:7px;padding:0 14px 14px}
+.notes:empty{padding:0}
+.notes li{font-size:.84rem;color:var(--muted);padding-left:10px;border-left:2px solid var(--line)}
+.notes li.bad{border-color:var(--del);color:var(--del)}
+.notes li.warn{border-color:var(--chg)}
+.notes li.info{border-color:var(--accent)}
+
+/* snippets */
+.snips{display:flex;flex-direction:column}
+.snip{padding:10px 14px;border-top:1px solid var(--line)}
+.snip:first-child{border-top:0}
+.snip-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.snip pre{margin:0;font:500 .85rem/1.55 var(--mono);letter-spacing:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.snip .hint{display:block;margin-top:5px;color:var(--muted);font-size:.78rem}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);overflow-wrap:anywhere}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+@media (max-width:1000px){
+  .main{grid-template-columns:1fr}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .row,.fmt{grid-template-columns:1fr}
+  .row>label{margin-bottom:-2px}
+  .field input,.field textarea{font-size:.95rem;padding:9px 11px}
+  .big code{font-size:.92rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>BASIC</b>.auth<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+        <a href="../basic-auth/basic-auth.html" data-path="/basic-auth" aria-current="page"><span class="tm-mark"><b>BASIC</b>.auth</span><span class="tm-text"><span class="tm-name">Basic auth generator</span><span class="tm-sum">Build and decode Basic auth headers</span></span></a>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../encode/encode.html" data-path="/encode"><span class="tm-mark"><b>ENC</b>.decode</span><span class="tm-text"><span class="tm-name">Encoder/decoder</span><span class="tm-sum">Encode and decode Base64, URLs, HTML and more</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../jwt/jwt.html" data-path="/jwt"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
+        <a href="../metronome/metronome.html" data-path="/metronome"><span class="tm-mark"><b>METRO</b>.nome</span><span class="tm-text"><span class="tm-name">Metronome</span><span class="tm-sum">Keep time with accents and tap tempo</span></span></a>
+        <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+        <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="exampleBtn" title="Fill in an example (E)">Example</button>
+      <button class="nav" id="clearBtn" title="Clear everything">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Build a Basic auth header</h1>
+    <p>Turn a username and password into an <code>Authorization: Basic</code> header, or paste a header back to see the credentials inside it. Copy the header, or a ready-made curl, fetch, Python or HTTPie command. Nothing is sent anywhere, and nothing is saved.</p>
+  </div>
+
+  <div class="main">
+    <div class="col">
+      <section class="card" aria-labelledby="inTitle">
+        <div class="card-head">
+          <h2 id="inTitle">Credentials</h2>
+          <span class="spacer"></span>
+          <button class="btn" id="toBuild" title="Edit these credentials" hidden>Edit</button>
+          <span class="seg" role="group" aria-label="Direction" id="modeSeg">
+            <button type="button" data-v="build" aria-pressed="true" title="Make a header from a username and password">Build</button><button type="button" data-v="decode" aria-pressed="false" title="Read the credentials out of a header">Decode</button>
+          </span>
+        </div>
+
+        <div id="buildPane">
+          <div class="rows">
+            <div class="row">
+              <label for="user">Username</label>
+              <div class="field"><input id="user" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="alice"></div>
+            </div>
+            <div class="row">
+              <label for="pass">Password</label>
+              <div class="field">
+                <input id="pass" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="s3cr3t">
+                <button class="eye" id="revealBtn" type="button" aria-pressed="false" aria-controls="pass" title="Show or hide the password">Show</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="decodePane" hidden>
+          <div class="field block">
+            <textarea id="decIn" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" aria-labelledby="inTitle" aria-describedby="detectMsg" placeholder="Authorization: Basic YWxpY2U6czNjcjN0"></textarea>
+          </div>
+          <div class="detect" id="detect" aria-live="polite"><span class="badge" id="detectBadge" hidden></span><span class="msg" id="detectMsg"></span></div>
+          <div class="examples" id="examples"><span>Try</span></div>
+          <dl class="fmts" id="decOut"></dl>
+        </div>
+
+        <div class="opts">
+          <div class="opt"><span id="csLabel">Characters as</span>
+            <span class="seg" role="group" aria-labelledby="csLabel" id="csSeg">
+              <button type="button" data-v="utf-8" title="Encode the credentials as UTF-8">UTF-8</button><button type="button" data-v="iso-8859-1" title="Encode the credentials as ISO-8859-1 (Latin-1), RFC 7617's default">ISO-8859-1</button>
+            </span>
+          </div>
+        </div>
+        <ul class="notes" id="notes"></ul>
+      </section>
+
+      <section class="card" aria-labelledby="chalTitle">
+        <div class="card-head"><h2 id="chalTitle">Server challenge</h2></div>
+        <div class="rows">
+          <div class="row">
+            <label for="realm">Realm</label>
+            <div class="field"><input id="realm" type="text" autocomplete="off" spellcheck="false" placeholder="Restricted"></div>
+          </div>
+        </div>
+        <dl class="fmts stack" id="chalOut"></dl>
+        <ul class="notes" id="chalNotes"></ul>
+        <p class="note">Send this with a <code>401 Unauthorized</code> response to ask a client for credentials. <code>charset="UTF-8"</code> tells it to encode them as UTF-8 instead of ISO-8859-1.</p>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="outTitle">
+      <div class="card-head"><h2 id="outTitle">Authorization header</h2><span class="spacer"></span><button class="btn" id="copyHeader" data-copy="" data-label="the header" disabled>Copy header</button></div>
+      <button class="big empty" id="bigHeader" type="button" title="Click to copy the header" disabled><code></code></button>
+      <p class="facts" id="facts"></p>
+      <dl class="fmts" id="outFmts"></dl>
+      <div class="card-head sub"><h3>Snippets</h3></div>
+      <div class="rows">
+        <div class="row">
+          <label for="url">Request URL <small>for the snippets</small></label>
+          <div class="field"><input id="url" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://api.example.com/me"></div>
+        </div>
+      </div>
+      <div class="snips" id="snips"></div>
+      <p class="note">Base64 is encoding, not encryption: anyone who sees the header can read the password. Send it over HTTPS only, and remember it goes with every request.</p>
+    </section>
+  </div>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core Basic auth logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Basic auth (RFC 7617) is `Authorization: Basic base64(username ":" password)`. The credentials
+   are *bytes*, so the character set matters: the RFC's default is ISO-8859-1, and a server asks for
+   UTF-8 with charset="UTF-8" in its challenge. The first colon splits the pair, which is why a
+   username can't contain one but a password can. */
+const CHARSETS = { 'utf-8': 'UTF-8', 'iso-8859-1': 'ISO-8859-1' };
+const COLON = 0x3a;
+const charsetOf = cs => cs === 'iso-8859-1' ? 'iso-8859-1' : 'utf-8';
+
+/* ---------- text <-> bytes ---------- */
+const latin1 = bytes => Array.from(bytes, b => String.fromCharCode(b)).join('');
+
+function toBytes(str, charset = 'utf-8') {
+  const s = String(str);
+  if (charsetOf(charset) === 'utf-8') return { bytes: new TextEncoder().encode(s) };
+  const out = new Uint8Array(s.length);
+  const bad = [];
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c > 0xff && !bad.includes(s[i])) bad.push(s[i]);
+    out[i] = c & 0xff;
+  }
+  if (bad.length) return { error: `ISO-8859-1 has no room for ${bad.map(c => `“${c}”`).join(', ')}. Switch to UTF-8.` };
+  return { bytes: out };
+}
+
+/* UTF-8 bytes that aren't valid UTF-8 are read as ISO-8859-1 instead, and say so with `fallback`. */
+function fromBytes(bytes, charset = 'utf-8') {
+  if (charsetOf(charset) === 'iso-8859-1') return { text: latin1(bytes) };
+  try { return { text: new TextDecoder('utf-8', { fatal: true }).decode(bytes) }; }
+  catch { return { text: latin1(bytes), fallback: true }; }
+}
+
+/* ---------- Base64 ---------- */
+const b64FromBytes = bytes => btoa(latin1(bytes));
+
+/* Lenient: whitespace, the URL-safe alphabet and missing padding are accepted and reported. */
+function b64Decode(str) {
+  const raw = String(str);
+  const notes = [];
+  let s = raw.replace(/\s+/g, '');
+  if (!s) return { error: 'There are no Base64 credentials here.' };
+  if (/\s/.test(raw.trim())) notes.push({ level: 'warn', text: 'The Base64 was split over several lines; the line breaks were ignored.' });
+  if (/[-_]/.test(s)) {
+    notes.push({ level: 'info', text: 'That’s the URL-safe alphabet (- and _). Basic auth normally uses + and /.' });
+    s = s.replace(/-/g, '+').replace(/_/g, '/');
+  }
+  const body = s.replace(/=+$/, '');
+  const bad = [...new Set(body.match(/[^A-Za-z0-9+/]/g) || [])];
+  if (bad.length) return { error: `${bad.map(c => `“${c}”`).join(', ')} ${bad.length > 1 ? 'aren’t Base64 characters' : 'isn’t a Base64 character'}.` };
+  if (body.length % 4 === 1) return { error: 'The Base64 is one character too long to be whole bytes.' };
+  if (s.length % 4 || /=/.test(s) !== (body.length % 4 !== 0)) notes.push({ level: 'warn', text: 'The Base64 padding (=) was wrong; it was fixed.' });
+  const padded = body + '='.repeat((4 - body.length % 4) % 4);
+  let bytes;
+  try { bytes = Uint8Array.from(atob(padded), c => c.charCodeAt(0)); } catch { return { error: 'That Base64 couldn’t be decoded.' }; }
+  if (b64FromBytes(bytes) !== padded) notes.push({ level: 'warn', text: 'The last Base64 character has unused bits set (a non-canonical encoding); strict decoders reject it.' });
+  return { bytes, notes };
+}
+
+/* ---------- characters that are easy to miss ---------- */
+const HIDDEN = {
+  0x09: 'tab', 0x0a: 'line feed', 0x0d: 'carriage return', 0xa0: 'no-break space', 0xad: 'soft hyphen',
+  0x200b: 'zero width space', 0x200c: 'zero width non-joiner', 0x200d: 'zero width joiner',
+  0x2028: 'line separator', 0x2029: 'paragraph separator', 0x202f: 'narrow no-break space',
+  0x2060: 'word joiner', 0xfeff: 'byte order mark', 0xfffd: 'replacement character',
+};
+const isControl = cp => cp < 0x20 || cp === 0x7f;
+function hiddenChars(str) {
+  const found = new Map();
+  for (const ch of String(str)) {
+    const cp = ch.codePointAt(0);
+    const name = HIDDEN[cp] || (isControl(cp) ? `control character U+${cp.toString(16).toUpperCase().padStart(4, '0')}` : cp >= 0x2000 && cp <= 0x200a ? 'unusual space' : null);
+    if (name) found.set(name, (found.get(name) || 0) + 1);
+  }
+  return [...found].map(([name, count]) => ({ name, count }));
+}
+
+/* ---------- what's worth saying about a pair of credentials ---------- */
+function credentialNotes(user, pass, charset = 'utf-8') {
+  const cs = charsetOf(charset);
+  const u = String(user ?? ''), p = String(pass ?? '');
+  const notes = [];
+  if (u.includes(':')) notes.push({ level: 'bad', text: 'The username contains a colon. A server splits at the first colon, so it would read the rest as the password; RFC 7617 doesn’t allow it.' });
+  for (const [label, v] of [['username', u], ['password', p]]) {
+    if ([...v].some(ch => isControl(ch.codePointAt(0)))) notes.push({ level: 'bad', text: `The ${label} contains a control character, which can’t go in a header.` });
+    else if (v !== v.trim()) notes.push({ level: 'warn', text: `The ${label} starts or ends with a space, and that space is part of the credentials.` });
+    const hid = hiddenChars(v).filter(h => !h.name.startsWith('control character') && !['tab', 'line feed', 'carriage return'].includes(h.name));
+    if (hid.length) notes.push({ level: 'warn', text: `The ${label} contains ${hid.map(h => `${h.count} × ${h.name}`).join(', ')}, which you can’t see.` });
+  }
+  if (!u) notes.push({ level: 'info', text: 'The username is empty. The header is still valid, but most servers turn it down.' });
+  if (!p) notes.push({ level: 'info', text: 'The password is empty. That’s valid: the credentials just end at the colon.' });
+  if (/[^\x00-\x7f]/.test(u + p)) notes.push(cs === 'utf-8'
+    ? { level: 'info', text: 'Non-ASCII characters are encoded as UTF-8. A server using RFC 7617’s default reads them as ISO-8859-1 and sees something else, unless it asked for charset="UTF-8".' }
+    : { level: 'info', text: 'Non-ASCII characters are encoded as ISO-8859-1, RFC 7617’s default. A server expecting UTF-8 sees something else.' });
+  return notes;
+}
+
+/* ---------- build ---------- */
+function encodeBasic(creds, opts = {}) {
+  const charset = charsetOf(opts.charset);
+  const user = String(creds?.user ?? ''), pass = String(creds?.pass ?? '');
+  if (!user && !pass) return { empty: true };
+  const raw = `${user}:${pass}`;
+  const b = toBytes(raw, charset);
+  const notes = credentialNotes(user, pass, charset);
+  if (b.error) return { error: b.error, notes };
+  const b64 = b64FromBytes(b.bytes);
+  return {
+    user, pass, raw, charset, bytes: b.bytes, b64,
+    value: `Basic ${b64}`,
+    header: `Authorization: Basic ${b64}`,
+    facts: `${CHARSETS[charset]} · ${b.bytes.length} byte${b.bytes.length === 1 ? '' : 's'} · ${b64.length} Base64 characters`,
+    notes,
+  };
+}
+
+/* ---------- decode ---------- */
+const SOURCES = {
+  header: ['header', 'an Authorization header'],
+  'proxy-header': ['proxy header', 'a Proxy-Authorization header'],
+  scheme: ['credential', 'a Basic credential'],
+  base64: ['base64', 'Base64 credentials'],
+  pair: ['user:pass', 'a plain user:pass pair'],
+  url: ['url', 'a URL with credentials in it'],
+  flag: ['-u', 'a command line with -u'],
+};
+
+const pctDecode = s => { try { return decodeURIComponent(s); } catch { return s; } };
+function splitPair(text) {
+  const s = String(text);
+  const i = s.indexOf(':');
+  return i < 0 ? { user: s, pass: '', noColon: true } : { user: s.slice(0, i), pass: s.slice(i + 1) };
+}
+
+/* What has been pasted: a header line, a bare credential, a user:pass pair, a URL or a curl line. */
+function detectSource(text) {
+  const s = String(text).trim();
+  if (!s) return { kind: 'empty' };
+  let m;
+  // Base64 may be wrapped over several lines (b64Decode drops the line breaks and says so), but not split by spaces.
+  if ((m = /^(proxy-)?authorization\s*:\s*basic\s+([^ \t]*)$/i.exec(s))) return { kind: m[1] ? 'proxy-header' : 'header', b64: m[2] };
+  if ((m = /^basic\s+([^ \t]*)$/i.exec(s))) return { kind: 'scheme', b64: m[1] };
+  if ((m = /^[a-z][a-z0-9+.-]*:\/\/([^/?#\s@]*)@/i.exec(s))) {
+    const p = splitPair(m[1]);
+    return { kind: 'url', pair: { user: pctDecode(p.user), pass: pctDecode(p.pass), noColon: p.noColon } };
+  }
+  if ((m = /(?:^|\s)(?:-u|--user|-a|--auth)(?:=|\s+)(?:"([^"]*)"|'([^']*)'|(\S+))/.exec(s))) return { kind: 'flag', pair: splitPair(m[1] ?? m[2] ?? m[3]) };
+  if (s.includes(':')) return { kind: 'pair', pair: splitPair(s) };
+  if (/^[A-Za-z0-9+/_=\r\n-]+$/.test(s)) return { kind: 'base64', b64: s };
+  return { kind: 'unknown' };
+}
+
+function decodeBasic(text, opts = {}) {
+  const charset = charsetOf(opts.charset);
+  const src = detectSource(text);
+  if (src.kind === 'empty') return { empty: true };
+  if (src.kind === 'unknown') return { error: 'That isn’t a Basic auth header, Base64 credentials or a user:pass pair.' };
+  const notes = [{ level: 'info', text: `Read as ${SOURCES[src.kind][1]}.` }];
+  if (src.pair) { // already plain text: nothing to un-Base64
+    const { user, pass, noColon } = src.pair;
+    if (noColon) notes.push({ level: 'bad', text: 'There’s no colon here, so there’s no password to split off.' });
+    return { source: src.kind, charset, user, pass, raw: `${user}:${pass}`, encoded: false, noColon,
+      notes: [...notes, ...credentialNotes(user, pass, charset)] };
+  }
+  const dec = b64Decode(src.b64);
+  if (dec.error) return { source: src.kind, error: dec.error };
+  notes.push(...dec.notes);
+  const facts = `${dec.bytes.length} byte${dec.bytes.length === 1 ? '' : 's'} · read as ${CHARSETS[charset]}`;
+  const i = dec.bytes.indexOf(COLON);
+  if (i < 0) {
+    const whole = fromBytes(dec.bytes, charset);
+    notes.push({ level: 'bad', text: 'The decoded bytes have no colon in them, so these aren’t Basic auth credentials.' });
+    return { source: src.kind, charset, user: whole.text, pass: '', raw: whole.text, bytes: dec.bytes, encoded: true, noColon: true, facts, notes };
+  }
+  const u = fromBytes(dec.bytes.slice(0, i), charset);
+  const p = fromBytes(dec.bytes.slice(i + 1), charset);
+  if (u.fallback || p.fallback) notes.push({ level: 'warn', text: 'The bytes aren’t valid UTF-8, so they were read as ISO-8859-1 instead.' });
+  return { source: src.kind, charset, user: u.text, pass: p.text, raw: `${u.text}:${p.text}`, bytes: dec.bytes, encoded: true, facts,
+    notes: [...notes, ...credentialNotes(u.text, p.text, charset)] };
+}
+
+/* ---------- the server's side ---------- */
+function challengeHeader(opts = {}) {
+  const charset = charsetOf(opts.charset);
+  const given = String(opts.realm ?? '').trim();
+  const realm = given || 'Restricted';
+  const notes = [];
+  if (!given) notes.push({ level: 'info', text: 'RFC 7617 needs a realm, so “Restricted” is standing in for one. It’s shown to the person signing in.' });
+  if ([...realm].some(ch => isControl(ch.codePointAt(0)))) notes.push({ level: 'bad', text: 'The realm contains a control character, which can’t go in a header.' });
+  if (/[^\x00-\x7f]/.test(realm)) notes.push({ level: 'warn', text: 'The realm has non-ASCII characters in it. A quoted string in a header can’t carry them reliably, so keep the realm to ASCII.' });
+  if (/["\\]/.test(realm)) notes.push({ level: 'info', text: 'Quotes and backslashes in the realm are escaped with a backslash.' });
+  const parts = [`Basic realm="${realm.replace(/[\\"]/g, c => `\\${c}`)}"`];
+  if (charset === 'utf-8') parts.push('charset="UTF-8"');
+  const value = parts.join(', ');
+  return { realm, value, header: `WWW-Authenticate: ${value}`, notes };
+}
+
+/* ---------- snippets ---------- */
+const EXAMPLE_URL = 'https://api.example.com/me';
+const shq = s => `'${String(s).replace(/'/g, `'\\''`)}'`;  // safe inside single quotes in a POSIX shell
+const jss = s => JSON.stringify(String(s));                 // also a valid Python string literal
+
+function snippets(enc, opts = {}) {
+  if (!enc || enc.empty || enc.error) return [];
+  const url = String(opts.url ?? '').trim() || EXAMPLE_URL;
+  const { user = '', pass = '', value = '' } = enc;
+  const pair = `${user}:${pass}`;
+  const out = [
+    { k: 'curl', label: 'curl', text: `curl -u ${shq(pair)} ${shq(url)}` },
+    { k: 'curl-header', label: 'curl, header set by hand', text: `curl -H ${shq(`Authorization: ${value}`)} ${shq(url)}` },
+    { k: 'fetch', label: 'JavaScript (fetch)', text: `const res = await fetch(${jss(url)}, {\n  headers: { Authorization: ${jss(value)} },\n});` },
+    { k: 'python', label: 'Python (requests)', text: `import requests\n\nres = requests.get(${jss(url)}, auth=(${jss(user)}, ${jss(pass)}))` },
+    { k: 'httpie', label: 'HTTPie', text: `http --auth ${shq(pair)} GET ${shq(url)}` },
+    { k: 'wget', label: 'wget', text: `wget --user=${shq(user)} --password=${shq(pass)} ${shq(url)}` },
+  ];
+  const m = /^([a-z][a-z0-9+.-]*:\/\/)(.*)$/i.exec(url);
+  if (m) out.push({ k: 'url', label: 'URL with credentials', text: `${m[1]}${encodeURIComponent(user)}:${encodeURIComponent(pass)}@${m[2]}`,
+    hint: 'curl and most clients accept this; browsers strip the credentials or refuse the URL.' });
+  return out;
+}
+
+/* ---------- the URL the credentials are going to ---------- */
+function urlNotes(url) {
+  const s = String(url ?? '').trim();
+  if (!s) return [];
+  if (/^https:\/\//i.test(s)) return [];
+  if (/^http:\/\//i.test(s)) {
+    const host = s.slice(7).split(/[/:?#]/)[0];
+    return /^(localhost|127\.0\.0\.1|\[::1\]|[^.]+\.localhost)$/i.test(host)
+      ? [{ level: 'info', text: 'Plain HTTP to localhost is fine while you’re working locally; anywhere else the header travels in the clear.' }]
+      : [{ level: 'bad', text: 'That URL is plain HTTP. Base64 is encoding, not encryption, so anyone on the path can read the password. Use HTTPS.' }];
+  }
+  return [{ level: 'warn', text: 'That doesn’t look like an http:// or https:// URL.' }];
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  CHARSETS, toBytes, fromBytes, b64FromBytes, b64Decode, hiddenChars, credentialNotes,
+  encodeBasic, detectSource, splitPair, decodeBasic, challengeHeader, snippets, urlNotes, shq, jss, EXAMPLE_URL,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/* ---------- settings (preferences only; credentials are never saved) ---------- */
+const SETTINGS_KEY = 'basic-auth.settings';
+const DEFAULTS = { mode: 'build', charset: 'utf-8' };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+if (!['build', 'decode'].includes(settings.mode)) settings.mode = 'build';
+if (!CHARSETS[settings.charset]) settings.charset = 'utf-8';
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+
+const userEl = $('#user'), passEl = $('#pass'), urlEl = $('#url'), realmEl = $('#realm'), decIn = $('#decIn');
+
+/* ---------- rendering ---------- */
+const copyAttrs = (value, label) => `data-copy="${esc(value)}" data-label="${esc(label)}"`;
+const fmtRow = (label, value, placeholder, copyLabel) => `<div class="fmt${value ? '' : ' empty'}">
+  <dt>${esc(label)}</dt>
+  <dd><span class="val">${value ? esc(value) : esc(placeholder)}</span><button class="copy" type="button" ${copyAttrs(value || '', copyLabel || label.toLowerCase())}${value ? '' : ' disabled'}>Copy</button></dd>
+</div>`;
+const noteList = notes => notes.map(n => `<li class="${n.level}">${esc(n.text)}</li>`).join('');
+
+function renderNotes(notes) { $('#notes').innerHTML = noteList(notes); }
+
+function renderDecode(dec) {
+  const badge = $('#detectBadge'), msg = $('#detectMsg');
+  const kind = dec.source ? SOURCES[dec.source][0] : null;
+  badge.hidden = !kind;
+  badge.textContent = kind || '';
+  badge.classList.toggle('err', !!dec.error);
+  msg.textContent = dec.empty ? 'Paste a header, Base64 credentials, a user:pass pair, a URL or a curl command.'
+    : dec.error ? dec.error : dec.facts || '';
+  $('#decOut').innerHTML = dec.empty || dec.error ? '' : [
+    fmtRow('Username', dec.user, '— empty —', 'the username'),
+    dec.noColon ? '' : fmtRow('Password', dec.pass, '— empty —', 'the password'),
+  ].join('');
+  $('#toBuild').hidden = !!(dec.empty || dec.error);
+}
+
+function renderOutput(enc) {
+  const big = $('#bigHeader'), code = big.querySelector('code');
+  const ok = !enc.empty && !enc.error;
+  big.classList.toggle('empty', !ok);
+  big.disabled = !ok;
+  code.innerHTML = ok
+    ? `<span class="scheme">Authorization: Basic </span><span class="b64">${esc(enc.b64)}</span>`
+    : `<span class="scheme">Authorization: Basic …</span>`;
+  const copyBtn = $('#copyHeader');
+  copyBtn.disabled = !ok;
+  copyBtn.dataset.copy = ok ? enc.header : '';
+  big.dataset.copy = ok ? enc.header : '';
+  $('#facts').textContent = ok ? enc.facts : '';
+  $('#outFmts').innerHTML = [
+    fmtRow('Header value', ok ? enc.value : '', 'Basic …', 'the header value'),
+    fmtRow('Base64 credentials', ok ? enc.b64 : '', '—', 'the Base64 credentials'),
+    fmtRow('Decoded', ok ? enc.raw : '', 'username:password', 'the username and password'),
+  ].join('');
+  const snips = snippets(enc, { url: urlEl.value });
+  $('#snips').innerHTML = snips.length
+    ? snips.map(s => `<div class="snip">
+        <div class="snip-head"><span class="k">${esc(s.label)}</span><span class="spacer"></span><button class="copy" type="button" ${copyAttrs(s.text, s.label)}>Copy</button></div>
+        <pre>${esc(s.text)}</pre>${s.hint ? `<small class="hint">${esc(s.hint)}</small>` : ''}
+      </div>`).join('')
+    : '<p class="note">Enter a username or a password to get snippets.</p>';
+}
+
+function renderChallenge() {
+  const ch = challengeHeader({ realm: realmEl.value, charset: settings.charset });
+  $('#chalOut').innerHTML = [
+    fmtRow('Header', ch.header, '—', 'the challenge header'),
+    fmtRow('Header value', ch.value, '—', 'the challenge value'),
+  ].join('');
+  $('#chalNotes').innerHTML = noteList(ch.notes);
+}
+
+function render() {
+  const build = settings.mode === 'build';
+  $('#buildPane').hidden = !build;
+  $('#decodePane').hidden = build;
+  $('#inTitle').textContent = build ? 'Credentials' : 'Header to decode';
+  $('#toBuild').hidden = build;
+
+  let creds = null, dec = null;
+  if (build) {
+    creds = { user: userEl.value, pass: passEl.value };
+  } else {
+    dec = decodeBasic(decIn.value, { charset: settings.charset });
+    renderDecode(dec);
+    if (!dec.empty && !dec.error) creds = { user: dec.user, pass: dec.pass };
+  }
+  const enc = encodeBasic(creds, { charset: settings.charset });
+  renderOutput(enc);
+  /* In Decode the notes about the credentials come from decodeBasic, so they aren't repeated here. */
+  renderNotes([
+    ...(enc.error ? [{ level: 'bad', text: enc.error }] : []),
+    ...(build ? (enc.notes || []) : (dec.error ? [{ level: 'bad', text: dec.error }] : dec.notes || [])),
+    ...urlNotes(urlEl.value),
+  ]);
+  renderChallenge();
+}
+
+/* ---------- input ---------- */
+for (const el of [userEl, passEl, urlEl, decIn, realmEl]) el.addEventListener('input', render);
+
+function setMode(mode) {
+  settings.mode = mode;
+  saveSettings();
+  for (const b of $('#modeSeg').children) b.setAttribute('aria-pressed', String(b.dataset.v === mode));
+  render();
+  (mode === 'build' ? userEl : decIn).focus({ preventScroll: true });
+}
+$('#modeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setMode(b.dataset.v); });
+
+$('#csSeg').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  settings.charset = b.dataset.v;
+  saveSettings();
+  for (const x of $('#csSeg').children) x.setAttribute('aria-pressed', String(x.dataset.v === settings.charset));
+  render();
+});
+
+$('#revealBtn').addEventListener('click', () => {
+  const show = passEl.type === 'password';
+  passEl.type = show ? 'text' : 'password';
+  $('#revealBtn').setAttribute('aria-pressed', String(show));
+  $('#revealBtn').textContent = show ? 'Hide' : 'Show';
+});
+
+/* Decode → Build with the credentials that were just decoded. */
+$('#toBuild').addEventListener('click', () => {
+  const dec = decodeBasic(decIn.value, { charset: settings.charset });
+  if (dec.empty || dec.error) return;
+  userEl.value = dec.user;
+  passEl.value = dec.pass;
+  setMode('build');
+  toast('Copied the credentials into Build');
+});
+
+const EXAMPLES = [
+  'Authorization: Basic YWxpY2U6czNjcjN0',
+  'YWxpY2U6czNjcjN0',
+  'https://alice:s3cr3t@api.example.com/me',
+  "curl -u 'alice:s3cr3t' https://api.example.com/me",
+  'Basic ZsOpbGl4OnDDpHNzd29yZA==',
+  'YXBpX2tleTo=',
+];
+$('#examples').append(...EXAMPLES.map(text => {
+  const b = Object.assign(document.createElement('button'), { type: 'button', textContent: text, title: text });
+  b.onclick = () => { decIn.value = text; render(); decIn.focus({ preventScroll: true }); };
+  return b;
+}));
+
+$('#exampleBtn').addEventListener('click', () => {
+  if (settings.mode === 'build') { userEl.value = 'alice'; passEl.value = 's3cr3t'; }
+  else decIn.value = EXAMPLES[0];
+  urlEl.value = urlEl.value || EXAMPLE_URL;
+  realmEl.value = realmEl.value || 'Staging';
+  render();
+});
+
+function clearAll() {
+  for (const el of [userEl, passEl, urlEl, decIn, realmEl]) el.value = '';
+  render();
+  (settings.mode === 'build' ? userEl : decIn).focus({ preventScroll: true });
+}
+$('#clearBtn').addEventListener('click', clearAll);
+
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+  if (e.key === '/') { e.preventDefault(); (settings.mode === 'build' ? userEl : decIn).focus(); }
+  else if (e.key === 'e' || e.key === 'E') { e.preventDefault(); $('#exampleBtn').click(); }
+  else if (e.key === 'c' || e.key === 'C') { e.preventDefault(); $('#copyHeader').click(); }
+});
+
+/* ---------- copy / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+/* Credentials are never echoed in the toast, only what was copied. */
+async function copyText(text, label) {
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); toast(`Copied ${label || 'it'}`); }
+  catch { toast('Couldn’t copy to the clipboard'); }
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-copy]');
+  if (b && !b.disabled) copyText(b.dataset.copy, b.dataset.label);
+});
+
+/* ---------- start ---------- */
+for (const b of $('#csSeg').children) b.setAttribute('aria-pressed', String(b.dataset.v === settings.charset));
+for (const b of $('#modeSeg').children) b.setAttribute('aria-pressed', String(b.dataset.v === settings.mode));
+render();
+(settings.mode === 'build' ? userEl : decIn).focus({ preventScroll: true });
+</script>
+</body>
+</html>
