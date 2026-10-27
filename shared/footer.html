@@ -23,11 +23,24 @@ if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]
   const links = [...menu.querySelectorAll('a')];
   const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
   btn.addEventListener('click', () => setOpen(menu.hidden));
+  // Left/right move to the nearest link in the neighbouring column (the list flows down columns).
+  const across = (i, dir) => {
+    const from = links[i].getBoundingClientRect();
+    let best, bestDist = Infinity;
+    links.forEach((a, j) => {
+      const r = a.getBoundingClientRect();
+      if (dir * (r.left - from.left) < 8) return;
+      const dist = Math.abs(r.left - from.left) * 1e3 + Math.abs(r.top - from.top);
+      if (dist < bestDist) { best = j; bestDist = dist; }
+    });
+    return best;
+  };
   brand.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
     const i = links.indexOf(document.activeElement);
     const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
-      : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1,
+        ArrowRight: across(i, 1), ArrowLeft: across(i, -1) }[e.key];
     if (to === undefined) return;
     e.preventDefault(); e.stopPropagation();
     setOpen(true); links[to].focus();

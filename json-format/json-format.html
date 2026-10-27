@@ -161,14 +161,16 @@ header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6
 .logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
 .logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
 .logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
-.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;width:min(960px,calc(100vw - 24px));max-height:calc(100dvh - 90px);overflow-y:auto;overscroll-behavior:contain;padding:6px;
   background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
 .tool-menu[hidden]{display:none}
+.tm-list{columns:280px 3;column-gap:4px}
+.tm-list a{break-inside:avoid;margin-bottom:2px}
 .tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
 .tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
 .tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
 .tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
-.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark{flex-shrink:0;min-width:6.3em;font-size:1.05rem}
 .tm-mark b{color:var(--accent-text);font-weight:600}
 .tm-text{display:flex;flex-direction:column;line-height:1.3}
 .tm-name{font-weight:600;font-size:.9rem}
@@ -328,21 +330,23 @@ textarea::placeholder{color:var(--muted);opacity:.8}
       <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>JSON</b>.format<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
         <a class="tm-all" href="../index.html" data-path="/">All tools</a>
-        <a href="../basic-auth/basic-auth.html" data-path="/basic-auth"><span class="tm-mark"><b>BASIC</b>.auth</span><span class="tm-text"><span class="tm-name">Basic auth generator</span><span class="tm-sum">Build and decode Basic auth headers</span></span></a>
-        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
-        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
-        <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
-        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
-        <a href="../encode/encode.html" data-path="/encode"><span class="tm-mark"><b>ENC</b>.decode</span><span class="tm-text"><span class="tm-name">Encoder/decoder</span><span class="tm-sum">Encode and decode Base64, URLs, HTML and more</span></span></a>
-        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
-        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
-        <a href="../json-format/json-format.html" data-path="/json-format" aria-current="page"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
-        <a href="../jwt/jwt.html" data-path="/jwt"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
-        <a href="../meeting-time/meeting-time.html" data-path="/meeting-time"><span class="tm-mark"><b>MEET</b>.time</span><span class="tm-text"><span class="tm-name">Meeting time finder</span><span class="tm-sum">Find a meeting time across time zones</span></span></a>
-        <a href="../metronome/metronome.html" data-path="/metronome"><span class="tm-mark"><b>METRO</b>.nome</span><span class="tm-text"><span class="tm-name">Metronome</span><span class="tm-sum">Keep time with accents and tap tempo</span></span></a>
-        <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
-        <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
-        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        <div class="tm-list">
+          <a href="../basic-auth/basic-auth.html" data-path="/basic-auth"><span class="tm-mark"><b>BASIC</b>.auth</span><span class="tm-text"><span class="tm-name">Basic auth generator</span><span class="tm-sum">Build and decode Basic auth headers</span></span></a>
+          <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+          <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+          <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+          <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+          <a href="../encode/encode.html" data-path="/encode"><span class="tm-mark"><b>ENC</b>.decode</span><span class="tm-text"><span class="tm-name">Encoder/decoder</span><span class="tm-sum">Encode and decode Base64, URLs, HTML and more</span></span></a>
+          <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+          <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+          <a href="../json-format/json-format.html" data-path="/json-format" aria-current="page"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+          <a href="../jwt/jwt.html" data-path="/jwt"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
+          <a href="../meeting-time/meeting-time.html" data-path="/meeting-time"><span class="tm-mark"><b>MEET</b>.time</span><span class="tm-text"><span class="tm-name">Meeting time finder</span><span class="tm-sum">Find a meeting time across time zones</span></span></a>
+          <a href="../metronome/metronome.html" data-path="/metronome"><span class="tm-mark"><b>METRO</b>.nome</span><span class="tm-text"><span class="tm-name">Metronome</span><span class="tm-sum">Keep time with accents and tap tempo</span></span></a>
+          <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+          <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+          <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        </div>
       </nav>
     </span>
     <!-- /shared:brand -->
@@ -447,11 +451,24 @@ textarea::placeholder{color:var(--muted);opacity:.8}
     const links = [...menu.querySelectorAll('a')];
     const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
     btn.addEventListener('click', () => setOpen(menu.hidden));
+    // Left/right move to the nearest link in the neighbouring column (the list flows down columns).
+    const across = (i, dir) => {
+      const from = links[i].getBoundingClientRect();
+      let best, bestDist = Infinity;
+      links.forEach((a, j) => {
+        const r = a.getBoundingClientRect();
+        if (dir * (r.left - from.left) < 8) return;
+        const dist = Math.abs(r.left - from.left) * 1e3 + Math.abs(r.top - from.top);
+        if (dist < bestDist) { best = j; bestDist = dist; }
+      });
+      return best;
+    };
     brand.addEventListener('keydown', e => {
       if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
       const i = links.indexOf(document.activeElement);
       const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
-        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1,
+          ArrowRight: across(i, 1), ArrowLeft: across(i, -1) }[e.key];
       if (to === undefined) return;
       e.preventDefault(); e.stopPropagation();
       setOpen(true); links[to].focus();
