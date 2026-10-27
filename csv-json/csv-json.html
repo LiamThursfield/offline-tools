@@ -374,6 +374,8 @@ td.miss{background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(
       <span class="spacer"></span>
       <input class="filter" id="filter" type="search" placeholder="Filter rows" aria-label="Filter rows" autocomplete="off" spellcheck="false">
       <button class="btn" id="unsort" disabled>Original order</button>
+      <button class="btn" id="copyMd" disabled title="Copy the rows shown, in this order, as a Markdown table">Copy as Markdown</button>
+      <button class="btn" id="copyCsv" disabled title="Copy the rows shown, in this order, as comma-separated CSV">Copy as CSV</button>
     </div>
     <div class="table-wrap" id="tableWrap"></div>
     <div class="tfoot" id="tfoot"><span>Click a column heading to sort by it (again to reverse). Sorting and filtering change this preview only.</span><span class="spacer" style="flex:1"></span><button class="btn" id="more" hidden>Show more</button></div>
@@ -675,6 +677,17 @@ function toCSV({ columns, rows, headerless }, { delimiter = ',', header = true, 
   return out.length ? out.join(eol) + eol : '';
 }
 
+/* A GFM table. Pipes are escaped, line breaks become <br>, number columns are right-aligned. */
+function mdCell(v) {
+  const s = v === undefined || v === null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v);
+  return s.replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/\r\n|\r|\n/g, '<br>');
+}
+function toMarkdown({ columns, rows }) {
+  if (!columns.length) return '';
+  const align = columns.map((_, i) => columnType(rows, i) === 'number' ? '---:' : '---');
+  return [columns, align, ...rows].map((r, n) => `| ${(n === 1 ? r : r.map(mdCell)).join(' | ')} |`).join('\n') + '\n';
+}
+
 /* Row order for the table: missing and null values last in either direction, numbers numerically,
    text in natural order ("item 2" before "item 10"). Stable, so ties keep their original order. */
 const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
@@ -708,7 +721,7 @@ function columnType(rows, col) {
 
 if (typeof module !== 'undefined') module.exports = {
   DELIMITERS, detectFormat, detectDelimiter, parseCSV, inferValue, uniqueHeaders, unflatten, csvToJSON,
-  parseJSONInput, flattenRecord, jsonToTable, csvField, toCSV, compareCells, sortOrder, columnType,
+  parseJSONInput, flattenRecord, jsonToTable, csvField, toCSV, mdCell, toMarkdown, compareCells, sortOrder, columnType,
 };
 </script>
 
@@ -827,6 +840,7 @@ function cellHTML(v) {
 function renderTable() {
   const wrap = $('#tableWrap'), info = $('#tinfo');
   $('#unsort').disabled = sort.col < 0;
+  $('#copyMd').disabled = $('#copyCsv').disabled = !table || !table.columns.length;
   if (!table || !table.columns.length) {
     wrap.innerHTML = `<div class="empty-t">${input.value.trim() ? 'Nothing to show.' : 'Convert something to see it as a table.'}</div>`;
     info.textContent = ''; $('#more').hidden = true;
@@ -867,14 +881,18 @@ function toast(msg) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
 }
-function copyText(text) {
-  const done = () => toast(`Copied the ${result.outKind.toUpperCase()}`);
+function copyText(text, msg = `Copied the ${result.outKind.toUpperCase()}`) {
+  const done = () => toast(msg);
   (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(() => {
     const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
     try { document.execCommand('copy'); done(); } catch { toast('Couldn’t copy to the clipboard'); } t.remove();
   });
 }
 $('#copyOut').onclick = () => copyText(result.text);
+// The table copies what it shows: sorted and filtered, including rows past "Show more".
+const tableView = () => ({ columns: table.columns, rows: order.map(i => table.rows[i]) });
+$('#copyMd').onclick = () => copyText(toMarkdown(tableView()), `Copied ${plural(order.length, 'row')} as Markdown`);
+$('#copyCsv').onclick = () => copyText(toCSV(tableView()), `Copied ${plural(order.length, 'row')} as CSV`);
 $('#download').onclick = () => {
   const csv = result.outKind === 'csv';
   const a = document.createElement('a');

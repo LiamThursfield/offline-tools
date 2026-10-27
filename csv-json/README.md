@@ -60,6 +60,7 @@ The table shows the data being converted: the CSV rows, or the rows the JSON bec
 - **Filter**: shows only rows with a cell that contains the text, ignoring case.
 - `null` is shown in italics, and a hatched cell means the row had no value there at all.
 - Up to 500 rows are shown at a time; **Show more** adds 500 more.
+- **Copy as Markdown** copies the rows as a GitHub-flavoured Markdown table, and **Copy as CSV** as comma-separated CSV. Both copy the rows the table is showing, in its sort order and with the filter applied, including rows past **Show more**. In Markdown, `|` is escaped, line breaks become `<br>`, `null` and missing cells are left blank and number columns are right-aligned.
 
 Sorting and filtering only change the table, not the output.
 
