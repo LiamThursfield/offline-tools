@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>Meeting time finder – Find a meeting time across time zones | LXST.tools</title>
+<meta name="description" content="Find the time nearest to the one you want that falls within everyone’s working hours, across two or more time zones such as Europe/London and America/New_York, with working hours and days for each zone, meeting length, daylight saving changes handled, the fairest compromise when there’s no overlap, and an hour-by-hour day view. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/meeting-time">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/meeting-time">
+<meta property="og:title" content="Meeting time finder">
+<meta property="og:description" content="Find the time nearest to the one you want that falls within everyone’s working hours, across two or more time zones such as Europe/London and America/New_York, with working hours and days for each zone, meeting length, daylight saving changes handled, the fairest compromise when there’s no overlap, and an hour-by-hour day view. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Meeting time finder","url":"https://tools.lxst.digital/meeting-time","description":"Find the time nearest to the one you want that falls within everyone’s working hours, across two or more time zones such as Europe/London and America/New_York, with working hours and days for each zone, meeting length, daylight saving changes handled, the fairest compromise when there’s no overlap, and an hour-by-hour day view.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --accent-bg:color-mix(in oklab,var(--accent) 12%,var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  --work:color-mix(in oklab,var(--accent) var(--tint-strong),transparent);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;gap:2px;width:max-content;min-width:260px;max-width:calc(100vw - 24px);padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{min-width:5.5em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-bottom:4px;border-bottom:1px solid var(--line);border-radius:calc(var(--radius) - 4px) calc(var(--radius) - 4px) 0 0;padding-bottom:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:66ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0;overflow:hidden}
+.card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.card-head .spacer{flex:1}
+.card-head .btn{padding:2px 11px;font-size:.8rem}
+.note{margin:0;padding:10px 14px;color:var(--muted);font-size:.84rem}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);grid-template-rows:auto 1fr;grid-template-areas:"when zones" "results zones";gap:16px;align-items:start;margin-top:16px}
+
+/* when */
+.when{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;padding:14px}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.k{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.f input,.f select{width:100%}
+.f.wide{grid-column:1/-1}
+input[type=datetime-local],input[type=time]{border:1px solid var(--line);background:var(--surface);border-radius:calc(var(--radius) - 4px);padding:5px 9px;font:500 .95rem var(--mono);letter-spacing:0;color-scheme:inherit;min-width:0}
+#when{padding:7px 10px;font-size:.95rem}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 11px;max-width:100%;min-width:0}
+.f select{padding:8px 11px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);overflow:hidden;padding:2px;gap:2px;flex:none;align-self:flex-start;max-width:100%}
+.seg button{border:0;background:none;padding:5px 11px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+
+/* results */
+.status{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 10px;margin:0;padding:12px 14px;font-size:.95rem}
+.status .msg{flex:1 1 30ch}
+.badge{display:inline-flex;align-items:center;padding:1px 10px;border-radius:var(--pill);background:color-mix(in oklab,var(--ins) 16%,transparent);color:var(--ins);font-size:.78rem;font-weight:700;white-space:nowrap}
+.badge.warn{background:color-mix(in oklab,var(--chg) 16%,transparent);color:var(--chg)}
+.badge.err{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.options{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;padding:0 14px 14px}
+.oc{display:flex;flex-direction:column;min-width:0;border:1px solid var(--line);border-radius:calc(var(--radius) - 2px);background:var(--surface);cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.oc:hover{border-color:color-mix(in oklab,var(--accent) 50%,var(--line))}
+.oc.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.oc-head{display:flex;align-items:center;gap:8px;padding:8px 10px 8px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.oc-pick{border:0;background:none;padding:0;font-weight:700;font-size:.9rem;text-align:left}
+.oc-pick:focus-visible{outline-offset:3px;border-radius:4px}
+.oc-delta{color:var(--muted);font-size:.8rem}
+.oc-head .spacer{flex:1}
+.tag{font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:0 7px;border-radius:var(--pill);background:var(--panel);color:var(--muted);white-space:nowrap}
+.tag.rec{background:var(--accent);color:var(--accent-ink)}
+.copy{flex:none;border:1px solid var(--line);background:none;border-radius:var(--pill);padding:0 9px;font:600 .72rem var(--sans);color:var(--muted)}
+.copy:hover{color:var(--accent-text);border-color:var(--accent)}
+.oc-people{list-style:none;margin:0;padding:4px 0}
+.oc-people li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px;padding:5px 12px}
+.who{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.at{font:500 .88rem var(--mono);letter-spacing:0;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.at small{font:.76rem var(--sans);color:var(--muted);margin-right:6px}
+.why{grid-column:1/-1;font-size:.78rem;color:var(--muted)}
+.oc-people li.ok .why{color:var(--ins)}
+.oc-people li.bad .why{color:var(--del)}
+.oc-people li.ok .why::before{content:"✓ "}
+.oc-people li.bad .why::before{content:"✗ "}
+.changes{list-style:none;margin:0;padding:10px 14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.changes li::before{content:"⏰";margin-right:6px}
+
+/* time zones */
+.zones{list-style:none;margin:0;padding:0}
+.zone{display:flex;flex-direction:column;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.zone-top{display:flex;align-items:baseline;gap:8px;min-width:0}
+.zone-name{display:flex;align-items:baseline;gap:8px;min-width:0;flex-wrap:wrap;flex:1}
+.zone-name b{font-weight:700}
+.zone-name .region,.zone-off{font-size:.78rem;color:var(--muted)}
+.zone-name .tag{background:var(--surface)}
+.zone-off{white-space:nowrap}
+.zone-cfg{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.hours{display:flex;align-items:center;gap:6px;font-size:.84rem;color:var(--muted)}
+.hours input{width:auto;padding:3px 7px;font-size:.88rem}
+.days{display:inline-flex;gap:3px}
+.days button{width:28px;height:28px;padding:0;border:1px solid var(--line);background:none;border-radius:var(--pill);font-weight:600;font-size:.78rem;color:var(--muted)}
+.days button:hover{border-color:var(--accent);color:var(--ink)}
+.days button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.zone-err{margin:0;font-size:.8rem;color:var(--del)}
+.zone.bad input[type=time]{border-color:var(--del)}
+.rm{flex:none;align-self:center;border:0;background:none;border-radius:var(--pill);width:26px;height:26px;color:var(--muted);font-size:1.05rem;line-height:1}
+.rm:hover{background:color-mix(in oklab,var(--del) 14%,transparent);color:var(--del)}
+.add{display:flex;gap:8px;padding:12px 14px}
+.add input{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:var(--pill);padding:5px 12px}
+
+/* day view */
+.tl-date{color:var(--muted);font-size:.84rem}
+.tl-scroll{overflow-x:auto;overscroll-behavior-x:contain}
+.tl{--lw:140px;position:relative;display:grid;grid-template-columns:var(--lw) repeat(var(--cols),minmax(40px,1fr));min-width:max-content;padding:10px 0 4px}
+.tl-label{position:sticky;left:0;z-index:4;display:flex;flex-direction:column;justify-content:center;padding:0 10px 0 14px;background:var(--panel);min-width:0;line-height:1.2;height:44px}
+.tl-label b{font-size:.85rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tl-label small{font-size:.72rem;color:var(--muted)}
+.tl-cell{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:44px;padding-bottom:5px;border-left:1px solid var(--line);font:500 .8rem var(--mono);letter-spacing:0;font-variant-numeric:tabular-nums;color:var(--muted);cursor:pointer}
+.tl-cell.w{color:var(--ink)}
+.tl-cell:hover{box-shadow:inset 0 0 0 1px var(--accent)}
+/* the hour and date sit above the meeting box (.tl-over) so its edges never hide them */
+.tl-cell .t{position:relative;z-index:3}
+.tl-cell .d{position:absolute;z-index:3;top:3px;left:4px;font:700 .62rem var(--sans);letter-spacing:.02em;text-transform:uppercase;color:var(--accent-text);white-space:nowrap}
+.tl-all .tl-label b{color:var(--accent-text)}
+.tl-all .tl-cell{height:30px;padding:0}
+.tl-all .tl-label{height:30px}
+.tl-row{display:contents}
+.tl-over{position:absolute;top:10px;bottom:4px;left:var(--lw);right:0;pointer-events:none;z-index:2}
+.tl-sel{position:absolute;top:0;bottom:0;border:2px solid var(--ink);border-radius:6px;background:color-mix(in oklab,var(--ink) 10%,transparent)}
+.tl-target{position:absolute;top:-6px;bottom:0;width:0;border-left:2px dashed var(--chg)}
+.tl-target::before{content:"";position:absolute;top:-2px;left:-6px;border:5px solid transparent;border-top-color:var(--chg)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
+.sw{display:inline-block;width:14px;height:10px;margin-right:6px;border-radius:3px;vertical-align:baseline}
+.sw.w{background:var(--work)}
+.sw.a{background:var(--accent)}
+.sw.s{border:2px solid var(--ink)}
+.sw.t{width:0;border-left:2px dashed var(--chg);border-radius:0}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);overflow-wrap:anywhere}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1000px){
+  .main{grid-template-columns:1fr;grid-template-rows:none;grid-template-areas:"when" "zones" "results"}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .when{grid-template-columns:1fr}
+  .tl{--lw:96px;grid-template-columns:var(--lw) repeat(var(--cols),40px)}
+  .tl-label{padding-left:12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>MEET</b>.time<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+        <a href="../basic-auth/basic-auth.html" data-path="/basic-auth"><span class="tm-mark"><b>BASIC</b>.auth</span><span class="tm-text"><span class="tm-name">Basic auth generator</span><span class="tm-sum">Build and decode Basic auth headers</span></span></a>
+        <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+        <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+        <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+        <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+        <a href="../encode/encode.html" data-path="/encode"><span class="tm-mark"><b>ENC</b>.decode</span><span class="tm-text"><span class="tm-name">Encoder/decoder</span><span class="tm-sum">Encode and decode Base64, URLs, HTML and more</span></span></a>
+        <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+        <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+        <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+        <a href="../jwt/jwt.html" data-path="/jwt"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
+        <a href="../meeting-time/meeting-time.html" data-path="/meeting-time" aria-current="page"><span class="tm-mark"><b>MEET</b>.time</span><span class="tm-text"><span class="tm-name">Meeting time finder</span><span class="tm-sum">Find a meeting time across time zones</span></span></a>
+        <a href="../metronome/metronome.html" data-path="/metronome"><span class="tm-mark"><b>METRO</b>.nome</span><span class="tm-text"><span class="tm-name">Metronome</span><span class="tm-sum">Keep time with accents and tap tempo</span></span></a>
+        <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+        <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+        <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="nowBtn" title="Start from the current time (N)">Now</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Find a meeting time</h1>
+    <p>Add everyone's time zone and working hours, then pick when you'd like to meet. You'll see the nearest time that's inside working hours for everyone or, if there isn't one, the fairest compromise. Daylight saving changes are handled for you. Everything runs in your browser.</p>
+  </div>
+
+  <div class="main">
+    <section class="card" style="grid-area:when" aria-labelledby="whenTitle">
+      <div class="card-head"><h2 id="whenTitle">When would you like to meet?</h2></div>
+      <div class="when">
+        <label class="f"><span class="k">Date and time</span><input id="when" type="datetime-local" step="60" required></label>
+        <label class="f"><span class="k">In</span><select id="refZone"></select></label>
+        <label class="f"><span class="k">Meeting length</span>
+          <select id="duration">
+            <option value="15">15 minutes</option><option value="30">30 minutes</option><option value="45">45 minutes</option>
+            <option value="60">1 hour</option><option value="90">1 hour 30 minutes</option><option value="120">2 hours</option>
+            <option value="180">3 hours</option><option value="240">4 hours</option>
+          </select>
+        </label>
+        <div class="f wide"><span class="k" id="stepLabel">Start on the</span>
+          <span class="seg" role="group" aria-labelledby="stepLabel" id="stepSeg"><button type="button" data-v="15">quarter hour</button><button type="button" data-v="30">half hour</button><button type="button" data-v="60">hour</button></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="grid-area:zones" aria-labelledby="zonesTitle">
+      <div class="card-head"><h2 id="zonesTitle">Time zones and working hours</h2><span class="spacer"></span><button class="btn" id="zonesReset" title="Go back to the default list">Reset</button></div>
+      <ul class="zones" id="zones"></ul>
+      <form class="add" id="addZone">
+        <input id="addZoneIn" list="zoneList" placeholder="Add a zone or city, e.g. Sydney" aria-label="Time zone to add" autocomplete="off" spellcheck="false">
+        <button class="btn" type="submit">Add</button>
+      </form>
+      <datalist id="zoneList"></datalist>
+      <p class="note">New zones start with 09:00 to 17:00 and the working week most common there, which is a guess, so check it. To work until midnight, end at 00:00. The list is saved in this browser.</p>
+    </section>
+
+    <section class="card" style="grid-area:results" aria-labelledby="resTitle">
+      <div class="card-head"><h2 id="resTitle">Best times</h2></div>
+      <div class="status" id="status" aria-live="polite"><span class="badge" id="statusBadge" hidden></span><span class="msg" id="statusMsg"></span></div>
+      <div class="options" id="options"></div>
+      <ul class="changes" id="changes" hidden></ul>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px" aria-labelledby="tlTitle">
+    <div class="card-head"><h2 id="tlTitle">Day view</h2><span class="tl-date" id="tlDate"></span><span class="spacer"></span>
+      <button class="btn" id="tlPrev" type="button" aria-label="Previous day" title="Previous day">‹</button><button class="btn" id="tlNext" type="button" aria-label="Next day" title="Next day">›</button></div>
+    <div class="tl-scroll"><div class="tl" id="tl"></div></div>
+    <p class="note legend"><span><span class="sw w"></span>Working hours</span><span><span class="sw a"></span>Everyone's working</span><span><span class="sw s"></span>Selected meeting</span><span><span class="sw t"></span>Your time</span><span>Click any hour to check it.</span></p>
+  </section>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1 }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core scheduling logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Instants are milliseconds since the Unix epoch. Wall-clock times come from Intl, so daylight saving
+   and other offset changes follow the browser's time zone database. */
+const MIN = 6e4, HOUR = 36e5, DAY = 864e5;
+const GRID = 15; // minutes: every current UTC offset is a whole number of quarter hours
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const FULL_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const pad = n => String(n).padStart(2, '0');
+
+/* ---------- time zones (via Intl) ---------- */
+const LOCAL_ZONE = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch { return 'UTC'; } })();
+const partsFmt = new Map();
+function partsFormatter(zone) {
+  let f = partsFmt.get(zone);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', { timeZone: zone, hourCycle: 'h23', weekday: 'short',
+      year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+    partsFmt.set(zone, f);
+  }
+  return f;
+}
+function isValidZone(zone) { try { partsFormatter(zone); return true; } catch { return false; } }
+function canonicalZone(zone) { return new Intl.DateTimeFormat('en-US', { timeZone: zone }).resolvedOptions().timeZone; }
+const cityOf = zone => zone.split('/').at(-1).replace(/_/g, ' ');
+
+/* Wall-clock fields of an instant in a zone. wd: 0 = Sunday. */
+function wallParts(ms, zone) {
+  const p = {};
+  for (const { type, value } of partsFormatter(zone).formatToParts(ms)) p[type] = value;
+  return { y: +p.year, mo: +p.month, d: +p.day, h: +p.hour % 24, mi: +p.minute, wd: WEEKDAYS.indexOf(p.weekday) };
+}
+/* Like Date.UTC, but years 0–99 aren't moved to the 1900s, and out-of-range fields roll over. */
+function utcMs(y, mo, d, h = 0, mi = 0) {
+  const t = new Date(0);
+  t.setUTCFullYear(y, mo - 1, d);
+  t.setUTCHours(h, mi, 0, 0);
+  return t.getTime();
+}
+/* Offset of a zone from UTC at an instant, in minutes (east is positive). */
+function offsetMin(ms, zone) {
+  const w = wallParts(ms, zone);
+  return (utcMs(w.y, w.mo, w.d, w.h, w.mi) - Math.floor(ms / MIN) * MIN) / MIN;
+}
+/* The instant a wall-clock time happens in a zone. A time skipped when the clocks go forward moves
+   on by the gap (gap: true); a time that happens twice when they go back is the first one
+   (ambiguous: true). This matches Temporal's "compatible" disambiguation. */
+function wallToMs({ y, mo, d, h = 0, mi = 0 }, zone) {
+  const naive = utcMs(y, mo, d, h, mi);
+  const offs = new Set([-DAY, 0, DAY].map(k => offsetMin(naive + k, zone)));
+  const hits = [...new Set([...offs].map(o => naive - o * MIN).filter(t => offsetMin(t, zone) * MIN === naive - t))].sort((a, b) => a - b);
+  if (hits.length === 1) return { ms: hits[0] };
+  if (hits.length > 1) return { ms: hits[0], ambiguous: true };
+  return { ms: naive - offsetMin(naive - DAY, zone) * MIN, gap: true };
+}
+const minuteOfDay = w => w.h * 60 + w.mi;
+const dayNumber = w => Math.round(utcMs(w.y, w.mo, w.d) / DAY);
+const sameDate = (a, b) => a.y === b.y && a.mo === b.mo && a.d === b.d;
+/* A calendar date n days after { y, mo, d }. */
+function addDays({ y, mo, d }, n) {
+  const t = new Date(utcMs(y, mo, d + n));
+  return { y: t.getUTCFullYear(), mo: t.getUTCMonth() + 1, d: t.getUTCDate() };
+}
+
+/* ---------- working hours ---------- */
+/* A person's working hours: { zone, start, end, days }. start and end are minutes after midnight
+   (end can be 1440, midnight at the end of the day); days are the weekdays they work (0 = Sunday). */
+const MON_FRI = [1, 2, 3, 4, 5];
+/* Most of the world works Monday to Friday. Where the working week is usually different, new zones start
+   with that instead. It's only a starting point: people can change it. */
+const WORK_WEEKS = {
+  'Sun–Thu': [0, 1, 2, 3, 4],
+  'Sat–Wed': [6, 0, 1, 2, 3],
+  'Sun–Fri': [0, 1, 2, 3, 4, 5],
+};
+const ZONE_WEEKS = {
+  'Africa/Algiers': 'Sun–Thu', 'Africa/Cairo': 'Sun–Thu', 'Africa/Khartoum': 'Sun–Thu', 'Africa/Tripoli': 'Sun–Thu',
+  'Asia/Aden': 'Sun–Thu', 'Asia/Amman': 'Sun–Thu', 'Asia/Baghdad': 'Sun–Thu', 'Asia/Bahrain': 'Sun–Thu',
+  'Asia/Damascus': 'Sun–Thu', 'Asia/Dhaka': 'Sun–Thu', 'Asia/Jerusalem': 'Sun–Thu', 'Asia/Kuwait': 'Sun–Thu',
+  'Asia/Muscat': 'Sun–Thu', 'Asia/Qatar': 'Sun–Thu', 'Asia/Riyadh': 'Sun–Thu',
+  'Asia/Kabul': 'Sat–Wed', 'Asia/Tehran': 'Sat–Wed',
+  'Asia/Kathmandu': 'Sun–Fri',
+};
+const defaultDays = zone => [...(WORK_WEEKS[ZONE_WEEKS[zone]] || MON_FRI)];
+const defaultRule = zone => ({ zone, start: 9 * 60, end: 17 * 60, days: defaultDays(zone) });
+
+/* Why a person's hours can't hold a meeting of this length, or '' if they can. */
+function ruleProblem(rule, duration) {
+  if (!rule.days.length) return 'Pick at least one working day.';
+  if (rule.end <= rule.start) return 'The working day has to end after it starts. Overnight hours aren’t supported.';
+  if (rule.end - rule.start < duration) return 'The working day is shorter than the meeting.';
+  return '';
+}
+/* Whether someone is working at a wall-clock time. */
+const isWorking = (w, rule) => rule.days.includes(w.wd) && minuteOfDay(w) >= rule.start && minuteOfDay(w) < rule.end;
+
+/* How a meeting from wall time s to e looks to one person. ok: inside their working hours. Otherwise
+   why is 'off' (not a working day), 'early' (starts `by` minutes before their day) or 'late' (ends
+   `by` minutes after it), whichever is nearer. cost ranks compromises: 0 when ok, `by`, or a whole
+   day for a day off, so a time on someone's day off loses to any time on a working day. */
+function assessWalls(s, e, rule, duration) {
+  const base = { zone: rule.zone, start: s, end: e };
+  const from = minuteOfDay(s);
+  const days = dayNumber(e) - dayNumber(s), to = days === 0 ? minuteOfDay(e) : days === 1 && minuteOfDay(e) === 0 ? 1440 : Infinity;
+  const works = wd => rule.days.includes((wd + 7) % 7);
+  if (works(s.wd) && from >= rule.start && to <= rule.end && to > from) return { ...base, ok: true, cost: 0 };
+  if (!works(s.wd)) return { ...base, ok: false, why: 'off', cost: 1440 };
+  const end = from + duration, ways = [];
+  if (from < rule.start) ways.push({ why: 'early', by: rule.start - from });
+  if (end > rule.end) ways.push({ why: 'late', by: end - rule.end });
+  if (from < rule.start && works(s.wd - 1)) ways.push({ why: 'late', by: end + 1440 - rule.end });
+  if (end > rule.end && works(s.wd + 1)) ways.push({ why: 'early', by: rule.start + 1440 - from });
+  // none only when a clock change inside the meeting pushes its end out of hours
+  const best = ways.sort((a, b) => a.by - b.by)[0] || { why: 'late', by: 1 };
+  const by = Math.max(1, best.by);
+  return { ...base, ok: false, why: best.why, by, cost: by };
+}
+const assess = (ms, rule, duration) => assessWalls(wallParts(ms, rule.zone), wallParts(ms + duration * MIN, rule.zone), rule, duration);
+
+/* A meeting starting at ms, assessed for everyone. worst and total are the largest and summed costs. */
+function scored(ms, people) {
+  const costs = people.map(p => p.cost);
+  return { ms, people, ok: people.every(p => p.ok), worst: Math.max(0, ...costs), total: costs.reduce((a, b) => a + b, 0) };
+}
+const evaluate = (ms, zones, duration) => scored(ms, zones.map(rule => assess(ms, rule, duration)));
+const better = (a, b) => a.worst - b.worst || a.total - b.total; // < 0 when a is the fairer of the two
+
+/* Finds the meeting times nearest to target (ms), searching range days either side.
+   zones: working hours for each person (see defaultRule). Meetings last duration minutes (a multiple of 15)
+   and start on a multiple of step minutes on refZone's clock.
+   Returns { target, fits, earlier, later, fairest, best }:
+   - target: the target time assessed for everyone (see evaluate).
+   - fits: whether any time in the range suits everyone.
+   - earlier, later: the nearest times at or before and at or after the target that suit everyone. When none
+     does, the fairest time within a day on that side: the smallest worst cost, then the smallest total, then
+     the nearest. The day starts at the first time that isn't on anyone's day off, so a weekend in between
+     doesn't use it up. null if there's no time on that side.
+   - fairest: when nothing suits everyone, the fairest time in the whole range (the nearest, if several are
+     equally fair); otherwise null.
+   - best: the score of the fairest time in the range ({ worst, total }); 0 and 0 when fits. */
+function findMeetingTimes({ zones, target, duration = 30, step = 30, refZone = LOCAL_ZONE, range = 7 }) {
+  const g = GRID * MIN, first = Math.ceil((target - range * DAY) / g) * g;
+  const n = Math.floor((target + range * DAY - first) / g) + 1, durN = duration / GRID;
+  // wall times on the 15-minute grid, worked out as needed (a meeting's end is another grid point)
+  const wallsOf = zone => { const memo = []; return i => memo[i] || (memo[i] = wallParts(first + i * g, zone)); };
+  const ref = wallsOf(refZone), people = zones.map(rule => ({ rule, at: wallsOf(rule.zone) }));
+  const slots = [];
+  for (let i = 0; i < n; i++) {
+    if (minuteOfDay(ref(i)) % step) continue;
+    slots.push(scored(first + i * g, people.map(p => assessWalls(p.at(i), p.at(i + durN), p.rule, duration))));
+  }
+  const fits = slots.some(s => s.ok);
+  const before = slots.filter(s => s.ms <= target).reverse(), after = slots.filter(s => s.ms >= target); // nearest first
+  const fairestOf = list => list.reduce((b, s) => !b || better(s, b) < 0 ? s : b, null); // the first of equals
+  const fairestNear = side => {
+    const i = side.findIndex(s => s.worst < 1440);
+    if (i < 0) return fairestOf(side);
+    return fairestOf(side.slice(i).filter(s => Math.abs(s.ms - side[i].ms) <= DAY));
+  };
+  const fairest = fits ? null : fairestOf([...slots].sort((a, b) => Math.abs(a.ms - target) - Math.abs(b.ms - target) || b.ms - a.ms));
+  return {
+    target: evaluate(target, zones, duration),
+    fits,
+    earlier: (fits ? before.find(s => s.ok) : fairestNear(before)) || null,
+    later: (fits ? after.find(s => s.ok) : fairestNear(after)) || null,
+    fairest,
+    best: fits ? { worst: 0, total: 0 } : fairest ? { worst: fairest.worst, total: fairest.total } : { worst: Infinity, total: Infinity },
+  };
+}
+
+/* Clock changes in a zone between two instants: [{ ms, from, to }], offsets in minutes. ms is the first
+   quarter hour on the new offset. Looks a day at a time, so two changes in one day would be missed. */
+function clockChanges(zone, start, end) {
+  const g = GRID * MIN, out = [];
+  let a = Math.floor(start / g) * g, oa = offsetMin(a, zone);
+  while (a < end) {
+    const b = Math.min(a + DAY, Math.ceil(end / g) * g), ob = offsetMin(b, zone);
+    if (ob !== oa) {
+      let lo = a, hi = b;
+      while (hi - lo > g) { const mid = lo + Math.floor((hi - lo) / 2 / g) * g; if (offsetMin(mid, zone) === oa) lo = mid; else hi = mid; }
+      out.push({ ms: hi, from: oa, to: offsetMin(hi, zone) });
+    }
+    a = b; oa = ob;
+  }
+  return out;
+}
+
+/* One day on refZone's clock, hour by hour: each person's local time at the start of the hour and which
+   quarters of it are inside their working hours, and which quarters are inside everyone's. A day with a
+   clock change has 23 or 25 hours. */
+function dayTimeline(date, refZone, zones) {
+  const start = wallToMs(date, refZone).ms, end = wallToMs(addDays(date, 1), refZone).ms;
+  const hours = Array.from({ length: Math.max(1, Math.round((end - start) / HOUR)) }, (_, k) => {
+    const ms = start + k * HOUR;
+    const people = zones.map(rule => {
+      const q = [0, 1, 2, 3].map(j => wallParts(ms + j * GRID * MIN, rule.zone));
+      return { wall: q[0], quarters: q.map(w => isWorking(w, rule)) };
+    });
+    return { ms, people, all: [0, 1, 2, 3].map(j => people.length > 0 && people.every(p => p.quarters[j])) };
+  });
+  return { start, end, hours };
+}
+
+/* ---------- formatting ---------- */
+const timeStr = w => `${pad(w.h)}:${pad(w.mi)}`;
+const dateStr = w => `${WEEKDAYS[w.wd]} ${w.d} ${MONTHS[w.mo - 1]}`;
+function offsetStr(min) {
+  if (!min) return 'UTC';
+  const a = Math.abs(min);
+  return `UTC${min < 0 ? '-' : '+'}${Math.floor(a / 60)}${a % 60 ? ':' + pad(a % 60) : ''}`;
+}
+/* "45 min", "2 h 30 min", "1 day 3 h". */
+function spanStr(min) {
+  min = Math.round(Math.abs(min));
+  const d = Math.floor(min / 1440), h = Math.floor(min % 1440 / 60), m = min % 60;
+  return [d && `${d} day${d === 1 ? '' : 's'}`, h && `${h} h`, m && `${m} min`].filter(Boolean).join(' ') || '0 min';
+}
+/* Why a time does or doesn't suit someone, for a person from assess. */
+function whyStr(p) {
+  if (p.ok) return 'Inside working hours';
+  if (p.why === 'off') return `${FULL_DAYS[p.start.wd]} isn’t a working day`;
+  return p.why === 'early' ? `Starts ${spanStr(p.by)} before their working day` : `Ends ${spanStr(p.by)} after their working day`;
+}
+/* One line to paste into an invite or a message:
+   "Tue 28 Oct 2026 · London 14:00–14:30 · New York 09:00–09:30 · Sydney 00:00–00:30 (Wed 29 Oct)". */
+function summaryLine(ev, refZone) {
+  const r = wallParts(ev.ms, refZone);
+  return [`${dateStr(r)} ${r.y}`, ...ev.people.map(p =>
+    `${cityOf(p.zone)} ${timeStr(p.start)}–${timeStr(p.end)}${sameDate(p.start, r) ? '' : ` (${dateStr(p.start)})`}`)].join(' · ');
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  MIN, HOUR, DAY, LOCAL_ZONE, isValidZone, canonicalZone, cityOf, wallParts, utcMs, offsetMin, wallToMs, addDays, sameDate,
+  defaultDays, defaultRule, ruleProblem, isWorking, assess, evaluate, findMeetingTimes, clockChanges, dayTimeline,
+  timeStr, dateStr, offsetStr, spanStr, whyStr, summaryLine,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const listNames = names => names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'meeting-time.settings';
+const DEFAULT_ZONES = () => [...new Set([LOCAL_ZONE, 'Europe/London', 'America/New_York'])].map(defaultRule);
+const DEFAULTS = { duration: 30, step: 30, refZone: 'local' };
+const settings = (() => {
+  try { return { ...DEFAULTS, zones: DEFAULT_ZONES(), ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS, zones: DEFAULT_ZONES() }; }
+})();
+const validMinute = (n, max) => Number.isInteger(n) && n >= 0 && n <= max;
+settings.zones = (Array.isArray(settings.zones) ? settings.zones : DEFAULT_ZONES()).filter(r => r && isValidZone(r.zone)).map(r => ({
+  zone: r.zone,
+  start: validMinute(r.start, 1439) ? r.start : 540,
+  end: validMinute(r.end, 1440) ? r.end : 1020,
+  days: Array.isArray(r.days) ? [...new Set(r.days.filter(d => validMinute(d, 6)))] : defaultDays(r.zone),
+}));
+if (![15, 30, 60].includes(settings.step)) settings.step = DEFAULTS.step;
+if (![...$('#duration').options].some(o => +o.value === settings.duration)) settings.duration = DEFAULTS.duration;
+if (settings.refZone !== 'local' && !isValidZone(settings.refZone)) settings.refZone = 'local';
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+const refZone = () => settings.refZone === 'local' ? LOCAL_ZONE : settings.refZone;
+
+const ALL_ZONES = (() => {
+  let z = [];
+  try { z = Intl.supportedValuesOf('timeZone'); } catch {}
+  return [...new Set(['UTC', ...z])];
+})();
+
+/* ---------- state ---------- */
+let result = null;     // from findMeetingTimes, or null when the input can't be searched
+let options = [];      // [{ key, label, ev, rec }] shown as cards, in time order
+let selected = null;   // key of the option shown on the day view
+let view = null;       // { y, mo, d }: the day shown on the day view, on refZone's clock
+
+const minutesOf = v => { const m = /^(\d{2}):(\d{2})/.exec(v); return m ? +m[1] * 60 + +m[2] : null; };
+const hhmm = min => `${pad(Math.floor(min / 60) % 24)}:${pad(min % 60)}`;
+const wallInput = w => `${String(w.y).padStart(4, '0')}-${pad(w.mo)}-${pad(w.d)}T${timeStr(w)}`;
+function readTarget() {
+  const m = /^(\d{4,})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec($('#when').value);
+  return m ? wallToMs({ y: +m[1], mo: +m[2], d: +m[3], h: +m[4], mi: +m[5] }, refZone()) : null;
+}
+function setTarget(ms) { $('#when').value = wallInput(wallParts(ms, refZone())); }
+/* The next start time on the step after now, on refZone's clock. */
+function nextStart() {
+  const w = wallParts(Date.now() + MIN, refZone()), step = settings.step;
+  const m = Math.ceil(minuteOfDay(w) / step) * step;
+  return wallToMs({ y: w.y, mo: w.mo, d: w.d, h: 0, mi: m }, refZone()).ms;
+}
+
+/* ---------- search ---------- */
+function compute(keepView = false) {
+  const zones = settings.zones, duration = settings.duration, t = readTarget();
+  const problems = zones.map(r => ruleProblem(r, duration));
+  renderZoneProblems(problems);
+  result = null; options = [];
+  let badge = '', cls = '', msg = '';
+  if (!zones.length) msg = 'Add the time zones of the people you’re meeting.';
+  else if (!t) msg = 'Pick a date and time.';
+  else if (problems.some(Boolean)) {
+    cls = 'err'; badge = 'Check hours';
+    msg = `Fix the working hours for ${listNames(zones.filter((_, i) => problems[i]).map(r => cityOf(r.zone)))} to see times.`;
+  } else {
+    result = findMeetingTimes({ zones, target: t.ms, duration, step: settings.step, refZone: refZone() });
+    ({ badge, cls, msg } = describe(result, t.ms));
+    if (zones.length === 1) msg += ' Add another time zone to compare.';
+  }
+  $('#statusBadge').hidden = !badge;
+  $('#statusBadge').className = `badge ${cls}`;
+  $('#statusBadge').textContent = badge;
+  $('#statusMsg').innerHTML = msg;
+  if (t && t.gap) toast(`That time doesn’t exist in ${cityOf(refZone())} (the clocks go forward), so it moved on`);
+  if (!keepView || !view) view = result ? (w => ({ y: w.y, mo: w.mo, d: w.d }))(wallParts(current().ev.ms, refZone())) : t ? (w => ({ y: w.y, mo: w.mo, d: w.d }))(wallParts(t.ms, refZone())) : null;
+  renderOptions();
+  renderChanges(t && t.ms);
+  renderZoneOffsets(t && t.ms);
+  renderTimeline();
+}
+
+const whenStr = ms => { const w = wallParts(ms, refZone()); return `<b>${esc(dateStr(w))}, ${esc(timeStr(w))}</b>`; };
+/* The status line, and the option cards (sets options and selected). */
+function describe(r, target) {
+  const targetIsBest = r.target.ok || (!r.fits && better(r.target, r.best) <= 0);
+  const opts = [{ key: 'target', label: 'Your time', ev: r.target }];
+  if (!targetIsBest) {
+    for (const [key, label] of [['earlier', 'Earlier'], ['later', 'Later'], ['fairest', 'Fairest']]) {
+      const ev = r[key];
+      if (ev && !opts.some(o => o.ev.ms === ev.ms)) opts.push({ key, label, ev });
+    }
+  }
+  opts.sort((a, b) => a.ev.ms - b.ev.ms);
+  // the recommendation: the nearest time that suits everyone or, failing that, the fairest one
+  const near = [r.earlier, r.later].filter(Boolean).sort((a, b) => Math.abs(a.ms - target) - Math.abs(b.ms - target) || b.ms - a.ms)[0];
+  const pick = targetIsBest ? r.target : r.fits ? near : r.fairest;
+  const rec = (opts.find(o => pick && o.ev.ms === pick.ms) || opts.find(o => o.key === 'target')).key;
+  for (const o of opts) o.rec = o.key === rec && opts.length > 1;
+  options = opts; selected = rec;
+
+  const out = r.target.people.filter(p => !p.ok).map(p => esc(cityOf(p.zone)));
+  const gap = e => `${spanStr((e.ms - target) / MIN)} ${e.ms < target ? 'earlier' : 'later'}, at ${whenStr(e.ms)}`;
+  if (r.target.ok) return { badge: 'Works', msg: `${whenStr(target)} is inside everyone’s working hours.` };
+  if (r.fits) return { badge: 'Outside hours', cls: 'warn', msg: `${whenStr(target)} is outside working hours in ${listNames(out)}. The nearest time that suits everyone is ${gap(near)}.` };
+  const fairness = r.best.worst >= 1440 ? 'Every time falls on someone’s day off.' : `At the fairest times, nobody is more than ${spanStr(r.best.worst)} outside their working hours.`;
+  if (targetIsBest) return { badge: 'No overlap', cls: 'err', msg: `No time within a week suits everyone, and ${whenStr(target)} is already one of the fairest. ${fairness}` };
+  const nearby = opts.filter(o => (o.key === 'earlier' || o.key === 'later') && !o.rec).map(o => o.label);
+  const also = nearby.length ? ` ${listNames(nearby)} ${nearby.length > 1 ? 'are the fairest times' : 'is the fairest time'} within a day of yours.` : '';
+  return { badge: 'No overlap', cls: 'err', msg: `No time within a week suits everyone. The fairest is ${gap(pick)}. ${fairness}${also}` };
+}
+const current = () => options.find(o => o.key === selected) || options[0];
+
+/* ---------- render: options ---------- */
+function renderOptions() {
+  const target = result && result.target.ms;
+  $('#options').innerHTML = options.map(o => {
+    const delta = o.key === 'target' ? '' : `${spanStr((o.ev.ms - target) / MIN)} ${o.ev.ms < target ? 'before' : 'after'} your time`;
+    const ref = wallParts(o.ev.ms, refZone());
+    return `<article class="oc${o.key === selected ? ' on' : ''}" data-k="${o.key}">
+      <div class="oc-head"><button class="oc-pick" type="button" aria-pressed="${o.key === selected}" title="Show on the day view">${esc(o.label)}</button>${o.rec ? '<span class="tag rec">Best</span>' : ''}<span class="oc-delta">${esc(delta)}</span><span class="spacer"></span><button class="copy" type="button" data-act="copy" aria-label="Copy ${esc(o.label.toLowerCase())} as text">copy</button></div>
+      <ul class="oc-people">${o.ev.people.map(p => `<li class="${p.ok ? 'ok' : 'bad'}">
+        <span class="who">${esc(cityOf(p.zone))}</span>
+        <span class="at">${sameDate(p.start, ref) ? '' : `<small>${esc(dateStr(p.start))}</small>`}${esc(timeStr(p.start))}–${esc(timeStr(p.end))}</span>
+        <span class="why">${esc(whyStr(p))}</span></li>`).join('')}</ul>
+    </article>`;
+  }).join('');
+}
+$('#options').addEventListener('click', e => {
+  const card = e.target.closest('.oc'); if (!card) return;
+  const o = options.find(x => x.key === card.dataset.k);
+  if (e.target.closest('[data-act=copy]')) return copyText(summaryLine(o.ev, refZone()));
+  selected = o.key;
+  const w = wallParts(o.ev.ms, refZone());
+  view = { y: w.y, mo: w.mo, d: w.d };
+  renderOptions(); renderTimeline();
+  $(`.oc[data-k="${o.key}"] .oc-pick`).focus();
+});
+
+/* Clock changes in any zone within the week either side, since they move the overlap. */
+function renderChanges(target) {
+  const el = $('#changes');
+  const items = target == null ? [] : settings.zones.flatMap(r => clockChanges(r.zone, target - 7 * DAY, target + 7 * DAY).map(c => ({ ...c, zone: r.zone })))
+    .sort((a, b) => a.ms - b.ms);
+  el.hidden = !items.length;
+  el.innerHTML = items.map(c => {
+    const w = wallParts(c.ms, c.zone);
+    return `<li>${esc(cityOf(c.zone))}: clocks go ${c.to > c.from ? 'forward' : 'back'} ${esc(spanStr(c.to - c.from))} on ${esc(dateStr(w))} (${esc(offsetStr(c.from))} to ${esc(offsetStr(c.to))}).</li>`;
+  }).join('');
+}
+
+/* ---------- render: day view ---------- */
+const fill = (quarters, color) => quarters.some(Boolean)
+  ? `background:linear-gradient(90deg,${quarters.map((q, j) => `${q ? color : 'transparent'} ${j * 25}% ${(j + 1) * 25}%`).join(',')})` : '';
+let timeline = null;
+function renderTimeline() {
+  const el = $('#tl');
+  if (!view || !settings.zones.length) { el.innerHTML = ''; $('#tlDate').textContent = ''; timeline = null; return; }
+  const zones = settings.zones, tl = timeline = dayTimeline(view, refZone(), zones), span = tl.end - tl.start;
+  const w = wallParts(tl.start + HOUR, refZone());
+  $('#tlDate').textContent = `${FULL_DAYS[w.wd]} ${w.d} ${MONTHS[w.mo - 1]} ${w.y}, ${cityOf(refZone())} time`;
+  el.style.setProperty('--cols', tl.hours.length);
+  const rows = zones.map((r, i) => {
+    const off = offsetMin(tl.start + 12 * HOUR, r.zone);
+    let prev = null;
+    const cells = tl.hours.map((h, k) => {
+      const p = h.people[i], lw = p.wall, newDay = !prev || !sameDate(prev, lw);
+      prev = lw;
+      return `<div class="tl-cell${p.quarters.some(Boolean) ? ' w' : ''}" data-c="${k}" style="${fill(p.quarters, 'var(--work)')}">${newDay ? `<span class="d">${esc(WEEKDAYS[lw.wd])} ${lw.d}</span>` : ''}<span class="t">${lw.mi ? timeStr(lw) : pad(lw.h)}</span></div>`;
+    }).join('');
+    return `<div class="tl-row"><div class="tl-label"><b title="${esc(r.zone)}">${esc(cityOf(r.zone))}</b><small>${esc(offsetStr(off))}</small></div>${cells}</div>`;
+  });
+  rows.push(`<div class="tl-row tl-all"><div class="tl-label"><b>Everyone</b></div>${tl.hours.map((h, k) => `<div class="tl-cell" data-c="${k}" style="${fill(h.all, 'var(--accent)')}"></div>`).join('')}</div>`);
+  const pct = ms => `${((ms - tl.start) / span * 100).toFixed(3)}%`;
+  const marks = [];
+  const sel = current();
+  if (sel) {
+    const a = sel.ev.ms, b = a + settings.duration * MIN;
+    if (b > tl.start && a < tl.end) marks.push(`<div class="tl-sel" style="left:${pct(Math.max(a, tl.start))};width:calc(${pct(Math.min(b, tl.end))} - ${pct(Math.max(a, tl.start))})"></div>`);
+  }
+  // the box already marks your time when it's the one selected
+  if (result && (!sel || sel.ev.ms !== result.target.ms) && result.target.ms >= tl.start && result.target.ms < tl.end) marks.push(`<div class="tl-target" style="left:${pct(result.target.ms)}"></div>`);
+  el.innerHTML = rows.join('') + `<div class="tl-over" aria-hidden="true">${marks.join('')}</div>`;
+  el.setAttribute('aria-label', `Working hours on ${$('#tlDate').textContent}`);
+  // bring the selected meeting into view when the day view scrolls sideways
+  const mark = el.querySelector('.tl-sel'), sc = $('.tl-scroll');
+  if (mark && sc.scrollWidth > sc.clientWidth) {
+    const label = el.querySelector('.tl-label').offsetWidth;
+    sc.scrollLeft = Math.max(0, mark.offsetLeft + label - (sc.clientWidth - label) / 2);
+  }
+}
+/* Clicking an hour checks the start time under the pointer, on the step. */
+$('#tl').addEventListener('click', e => {
+  const cell = e.target.closest('.tl-cell'); if (!cell || !timeline) return;
+  const rect = cell.getBoundingClientRect(), frac = Math.min(Math.max((e.clientX - rect.left) / rect.width, 0), 0.999);
+  const ms = timeline.hours[+cell.dataset.c].ms + Math.floor(frac * 60 / settings.step) * settings.step * MIN;
+  setTarget(ms);
+  compute(true);
+});
+const moveDay = n => { if (!view) return; view = addDays(view, n); renderTimeline(); };
+$('#tlPrev').onclick = () => moveDay(-1);
+$('#tlNext').onclick = () => moveDay(1);
+
+/* ---------- time zones ---------- */
+const DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
+const abbrFmt = new Map();
+/* Short name such as "EST" or "BST", when the browser knows one (otherwise it's "GMT+5", which the offset already says). */
+function zoneAbbr(ms, zone) {
+  for (const loc of ['en-US', 'en-GB']) {
+    const key = loc + zone;
+    let f = abbrFmt.get(key);
+    if (!f) abbrFmt.set(key, f = new Intl.DateTimeFormat(loc, { timeZone: zone, timeZoneName: 'short' }));
+    const n = f.formatToParts(ms).find(p => p.type === 'timeZoneName')?.value;
+    if (n && !/^(GMT|UTC)/.test(n)) return n;
+  }
+  return '';
+}
+function renderZoneList() {
+  $('#zones').innerHTML = settings.zones.map((r, i) => {
+    const z = r.zone, city = esc(cityOf(z));
+    const region = z.includes('/') ? z.slice(0, z.lastIndexOf('/')).replace(/_/g, ' ') : '';
+    return `<li class="zone" data-i="${i}">
+      <div class="zone-top"><span class="zone-name"><b>${city}</b>${region ? `<span class="region">${esc(region)}</span>` : ''}${z === LOCAL_ZONE ? '<span class="tag">You</span>' : ''}</span>
+        <span class="zone-off"></span><button class="rm" type="button" data-act="rm" aria-label="Remove ${esc(z)}" title="Remove">×</button></div>
+      <div class="zone-cfg">
+        <span class="hours"><input type="time" step="900" data-f="start" value="${hhmm(r.start)}" aria-label="Working day starts in ${city}"> to <input type="time" step="900" data-f="end" value="${hhmm(r.end)}" aria-label="Working day ends in ${city}"></span>
+        <span class="days" role="group" aria-label="Working days in ${city}">${DAY_ORDER.map(d => `<button type="button" data-day="${d}" aria-pressed="${r.days.includes(d)}" aria-label="${FULL_DAYS[d]}" title="${FULL_DAYS[d]}">${FULL_DAYS[d][0]}</button>`).join('')}</span>
+      </div>
+      <p class="zone-err" hidden></p>
+    </li>`;
+  }).join('') || '<li class="note">No time zones yet. Add one below.</li>';
+}
+function renderZoneProblems(problems) {
+  document.querySelectorAll('.zone[data-i]').forEach(li => {
+    const p = problems[+li.dataset.i], err = li.querySelector('.zone-err');
+    li.classList.toggle('bad', !!p);
+    err.hidden = !p; err.textContent = p || '';
+  });
+}
+function renderZoneOffsets(ms) {
+  const at = ms ?? Date.now();
+  document.querySelectorAll('.zone[data-i]').forEach(li => {
+    const z = settings.zones[+li.dataset.i].zone, abbr = zoneAbbr(at, z);
+    li.querySelector('.zone-off').textContent = [abbr, offsetStr(offsetMin(at, z))].filter(Boolean).join(' · ');
+  });
+}
+const zonesChanged = () => { saveSettings(); renderRefZones(); compute(); };
+
+$('#zones').addEventListener('change', e => {
+  const inp = e.target.closest('input[data-f]'); if (!inp) return;
+  const r = settings.zones[+inp.closest('.zone').dataset.i];
+  let m = minutesOf(inp.value);
+  if (m === null) { inp.value = hhmm(r[inp.dataset.f]); return; }
+  if (inp.dataset.f === 'end' && m === 0) m = 1440; // ending at 00:00 means midnight at the end of the day
+  r[inp.dataset.f] = m;
+  saveSettings(); compute(true);
+});
+$('#zones').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const li = b.closest('.zone'), i = +li.dataset.i, r = settings.zones[i];
+  if (b.dataset.day) {
+    const d = +b.dataset.day;
+    r.days = r.days.includes(d) ? r.days.filter(x => x !== d) : [...r.days, d].sort();
+    b.setAttribute('aria-pressed', String(r.days.includes(d)));
+    saveSettings(); compute(true);
+  } else if (b.dataset.act === 'rm') {
+    settings.zones.splice(i, 1);
+    renderZoneList(); zonesChanged();
+    const next = $(`.zone[data-i="${Math.min(i, settings.zones.length - 1)}"] .rm`);
+    (next || $('#addZoneIn')).focus();
+    toast(`Removed ${cityOf(r.zone)}`);
+  }
+});
+
+$('#zoneList').innerHTML = ALL_ZONES.map(z => `<option value="${esc(z)}">${esc(cityOf(z))}</option>`).join('');
+/* Accepts an IANA name in any case, a city ("tokyo", "new york"), or anything else the browser accepts (e.g. "+05:30"). */
+function findZone(text) {
+  const t = text.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (!t) return null;
+  const hit = ALL_ZONES.find(z => z.toLowerCase() === t) || ALL_ZONES.find(z => cityOf(z).toLowerCase() === t)
+    || ALL_ZONES.find(z => z.toLowerCase().replace(/_/g, ' ').includes(t));
+  if (hit) return hit;
+  try { return isValidZone(text.trim()) ? canonicalZone(text.trim()) : null; } catch { return null; }
+}
+$('#addZone').addEventListener('submit', e => {
+  e.preventDefault();
+  const el = $('#addZoneIn'), z = findZone(el.value);
+  if (!z) return toast(el.value.trim() ? `No time zone matches “${el.value.trim()}”` : 'Type a time zone or city first');
+  if (settings.zones.some(r => r.zone === z)) return toast(`${z} is already in the list`);
+  settings.zones.push(defaultRule(z));
+  renderZoneList(); zonesChanged();
+  el.value = '';
+  toast(`Added ${z}`);
+});
+$('#zonesReset').onclick = () => { settings.zones = DEFAULT_ZONES(); renderZoneList(); zonesChanged(); };
+
+/* "In": your zone, the zones in the list, then every zone. Changing it keeps the date and time as typed. */
+function renderRefZones() {
+  const sel = $('#refZone');
+  const opt = z => `<option value="${esc(z)}">${esc(z)}</option>`;
+  const listed = settings.zones.map(r => r.zone).filter(z => z !== LOCAL_ZONE);
+  sel.innerHTML = `<option value="local">Your zone (${esc(LOCAL_ZONE)})</option>`
+    + (listed.length ? `<optgroup label="Your list">${listed.map(opt).join('')}</optgroup>` : '')
+    + `<optgroup label="All time zones">${ALL_ZONES.filter(z => z !== LOCAL_ZONE).map(opt).join('')}</optgroup>`;
+  sel.value = settings.refZone;
+}
+$('#refZone').onchange = e => { settings.refZone = e.target.value; saveSettings(); compute(); };
+
+/* ---------- meeting ---------- */
+$('#when').addEventListener('change', () => compute());
+$('#duration').value = settings.duration;
+$('#duration').onchange = e => { settings.duration = +e.target.value; saveSettings(); compute(); };
+const stepBtns = [...document.querySelectorAll('#stepSeg button')];
+const syncStep = () => stepBtns.forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === settings.step)));
+stepBtns.forEach(b => b.onclick = () => { settings.step = +b.dataset.v; saveSettings(); syncStep(); compute(); });
+syncStep();
+const useNow = () => { setTarget(nextStart()); compute(); };
+$('#nowBtn').onclick = useNow;
+
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.target.closest && e.target.closest('input, select, textarea, [contenteditable]')) return;
+  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); useNow(); }
+});
+
+/* ---------- copy / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+async function copyText(text) {
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); toast('Copied'); } catch { toast('Couldn’t copy to the clipboard'); }
+}
+
+/* ---------- start ---------- */
+renderRefZones();
+renderZoneList();
+setTarget(nextStart());
+compute();
+</script>
+</body>
+</html>

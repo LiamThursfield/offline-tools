@@ -100,6 +100,16 @@
     "description": "Decode JSON Web Tokens without sending them anywhere: header and claims with explanations, exp, nbf and iat as readable dates, expired and not-yet-valid tokens flagged, security warnings, and signature checks for HS256, RS256, PS256, ES256 and EdDSA with a secret, PEM key, certificate or JWK."
   },
   {
+    "slug": "meeting-time",
+    "name": "Meeting time finder",
+    "mark": [
+      "MEET",
+      ".time"
+    ],
+    "summary": "Find a meeting time across time zones",
+    "description": "Find the time nearest to the one you want that falls within everyone’s working hours, across two or more time zones such as Europe/London and America/New_York, with working hours and days for each zone, meeting length, daylight saving changes handled, the fairest compromise when there’s no overlap, and an hour-by-hour day view."
+  },
+  {
     "slug": "metronome",
     "name": "Metronome",
     "mark": [

@@ -20,6 +20,8 @@
 /json-format/  /json-format/json-format   200
 /jwt           /jwt/jwt                   200
 /jwt/          /jwt/jwt                   200
+/meeting-time  /meeting-time/meeting-time 200
+/meeting-time/ /meeting-time/meeting-time 200
 /metronome     /metronome/metronome       200
 /metronome/    /metronome/metronome       200
 /regex         /regex/regex               200
