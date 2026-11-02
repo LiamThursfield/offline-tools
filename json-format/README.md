@@ -32,6 +32,7 @@ With **Fix common mistakes** on (the default), input that isn't strict JSON is r
 | Raw tabs and invalid escapes in strings | `"a<tab>b"`, `"it\'s"` |
 | Non-breaking and zero-width spaces | often pasted in from documents or chat apps |
 | Several values in a row | JSON Lines / NDJSON become an array |
+| Escaped JSON without its outer quotes | `{\"a\": 1}`, as copied from inside a JSON string or a log line |
 
 A raw line break inside a string is never repaired, because it almost always means a missing closing quote.
 

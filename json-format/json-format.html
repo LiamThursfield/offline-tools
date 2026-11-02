@@ -513,6 +513,7 @@ const FIXES = {
   escape: ['invalid escape sequence fixed', 'invalid escape sequences fixed'],
   space: ['non-standard space removed', 'non-standard spaces removed'],
   multiple: ['separate values wrapped in an array', 'separate values wrapped in an array'],
+  escapedJson: ['escaped JSON unescaped', 'escaped JSON unescaped'],
 };
 
 function lineCol(text, pos) {
@@ -782,8 +783,24 @@ function parseText(text, { repair = true } = {}) {
   if (strict.empty || strict.ok || !repair) return strict;
   const loose = parse(text, { loose: true });
   if (loose.ok) return { ...loose, repaired: true, strict };
+  const inner = unescapeJson(text);
+  if (inner && inner.ok) {
+    // positions in the unescaped text don't match the input, so every repair points at the first backslash
+    const pos = text.indexOf('\\');
+    return { ...inner, repaired: true, strict, fixes: [{ kind: 'escapedJson', pos }, ...(inner.fixes || []).filter(f => f.kind !== 'escapedJson').map(f => ({ ...f, pos }))] };
+  }
   // loose got further: the earlier problems were repairable, so report the one that isn't
   return loose.pos >= strict.pos ? loose : strict;
+}
+
+/* Parses an object or array whose contents are escaped but which has lost its surrounding
+   quotes, such as {\"a\": 1}, as copied from inside a JSON string or a log line. Handles
+   repeated escaping. Returns null if the text isn't valid as the inside of a string. */
+function unescapeJson(text) {
+  if (!/^\s*[[{]/.test(text) || !text.includes('\\')) return null;
+  const body = text.trim().replace(/\r\n?|\n/g, '\\n').replace(/\t/g, '\\t');
+  const str = parse(`"${body}"`);
+  return str.ok ? parseText(str.root.value) : null;
 }
 
 /* Groups repairs by kind: [{ kind, count, pos (first), label }] */
