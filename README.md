@@ -9,6 +9,7 @@ The tools are also hosted at [tools.lxst.digital](https://tools.lxst.digital/).
 <!-- shared:tool-table -->
 | Tool | What it does |
 | --- | --- |
+| [ASCII table converter](ascii-table/) | Turn tables printed by command-line tools into Markdown or CSV: +---+ and box-drawing borders, psql and MySQL output, Markdown tables, and columns lined up with spaces (docker ps, kubectl get, df) or tabs, with titles, cells that wrap over several lines and the text around the table handled, number columns right-aligned, and a preview of the columns found. |
 | [Basic auth generator](basic-auth/) | Turn a username and password into an Authorization: Basic header, or decode one back to the credentials, with ready-made curl, fetch, Python and HTTPie snippets, UTF-8 or ISO-8859-1 encoding, a WWW-Authenticate challenge builder, and warnings about colons, hidden characters and plain HTTP. |
 | [BPM tapper](bpm-tapper/) | Tap, click or press a key along to a song to find its tempo: average and recent BPM, consistency, half/double time, a per-tap chart and a beat counter. |
 | [Colour converter](hex-oklch/) | Convert colours between HEX, RGB, HSL, HWB, OKLCH and OKLab, adjust them with OKLCH sliders, map out-of-gamut colours into sRGB, and check text contrast against WCAG AA and AAA, with suggested fixes. |

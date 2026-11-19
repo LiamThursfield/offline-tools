@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- shared:meta -->
+<title>ASCII table converter – Turn CLI tables into Markdown or CSV | LXST.tools</title>
+<meta name="description" content="Turn tables printed by command-line tools into Markdown or CSV: +---+ and box-drawing borders, psql and MySQL output, Markdown tables, and columns lined up with spaces (docker ps, kubectl get, df) or tabs, with titles, cells that wrap over several lines and the text around the table handled, number columns right-aligned, and a preview of the columns found. Works offline; nothing is uploaded.">
+<link rel="canonical" href="https://tools.lxst.digital/ascii-table">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAF6klEQVRYCZ1XbWwUVRQ9M9vPdIvQr6WupdjYlmgNwYIEBeJqwJiYECVBREskMcgf9QdtCSSiIZoY0R/qH2gwQSxRUSg01hiIxBhTEy0hUVqoJQrWEqillK9+74znvNnZtoh22ps9897OzLvnvvvufe+OhYSkpqaqp8vDxHoiRkQJ84DtdGWEA7uI74i9RDMxQmEDWCkpKbAsS/1cYjPxIpFPeOK6gEPwNyWRSpsXT7c/9G92PiLeJS6L10rMXOQfEs8QNuGRSkEkDHfOLGBWpqfQPJzkIoOvDMD68wpw6caYLm+Yw+Zz4mXicgovIaKaWEsYV2jGbsVsOBsWwX28nAbMBNK5Et5TvjaJyFtDo8YA65t22Ht/htV60feGJiiuc/TAa/LAI/zzGREhzCydZxfAeX2lmbnVfgnWT51cxWtAXMYHkBA5ojPgPlgEtzwCq/MK7DeOwv70pOcNT0U3m7XygALOI+d6O1ULEX9vFXB9EKHNR2B/+YvnRpEHjQN5SkZEsuGsvh/xmhji7z8FpNjGG4m4KOBbVfLA7+zcrdm5i4oQP/iCsTK08QtYR9s9tykWpiMmeLmcK8sQr1tjdIVW74XV8hcNNDr/0Hoo1YC0EJyNS+DOzob95jGPXLOYLrl0aix1WEd/MzrdQnrkpSXkEq2RqHppJuiKc+DQUqulE3bDqWkTu1pG55ZYoSHSKd3icMllUjtpilxVxtQvnAHre67I5X4/YhOGBmuU17m5uYhEIrDt5Cw9XdRpdJPDcImTknzLLQh77jrP3NXmMw3RnrJz507U1dUhKyuLasbpYd+Sbi6J4UroVxZ4ovWWjMS9NuDVd7fZ1eiBaDSK/Pz8iR7wdfm6fS7eHzMgcI552kSclpZm3J2RkYGenh7093PpAsmYZ8YZEGikeUnk5eXlqKmpQSwWgwzo7OxEfX090tPTgyvim1M2QOTFxcXYs2cPKioq0NjYiNbWVpSVlaG2ttYE4enTpwMbMWUDpLmqqgqVlZWorq7G7t27dbZCp+q6deuwa9euwOR6MZkFQUdlZmZi6dKl6OjowIEDBxCPxw25Iv7w4cM4ceIEQiGdb8FkSgaIRDMNh8Po6+vDwACPXEa+RO3Q0BB6e3uDMSfeCmSAn8+amUi7urpMHBQWFhoP6Pno6CgKCgpQWlo6Mf8nMWdSA6Rcbt+6davZYJTnDQ0NyMvLw/bt203wadOZO3cutm3bhnnz5hmjJuFNPp40CGVATk6OCbySkhIT9YcOHTJBuGnTJixfvtx4RJvP4OAgzp49e/tNKEk5sfNvAxJr6r+mPb27uxs7duxAUVERmpubMTw8bGav/ooVK5CdnY2mpibjGaWmvKN48OPD18Ubya7fGTPg5jDvcYe6I8N/lmy1vvv37zf/ZZCg2coTinwRKRvUtrW1mfdumwlGNzkMl6feM4CGWed4UPCBu+BOHpJMo8Rp5Vtxq0KRjb83vu+PmdBSp7uApQc5DFfCGQpCV4WD1d4N69eLcGKM4vtmB6//JrD8xx9VW9Tpxu4xHOJKFDquDLhq1qa3H/YnLUBeGM6WGDCTZfgtXvgP9f9/Wzqoy6mNwaVuex85yJWIh6v0XOhJapijktvq6GGxkAfn6fn8NMmCfZIfNH0DY/WBDrGgELFQNBPxt56A89xC2I2nEHr7ODA86hvQohg4SCymRam4Ogh7SxPcMKu0DYvhPnAX7PoWWM3nWSXdDO4R1YK5LEgeKobz/EK486Owjp2BXfuVNyE9Z+UhblXFhezoS2UZ4ZGwMI2/ugzO+kqW1iyhbjCliMBLQgI3zGNZuHQNoY9bYH/wA3Dxur/2YuINrPE/zR7jn30EU4Ai16l0urcA7qMMSmaG1i9whczxVs8NWCcvwDreAauNQafvCm/mYrhArCe+9Q2QT1YR7xClhCf+OqYyVlOCn3Bm8ChLu5EE6RixHnUQtcQRwg2pwFAOcyM5ww3mR95kDqKECJlI9Qf7xgRtqcDMmPtFQrTmXxOvsJQ7Ll7VEf8AWB8/nZz5R+QAAAAASUVORK5CYII=">
+<meta name="theme-color" content="#050505" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="LXST.tools">
+<meta property="og:url" content="https://tools.lxst.digital/ascii-table">
+<meta property="og:title" content="ASCII table converter">
+<meta property="og:description" content="Turn tables printed by command-line tools into Markdown or CSV: +---+ and box-drawing borders, psql and MySQL output, Markdown tables, and columns lined up with spaces (docker ps, kubectl get, df) or tabs, with titles, cells that wrap over several lines and the text around the table handled, number columns right-aligned, and a preview of the columns found. Works offline; nothing is uploaded.">
+<meta property="og:image" content="https://tools.lxst.digital/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="LXST.digital">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"ASCII table converter","url":"https://tools.lxst.digital/ascii-table","description":"Turn tables printed by command-line tools into Markdown or CSV: +---+ and box-drawing borders, psql and MySQL output, Markdown tables, and columns lined up with spaces (docker ps, kubectl get, df) or tabs, with titles, cells that wrap over several lines and the text around the table handled, number columns right-aligned, and a preview of the columns found.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"GBP"},"creator":{"@type":"Organization","name":"LXST.digital","url":"https://lxst.digital/"}}</script>
+<!-- /shared:meta -->
+<script>
+/* shared:theme.js */
+/* Theme registry. Each id (except "auto") needs a matching :root[data-theme="…"] block in shared/themes.css.
+   "auto" follows the OS light/dark setting using the two ids named below.
+   A theme based on someone else's work sets `credit`: the footer then names it, linking to `url` if given. */
+const THEMES = [
+  { id: 'auto', label: 'Auto', light: 'lxst-light', dark: 'lxst-dark' },
+  { id: 'lxst-dark', label: 'LXST dark' },
+  { id: 'lxst-light', label: 'LXST light' },
+  { id: 'classic-dark', label: 'Classic dark' },
+  { id: 'classic-light', label: 'Classic light' },
+  { id: 'lock-wood', label: 'lock-wood', credit: { name: 'lock-wood colour scheme', url: 'https://github.com/lock-wood/lock-wood-theme' } },
+];
+/* One key for every page, so the choice carries between tools. */
+const THEME_KEY = 'tools.theme';
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
+function savedTheme() { try { const t = localStorage.getItem(THEME_KEY); return THEMES.some(x => x.id === t) ? t : 'auto'; } catch { return 'auto'; } }
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id) || THEMES[0];
+  const shown = THEMES.find(x => x.id === (t.id === 'auto' ? (darkMQ.matches ? t.dark : t.light) : t.id));
+  document.documentElement.dataset.theme = shown.id;
+  const sel = document.getElementById('theme');
+  if (sel) sel.value = t.id;
+  showThemeCredit(shown);
+  return t.id;
+}
+/* Footer note for a theme based on someone else's work (element is in shared/footer.html). */
+function showThemeCredit(t) {
+  const el = document.getElementById('themeCredit');
+  if (!el) return;
+  el.hidden = !t.credit;
+  if (!t.credit) return;
+  const name = t.credit.url ? Object.assign(document.createElement('a'), { href: t.credit.url, textContent: t.credit.name }) : t.credit.name;
+  el.replaceChildren(`The ${t.label} theme is based on the `, name, `. It's credited here with thanks; its authors aren't affiliated with these tools.`);
+}
+function saveTheme(id) { id = applyTheme(id); try { localStorage.setItem(THEME_KEY, id); } catch {} }
+applyTheme(savedTheme());
+darkMQ.addEventListener('change', () => { if (savedTheme() === 'auto') applyTheme('auto'); });
+/* Follow changes made in other tabs, and in other tools when coming back through the history
+   (pageshow also runs after the browser restores the picker's old value on back/forward). */
+addEventListener('storage', e => { if (e.key === THEME_KEY) applyTheme(savedTheme()); });
+addEventListener('pageshow', () => applyTheme(savedTheme()));
+/* /shared:theme.js */
+</script>
+<style>
+/* ===== Themes ===== */
+/* shared:themes.css */
+/* Each theme sets only these base tokens; each page derives the rest (tints, hover states,
+   focus rings) from them with color-mix(). To add a theme: add a block here with a new
+   data-theme id, add a matching entry to THEMES in shared/theme.js, then run the sync script. */
+:root,:root[data-theme="lxst-dark"]{
+  color-scheme:dark;
+  --bg:oklch(0.1149 0 0); --panel:oklch(0.1591 0 0); --surface:oklch(0.2002 0 0);
+  --ink:oklch(0.9844 0.0045 258.3244); --muted:oklch(0.7107 0.0351 256.7878); --line:oklch(0.2393 0 0);
+  --accent:oklch(0.8791 0.2134 155.9529); --accent-ink:oklch(0.1149 0 0); --accent-text:oklch(0.8791 0.2134 155.9529);
+  --del:oklch(0.72 0.19 16); --ins:oklch(0.8791 0.2134 155.9529); --chg:oklch(0.84 0.14 80); --typ:oklch(0.78 0.13 300);
+  --tint:16%; --tint-strong:34%;
+  --shadow:0 10px 20px hsl(0 0% 0% / .5),0 1px 2px -1px hsl(0 0% 0% / .5);
+  --radius:.75rem; --pill:999px;
+  --sans:"Google Sans","Google Sans Text",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Code",Menlo,Consolas,monospace;
+}
+:root[data-theme="lxst-light"]{
+  color-scheme:light;
+  --bg:oklch(1 0 0); --panel:oklch(0.9816 0.0017 247.839); --surface:oklch(0.9632 0.0034 247.8585);
+  --ink:oklch(0.115 0 89.876); --muted:oklch(0.5544 0.0407 257.4166); --line:oklch(0.9288 0.0126 255.5078);
+  --accent:oklch(0.7324 0.1767 156.2757); --accent-ink:oklch(0.115 0 89.876); --accent-text:oklch(0.52 0.14 156);
+  --del:oklch(0.58 0.21 25); --ins:oklch(0.52 0.14 156); --chg:oklch(0.56 0.12 70); --typ:oklch(0.52 0.19 300);
+  --tint:11%; --tint-strong:26%;
+  --shadow:0 4px 10px hsl(0 0% 0% / .05),0 1px 2px -1px hsl(0 0% 0% / .05);
+}
+:root[data-theme="classic-light"]{
+  color-scheme:light;
+  --bg:#EEF1F0; --panel:#FFFFFF; --surface:#EEF1F0; --ink:#1B2730; --muted:#5E6B74; --line:#D5DBDA;
+  --accent:#2B4C7E; --accent-ink:#FFFFFF; --accent-text:#2B4C7E;
+  --del:#B42340; --ins:#1B7045; --chg:#8A5A00; --typ:#6A3FA0;
+  --tint:10%; --tint-strong:24%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+:root[data-theme="classic-dark"]{
+  color-scheme:dark;
+  --bg:#151B20; --panel:#1D252C; --surface:#222C34; --ink:#E3E8EB; --muted:#95A2AB; --line:#2F3A42;
+  --accent:#7FA6DE; --accent-ink:#0F1418; --accent-text:#7FA6DE;
+  --del:#FF8A9C; --ins:#7FD9A4; --chg:#F2C46B; --typ:#C7A6F2;
+  --tint:16%; --tint-strong:34%; --shadow:none; --radius:10px; --pill:7px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+}
+/* lock-wood: https://github.com/lock-wood/lock-wood-theme (muted sage/rose/ochre on charcoal) */
+:root[data-theme="lock-wood"]{
+  color-scheme:dark;
+  --bg:#1A1C20; --panel:#242832; --surface:#2C303A; --ink:#B7B2C1; --muted:#9994A8; --line:#484453;
+  --accent:#759C75; --accent-ink:#1A1C20; --accent-text:#759C75;
+  --del:#C08281; --ins:#759C75; --chg:#AA9980; --typ:#AE85AB;
+  --tint:16%; --tint-strong:34%; --radius:8px; --pill:8px;
+  --shadow:0 10px 20px hsl(222 11% 5% / .5),0 1px 2px -1px hsl(222 11% 5% / .5);
+}
+/* /shared:themes.css */
+/* derived tokens: shared by every theme */
+:root{
+  --del-bg:color-mix(in oklab,var(--del) var(--tint),var(--panel));
+  --ins-bg:color-mix(in oklab,var(--ins) var(--tint),var(--panel));
+  --chg-bg:color-mix(in oklab,var(--chg) var(--tint),var(--panel));
+  --hover:color-mix(in oklab,var(--ink) 6%,transparent);
+  --ring:color-mix(in oklab,var(--accent) 30%,transparent);
+  --pane-h:clamp(260px,44vh,640px);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);letter-spacing:-.01em;min-height:100vh}
+button,select,input{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+select:focus-visible,input:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+
+/* header: pill nav like lxst.digital */
+header{position:sticky;top:12px;z-index:10;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:6px 8px 6px 22px;border:1px solid var(--line);border-radius:var(--pill);
+  background:color-mix(in oklab,var(--bg) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.logo{font-size:1.35rem;margin:0;font-weight:400;display:flex;user-select:none;padding:4px 0}
+.logo b{color:var(--accent-text);font-weight:600}
+/* shared:chrome.css */
+.wrap{position:relative;max-width:1500px;margin:0 auto;padding:18px 20px 60px}
+.brand{position:relative;display:flex;align-items:center;gap:8px}
+.site-foot{margin:40px 4px 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.site-foot p{margin:0}
+.site-foot .theme-credit{margin-top:6px}
+.site-foot a{color:var(--accent-text);text-decoration:none}
+.site-foot a:hover{text-decoration:underline}
+@media (max-width:800px){.site-foot{margin-top:28px}}
+.logo-btn{align-items:center;gap:0;margin:0 0 0 -8px;padding:4px 8px;border:0;border-radius:var(--pill);background:none;color:inherit;font-family:inherit;letter-spacing:inherit;cursor:pointer;transition:background .3s}
+.logo-btn:hover,.logo-btn[aria-expanded="true"]{background:var(--hover)}
+.logo-btn .chev{width:16px;height:16px;margin:2px 0 0 4px;color:var(--muted);transition:transform .2s}
+.logo-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tool-menu{position:absolute;top:calc(100% + 14px);left:-14px;z-index:20;display:flex;flex-direction:column;width:min(960px,calc(100vw - 24px));max-height:calc(100dvh - 90px);overflow-y:auto;overscroll-behavior:contain;padding:6px;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 12px 28px hsl(0 0% 0% / .28),0 2px 6px hsl(0 0% 0% / .12)}
+.tool-menu[hidden]{display:none}
+.tm-list{columns:280px 3;column-gap:4px}
+.tm-list a{break-inside:avoid;margin-bottom:2px}
+.tool-menu a{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:calc(var(--radius) - 4px);color:var(--ink);text-decoration:none}
+.tool-menu a:hover,.tool-menu a:focus-visible{background:var(--hover);outline:none}
+.tool-menu a:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.tool-menu a[aria-current="page"]{background:color-mix(in oklab,var(--accent) 12%,transparent)}
+.tm-mark{flex-shrink:0;min-width:6.3em;font-size:1.05rem}
+.tm-mark b{color:var(--accent-text);font-weight:600}
+.tm-text{display:flex;flex-direction:column;line-height:1.3}
+.tm-name{font-weight:600;font-size:.9rem}
+.tm-sum{color:var(--muted);font-size:.8rem}
+.tool-menu a.tm-all{margin-bottom:4px;border-bottom:1px solid var(--line);border-radius:calc(var(--radius) - 4px) calc(var(--radius) - 4px) 0 0;padding-bottom:10px;color:var(--accent-text);font-weight:600;font-size:.85rem}
+/* /shared:chrome.css */
+.actions{display:flex;gap:2px;margin-left:auto}
+.nav{border:0;background:none;border-radius:var(--pill);padding:7px 14px;font-weight:600;font-size:.92rem;transition:background .3s,color .3s}
+.nav:hover:not(:disabled){background:var(--hover);color:var(--accent-text)}
+.nav:disabled{opacity:.45;cursor:not-allowed}
+.theme-pick{display:inline-flex;align-items:center;gap:6px;margin-left:4px;padding:0 4px 0 12px;border:1px solid var(--line);border-radius:var(--pill);font-size:.85rem;color:var(--muted);font-weight:600}
+.theme-pick select{border:0;background:transparent;color:var(--ink);font-weight:600;padding:7px 6px;border-radius:var(--pill);cursor:pointer}
+.theme-pick select option{background:var(--panel);color:var(--ink)}
+
+.intro{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:34px 4px 22px}
+.eyebrow{display:inline-flex;padding:3px 12px;border-radius:var(--pill);background:color-mix(in oklab,var(--accent) 12%,transparent);color:var(--accent-text);font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.intro h1{margin:0;font-size:clamp(1.8rem,3.2vw,2.6rem);font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.intro p{margin:0;color:var(--muted);font-size:1.02rem;max-width:66ch}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:5px 14px;font-weight:600;font-size:.88rem;transition:border-color .2s,color .2s,background .2s}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent-text)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* panes */
+.panes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.pane,.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;min-width:0;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+#inPane:focus-within{border-color:color-mix(in oklab,var(--accent) 55%,var(--line))}
+.pane.drag{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.pane-head h2{margin:0;font-size:.92rem;font-weight:700}
+.pane-head .spacer{flex:1}
+.pane-head .btn{padding:2px 11px;font-size:.8rem}
+.fname{color:var(--muted);font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:30%}
+.status{font-size:.78rem;font-weight:600;border-radius:var(--pill);padding:1px 9px;white-space:nowrap}
+.status.ok{color:var(--ins);background:var(--ins-bg)}.status.bad{color:var(--del);background:var(--del-bg)}
+.status.warn{color:var(--chg);background:var(--chg-bg)}.status.text{color:var(--muted);background:var(--surface)}
+textarea{display:block;flex:1;width:100%;height:var(--pane-h);min-height:180px;resize:vertical;border:0;background:transparent;padding:12px 14px;font:12.5px/1.6 var(--mono);letter-spacing:0;color:var(--ink);outline:none;white-space:pre;overflow:auto;tab-size:8}
+textarea::placeholder{color:var(--muted);opacity:.8}
+.opts{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.86rem;min-height:45px}
+.opts label{display:inline-flex;align-items:center;gap:6px}
+.opts .lbl{color:var(--muted)}
+select{border:1px solid var(--line);background:var(--panel);border-radius:var(--pill);padding:3px 10px;max-width:100%;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--pill);padding:2px;gap:2px;flex:none}
+.seg button{border:0;background:none;padding:2px 11px;border-radius:var(--pill);font-weight:600;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
+
+/* input messages */
+.msgs:empty{display:none}
+.msg{padding:9px 14px;border-top:1px solid var(--line);font-size:.86rem}
+.msg.bad{background:var(--del-bg)}.msg.bad>b{color:var(--del)}
+.msg.warn{background:var(--chg-bg)}.msg.warn>b{color:var(--chg)}
+.msg code{font-family:var(--mono);font-size:.92em;letter-spacing:0}
+
+/* table preview */
+.card{margin-top:16px}
+.card-head{display:flex;align-items:center;gap:8px 12px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-head h2{margin:0;font-size:.92rem;font-weight:700}
+.tinfo{color:var(--muted);font-size:.84rem;font-variant-numeric:tabular-nums}
+.ttitle{font-weight:600;font-size:.86rem;overflow-wrap:anywhere}
+.table-wrap{overflow:auto;max-height:70vh;overscroll-behavior:contain}
+table{border-collapse:separate;border-spacing:0;min-width:100%;font-size:.84rem}
+th,td{padding:5px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;vertical-align:top}
+td{max-width:48ch;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);font-size:.8rem;letter-spacing:0}
+thead th{position:sticky;top:0;z-index:2;background:var(--surface);padding:7px 12px;font-weight:700}
+th .ctype{margin-left:6px;font:500 .68rem var(--sans);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.rn{position:sticky;left:0;z-index:1;background:var(--panel);color:var(--muted);text-align:right;font:500 .74rem var(--mono);letter-spacing:0;font-variant-numeric:tabular-nums;border-right:1px solid var(--line);padding:5px 8px}
+thead .rn{z-index:3;background:var(--surface);padding:7px 8px}
+tbody tr:hover td{background:var(--hover)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.ctr{text-align:center}
+td.blank{background:repeating-linear-gradient(135deg,transparent 0 6px,color-mix(in oklab,var(--line) 60%,transparent) 6px 7px)}
+.tfoot{padding:8px 14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.empty-t{padding:28px 14px;text-align:center;color:var(--muted);font-size:.9rem}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;pointer-events:none;z-index:50;
+  background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:var(--pill);font-weight:600;font-size:.88rem;box-shadow:var(--shadow);transition:opacity .2s,transform .2s;max-width:calc(100vw - 32px);overflow-wrap:anywhere}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:1000px){
+  .panes{grid-template-columns:minmax(0,1fr)}
+  textarea{height:36vh}
+}
+@media (max-width:800px){
+  .wrap{padding:12px 12px 40px}
+  header{position:relative;top:0;border-radius:var(--radius);padding:8px 10px 8px 16px}
+  .intro{margin:22px 2px 16px}
+}
+@media (max-width:640px){
+  header{display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:6px 6px 4px 16px}
+  .theme-pick{grid-column:2;grid-row:1;margin:0;padding:0 2px 0 4px}
+  .tp-label{display:none}
+  .actions{grid-column:1/-1;margin:0 -2px 0 -12px;padding-top:4px;border-top:1px solid var(--line);justify-content:space-around}
+  .nav{padding:6px 8px;font-size:.86rem}
+  .fname{max-width:40%}
+  .table-wrap{max-height:60vh}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <!-- shared:brand -->
+    <span class="brand">
+      <button type="button" class="logo logo-btn" id="toolMenuBtn" aria-expanded="false" aria-controls="toolMenu" title="Switch tool"><b>ASCII</b>.table<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <nav class="tool-menu" id="toolMenu" aria-label="Tools" hidden>
+        <a class="tm-all" href="../index.html" data-path="/">All tools</a>
+        <div class="tm-list">
+          <a href="../ascii-table/ascii-table.html" data-path="/ascii-table" aria-current="page"><span class="tm-mark"><b>ASCII</b>.table</span><span class="tm-text"><span class="tm-name">ASCII table converter</span><span class="tm-sum">Turn CLI tables into Markdown or CSV</span></span></a>
+          <a href="../basic-auth/basic-auth.html" data-path="/basic-auth"><span class="tm-mark"><b>BASIC</b>.auth</span><span class="tm-text"><span class="tm-name">Basic auth generator</span><span class="tm-sum">Build and decode Basic auth headers</span></span></a>
+          <a href="../bpm-tapper/bpm-tapper.html" data-path="/bpm-tapper"><span class="tm-mark"><b>BPM</b>.tap</span><span class="tm-text"><span class="tm-name">BPM tapper</span><span class="tm-sum">Tap along to find a song's tempo</span></span></a>
+          <a href="../hex-oklch/hex-oklch.html" data-path="/hex-oklch"><span class="tm-mark"><b>HEX</b>.oklch</span><span class="tm-text"><span class="tm-name">Colour converter</span><span class="tm-sum">Convert colours and check contrast</span></span></a>
+          <a href="../cron/cron.html" data-path="/cron"><span class="tm-mark"><b>CRON</b>.tab</span><span class="tm-text"><span class="tm-name">Cron explainer</span><span class="tm-sum">Explain cron schedules and list next runs</span></span></a>
+          <a href="../csv-json/csv-json.html" data-path="/csv-json"><span class="tm-mark"><b>CSV</b>.json</span><span class="tm-text"><span class="tm-name">CSV ⇄ JSON converter</span><span class="tm-sum">Convert between CSV and JSON</span></span></a>
+          <a href="../encode/encode.html" data-path="/encode"><span class="tm-mark"><b>ENC</b>.decode</span><span class="tm-text"><span class="tm-name">Encoder/decoder</span><span class="tm-sum">Encode and decode Base64, URLs, HTML and more</span></span></a>
+          <a href="../gzip/gzip.html" data-path="/gzip"><span class="tm-mark"><b>GZIP</b>.tool</span><span class="tm-text"><span class="tm-name">Gzip helper</span><span class="tm-sum">Compress and decompress gzip data</span></span></a>
+          <a href="../json-diff/json-diff.html" data-path="/json-diff"><span class="tm-mark"><b>JSON</b>.diff</span><span class="tm-text"><span class="tm-name">JSON diff</span><span class="tm-sum">Compare two JSON documents</span></span></a>
+          <a href="../json-format/json-format.html" data-path="/json-format"><span class="tm-mark"><b>JSON</b>.format</span><span class="tm-text"><span class="tm-name">JSON formatter</span><span class="tm-sum">Format, validate and explore JSON</span></span></a>
+          <a href="../jwt/jwt.html" data-path="/jwt"><span class="tm-mark"><b>JWT</b>.decode</span><span class="tm-text"><span class="tm-name">JWT decoder</span><span class="tm-sum">Decode JWTs and check their signatures</span></span></a>
+          <a href="../meeting-time/meeting-time.html" data-path="/meeting-time"><span class="tm-mark"><b>MEET</b>.time</span><span class="tm-text"><span class="tm-name">Meeting time finder</span><span class="tm-sum">Find a meeting time across time zones</span></span></a>
+          <a href="../metronome/metronome.html" data-path="/metronome"><span class="tm-mark"><b>METRO</b>.nome</span><span class="tm-text"><span class="tm-name">Metronome</span><span class="tm-sum">Keep time with accents and tap tempo</span></span></a>
+          <a href="../regex/regex.html" data-path="/regex"><span class="tm-mark"><b>REGEX</b>.test</span><span class="tm-text"><span class="tm-name">Regex tester</span><span class="tm-sum">Test regular expressions and replacements</span></span></a>
+          <a href="../text-diff/text-diff.html" data-path="/text-diff"><span class="tm-mark"><b>TEXT</b>.diff</span><span class="tm-text"><span class="tm-name">Text diff</span><span class="tm-sum">Compare two texts line by line and word by word</span></span></a>
+          <a href="../timestamp/timestamp.html" data-path="/timestamp"><span class="tm-mark"><b>TIME</b>.stamp</span><span class="tm-text"><span class="tm-name">Timestamp converter</span><span class="tm-sum">Convert Unix times, ISO 8601 and time zones</span></span></a>
+        </div>
+      </nav>
+    </span>
+    <!-- /shared:brand -->
+    <nav class="actions" aria-label="Actions">
+      <button class="nav" id="sample" title="Each click loads a different kind of table">Load example</button>
+      <button class="nav" id="clear">Clear</button>
+    </nav>
+    <label class="theme-pick"><span class="tp-label">Theme</span> <select id="theme" aria-label="Theme"></select></label>
+  </header>
+
+  <div class="intro">
+    <span class="eyebrow">Offline tool</span>
+    <h1>Convert text tables to Markdown or CSV</h1>
+    <p>Paste a table printed by a command-line tool, with +---+ or box-drawing borders, psql or MySQL output, or columns lined up with spaces, and get Markdown or CSV back. Everything runs in your browser; nothing is uploaded.</p>
+  </div>
+
+  <div class="panes">
+    <section class="pane" id="inPane" aria-labelledby="inTitle">
+      <div class="pane-head">
+        <h2 id="inTitle">Input</h2><span class="fname" id="fname"></span>
+        <span class="spacer"></span><span class="status text" id="status">empty</span>
+        <span class="seg" id="modeSeg" role="group" aria-label="How columns are separated"><button type="button" data-v="auto" title="Work out how the columns are separated">Auto</button><button type="button" data-v="borders" title="Columns separated by | or box-drawing lines, as in +---+ tables, psql, MySQL and Markdown">Borders</button><button type="button" data-v="spaces" title="Columns lined up with spaces, as in docker ps, kubectl get and df">Spaces</button><button type="button" data-v="tabs" title="Columns separated by tabs, as when copying from a spreadsheet">Tabs</button></span>
+        <button class="btn" id="openFile">Open file</button>
+        <input type="file" id="file" accept=".txt,.log,.md,.out,text/*" hidden>
+      </div>
+      <div class="opts">
+        <label><input type="checkbox" id="optHeader"> First row is headers</label>
+        <label id="tablePick" hidden><span class="lbl">Table</span> <select id="tableSel"></select></label>
+        <span id="joinOpts"><span class="lbl" id="joinLabel">Rows over several lines</span> <span class="seg" id="joinSeg" role="group" aria-labelledby="joinLabel"><button type="button" data-v="auto" title="Join the lines between separators into one row when the table puts a separator between every row">Auto</button><button type="button" data-v="join" title="Lines between two separator lines are one row whose cells wrapped">Join</button><button type="button" data-v="keep" title="Every line is its own row">Keep</button></span></span>
+        <span id="gapOpts" hidden><span class="lbl" id="gapLabel">Column gap</span> <span class="seg" id="gapSeg" role="group" aria-labelledby="gapLabel"><button type="button" data-v="auto" title="Two or more spaces between columns, or one where the headings are one space apart">Auto</button><button type="button" data-v="1">1+ spaces</button><button type="button" data-v="2">2+ spaces</button></span></span>
+      </div>
+      <textarea id="input" spellcheck="false" autocomplete="off" aria-labelledby="inTitle" placeholder="Paste a table printed by a command-line tool here, or drop a text file onto this box"></textarea>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+    </section>
+
+    <section class="pane" id="outPane" aria-labelledby="outTitle">
+      <div class="pane-head">
+        <h2 id="outTitle">Output</h2>
+        <span class="seg" id="formatSeg" role="group" aria-label="Output format"><button type="button" data-v="md">Markdown</button><button type="button" data-v="csv">CSV</button></span>
+        <span class="spacer"></span>
+        <button class="btn" id="copyOut" disabled>Copy</button>
+        <button class="btn" id="download" disabled>Download</button>
+      </div>
+      <div class="opts" id="mdOpts">
+        <label title="Pad cells so the columns line up in the Markdown text"><input type="checkbox" id="optPad"> Line up columns</label>
+        <label title="Right-align columns that hold only numbers (like 200, -3.5, 1,024 or 45%)"><input type="checkbox" id="optAlignNum"> Right-align numbers</label>
+        <label title="Put the table's title, if it has one, in bold above the table"><input type="checkbox" id="optTitle"> Title above table</label>
+      </div>
+      <div class="opts" id="csvOpts" hidden>
+        <label><span class="lbl">Delimiter</span> <select id="delimiter"></select></label>
+        <label><input type="checkbox" id="optCsvHeader"> Header row</label>
+      </div>
+      <textarea id="output" readonly spellcheck="false" aria-labelledby="outTitle" placeholder="The converted table appears here"></textarea>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="tableTitle">
+    <div class="card-head">
+      <h2 id="tableTitle">Columns found</h2><span class="ttitle" id="ttitle"></span><span class="tinfo" id="tinfo" aria-live="polite"></span>
+    </div>
+    <div class="table-wrap" id="tableWrap"></div>
+    <div class="tfoot">Check the columns were split where you expect. If not, pick how they're separated in the input's header. A hatched cell had nothing in the input.</div>
+  </section>
+  <!-- shared:footer.html -->
+  <footer class="site-foot">
+    <p>Made by <a href="https://lxst.digital/">LXST.digital</a>. Everything runs in your browser; nothing is uploaded. To use a tool offline, save its page from your browser's File menu.</p>
+    <p class="theme-credit" id="themeCredit" hidden></p>
+  </footer>
+  <script>
+  /* Links point at files so they work when opened locally; when served over http(s), use the short URLs in data-path. */
+  if (/^https?:$/.test(location.protocol)) document.querySelectorAll('a[data-path]').forEach(a => a.href = a.dataset.path);
+
+  /* Theme picker and credit: options come from THEMES in the <head> script (shared/theme.js). */
+  (() => {
+    const sel = document.getElementById('theme');
+    if (sel) {
+      sel.append(...THEMES.map(t => new Option(t.label, t.id)));
+      sel.onchange = () => saveTheme(sel.value);
+    }
+    applyTheme(savedTheme()); // sets the picker and the footer's theme credit
+  })();
+
+  /* Tool switcher: the logo opens a list of the other tools (disclosure pattern). */
+  (() => {
+    const brand = document.querySelector('.brand'), btn = document.getElementById('toolMenuBtn'), menu = document.getElementById('toolMenu');
+    if (!brand || !btn || !menu) return;
+    const links = [...menu.querySelectorAll('a')];
+    const setOpen = open => { menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(menu.hidden));
+    // Left/right move to the nearest link in the neighbouring column (the list flows down columns).
+    const across = (i, dir) => {
+      const from = links[i].getBoundingClientRect();
+      let best, bestDist = Infinity;
+      links.forEach((a, j) => {
+        const r = a.getBoundingClientRect();
+        if (dir * (r.left - from.left) < 8) return;
+        const dist = Math.abs(r.left - from.left) * 1e3 + Math.abs(r.top - from.top);
+        if (dist < bestDist) { best = j; bestDist = dist; }
+      });
+      return best;
+    };
+    brand.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !menu.hidden) { e.preventDefault(); e.stopPropagation(); setOpen(false); btn.focus(); return; }
+      const i = links.indexOf(document.activeElement);
+      const to = e.target === btn ? { ArrowDown: 0, ArrowUp: links.length - 1 }[e.key]
+        : i < 0 ? undefined : { ArrowDown: (i + 1) % links.length, ArrowUp: (i - 1 + links.length) % links.length, Home: 0, End: links.length - 1,
+          ArrowRight: across(i, 1), ArrowLeft: across(i, -1) }[e.key];
+      if (to === undefined) return;
+      e.preventDefault(); e.stopPropagation();
+      setOpen(true); links[to].focus();
+    });
+    brand.addEventListener('focusout', e => { if (!brand.contains(e.relatedTarget)) setOpen(false); });
+    document.addEventListener('pointerdown', e => { if (!menu.hidden && !brand.contains(e.target)) setOpen(false); });
+  })();
+  </script>
+  <!-- /shared:footer.html -->
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ===== Core parsing and conversion logic (pure functions, no DOM) ===== -->
+<script id="core">
+/* Characters drawn as vertical lines between cells. */
+const VBARS = '|│║┃┆┇┊┋╎╏';
+const VBAR_RE = /[|│║┃┆┇┊┋╎╏]/g;
+const isVbar = c => !!c && VBARS.includes(c);
+/* Characters drawn as horizontal lines. */
+const HORIZ = '-=_~─━┄┅┈┉╌╍═╴╶╸╺╼╾';
+const SEP_RE = /^[\s\-=+.:'`_~*|│║┃┆┇┊┋╎╏─-╿]+$/;
+const HRUN_RE = /[-=_~─━┄┅┈┉╌╍═╴╶╸╺╼╾]{3,}/;
+const ANSI_RE = /\x1b\[[0-?]*[ -\/]*[@-~]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)/g;
+
+/* Lines of the input with colour codes, trailing spaces and Markdown code fences removed. */
+function prepLines(text) {
+  return String(text).replace(/^﻿/, '').replace(ANSI_RE, '').replace(/ /g, ' ').split(/\r\n|\r|\n/)
+    .map(l => /^\s*(```|~~~)/.test(l) ? '' : l.replace(/\s+$/, ''));
+}
+
+/* A border or rule line such as +----+----+, |----|:---:|, ├────┼────┤, '------' or ===== =====.
+   It needs three line characters in a row, or no spaces at all (|-|-|), so a row of "-" cells isn't one. */
+function isSeparator(line) {
+  const t = line.trim();
+  if (!t || !SEP_RE.test(t)) return false;
+  return HRUN_RE.test(t) || (!/\s/.test(t) && [...t].some(c => HORIZ.includes(c)));
+}
+const isPipeRow = line => !isSeparator(line) && /[|│║┃┆┇┊┋╎╏]/.test(line);
+
+/* How the columns are separated: 'borders' when most text lines have a |, 'tabs' when most have a tab, else 'spaces'. */
+function detectMode(lines) {
+  const text = lines.filter(l => l.trim() && !isSeparator(l));
+  if (!text.length) return lines.some(l => l.trim()) ? 'borders' : null;
+  const pipes = text.filter(isPipeRow).length, tabs = text.filter(l => l.includes('\t')).length;
+  if (pipes && pipes >= text.length / 2) return 'borders';
+  if (tabs && tabs >= text.length / 2) return 'tabs';
+  return 'spaces';
+}
+
+/* The tables in the input, as runs of lines. With borders, a table is a run of | rows and separator lines, so text
+   around it (a command, "(4 rows)") is left out. Otherwise it's a run of non-blank lines. */
+function findBlocks(lines, mode) {
+  const blocks = [];
+  let cur = null;
+  const inTable = mode === 'borders' ? l => isPipeRow(l) || isSeparator(l) : l => !!l.trim();
+  lines.forEach((l, i) => {
+    if (inTable(l)) { if (!cur) blocks.push(cur = { start: i, lines: [] }); cur.lines.push(l); }
+    else cur = null;
+  });
+  return blocks.filter(b => b.lines.some(l => !isSeparator(l)));
+}
+
+/* One bordered row's cells. With outer borders (| a | b |) the first and last bars are dropped; without (psql,
+   Markdown without outer pipes) every bar separates two cells. \| in Markdown stays in the cell as |. */
+function splitPipes(line, outer) {
+  let s = line.replace(/\\\|/g, '\u0000').replace(VBAR_RE, '|');
+  if (outer) {
+    s = s.trim();
+    if (s[0] === '|') s = s.slice(1);
+    if (s.endsWith('|')) s = s.slice(0, -1);
+  }
+  return s.split('|').map(c => c.replace(/\u0000/g, '|').trim());
+}
+
+/* Cells of several lines that make up one row: each column's parts joined with a space. */
+function joinLines(rows) {
+  const width = Math.max(...rows.map(r => r.length));
+  return Array.from({ length: width }, (_, i) => rows.map(r => r[i] || '').filter(Boolean).join(' '));
+}
+
+/* Alignment from a Markdown separator row (|:---|---:|:--:|), or null. */
+function markdownAlign(line, outer) {
+  if (/[+─-╿]/.test(line) || !/^[\s|:\-]+$/.test(line)) return null;
+  const cells = splitPipes(line, outer);
+  if (!cells.every(c => /^:?-+:?$/.test(c))) return null;
+  return cells.map(c => c[0] === ':' && c.endsWith(':') ? 'center' : c.endsWith(':') ? 'right' : c[0] === ':' ? 'left' : null);
+}
+
+/* A table drawn with | or box-drawing lines. Separator lines split it into groups: a first group of one single cell
+   is the title (as cli-table and ascii-table print it), the next is the header when a separator follows it, and in
+   tables with a separator between every row each group is one row whose cells wrapped onto several lines. */
+function parseBordered(lines, { header = true, join = 'auto' } = {}) {
+  const text = lines.filter(l => !isSeparator(l));
+  const outer = text.filter(l => { const t = l.trim(); return isVbar(t[0]) && isVbar(t.at(-1)); }).length >= text.length * 0.8;
+  const groups = [];
+  let g = [], align = null;
+  for (const l of lines) {
+    if (isSeparator(l)) {
+      // Markdown has no top border, and its separator comes straight after the header.
+      if (!align && !isSeparator(lines[0]) && groups.length + (g.length ? 1 : 0) === 1) align = markdownAlign(l, outer);
+      if (g.length) groups.push(g);
+      g = [];
+    } else g.push(splitPipes(l, outer));
+  }
+  if (g.length) groups.push(g);
+  const notes = [];
+  let title = null;
+  const widest = Math.max(...groups.flat().map(r => r.length));
+  if (groups.length > 1 && groups[0].length === 1 && groups[0][0].length === 1 && groups[0][0][0] && widest > 1) title = groups.shift()[0][0];
+
+  // Is the header separated from the body? Then the groups after it are the body.
+  const headSep = header && groups.length > 1;
+  const body = headSep ? groups.slice(1) : groups;
+  let joined = join === 'join';
+  if (join === 'auto' && body.length > 1) {
+    const multi = body.filter(b => b.length > 1);
+    const singles = body.length - multi.length;
+    // A separator between most rows, or every extra line has an empty cell (the columns that didn't wrap).
+    joined = multi.length > 0 && ((body.length >= 3 && singles * 2 >= body.length)
+      || multi.every(b => b.slice(1).every(r => r.some(c => !c) && r.some(c => c))));
+  }
+  let head = null, rows = [];
+  if (headSep) {
+    if (joined || groups[0].length === 1) head = joinLines(groups[0]);
+    else { head = groups[0][0]; rows.push(...groups[0].slice(1)); }
+  }
+  let wrapped = 0;
+  for (const b of body) {
+    if (joined && b.length > 1) { rows.push(joinLines(b)); wrapped++; }
+    else rows.push(...b);
+  }
+  if (header && !head) head = rows.shift() || null;
+  if (wrapped) notes.push(`Joined the lines of ${wrapped} row${wrapped > 1 ? 's' : ''} that wrapped onto more than one line. Pick Keep under “Rows over several lines” to keep every line as a row.`);
+  const box = lines.some(l => /[─-╿]/.test(l));
+  const style = align ? 'Markdown' : box ? 'box drawing' : !outer ? 'psql style' : 'ASCII borders';
+  return { title, header: head, rows, align, style, notes, joined };
+}
+
+/* Tabs to spaces at 8-column stops, so tab-aligned output lines up by position. */
+function expandTabs(line) {
+  let out = '';
+  for (const c of line) out += c === '\t' ? ' '.repeat(8 - (out.length % 8)) : c;
+  return out;
+}
+
+/* Columns lined up with spaces (docker ps, kubectl get, df). A column boundary is where every line has a gap.
+   gap: 'auto' needs two or more spaces, or one where the headings are one space apart (df's "Avail Capacity");
+   '1' splits at any single-space gap; '2' only at two or more. A rule line with gaps (===== =====) gives the
+   columns directly. In auto, a column with no heading joins the one on its left, as does a heading word that has
+   no values under it ("Mounted on", "NOMINATED NODE"). */
+function parseAligned(lines, { header = true, gap = 'auto' } = {}) {
+  const rules = lines.filter(isSeparator).map(l => Array.from(expandTabs(l)));
+  const rows = lines.filter(l => !isSeparator(l)).map(l => Array.from(expandTabs(l)));
+  if (!rows.length) return { title: null, header: null, rows: [], style: 'aligned with spaces', notes: [] };
+  const width = Math.max(...rows.map(r => r.length));
+  let bounds = null;
+  for (const r of rules) {
+    const st = [];
+    r.forEach((c, p) => { if (c !== ' ' && (p === 0 || r[p - 1] === ' ')) st.push(p); });
+    if (st.length > 1) { bounds = st.map((p, i) => ({ p: i ? p : 0, weak: false })); break; }
+  }
+  if (!bounds) {
+    const blank = Array.from({ length: width }, (_, p) => rows.every(r => p >= r.length || r[p] === ' '));
+    const head = rows[0], has = p => p >= 0 && p < head.length && head[p] !== ' ';
+    bounds = [{ p: 0, weak: false }];
+    for (let p = 1; p < width; p++) {
+      if (blank[p] || !blank[p - 1]) continue;
+      let g = 0;
+      while (p - 1 - g >= 0 && blank[p - 1 - g]) g++;
+      if (p - g === 0) continue; // every line is indented
+      if (gap === '1' || g >= 2) bounds.push({ p, weak: false });
+      else if (gap === 'auto' && has(p - 2) && has(p)) bounds.push({ p, weak: true });
+    }
+  }
+  let cells = rows.map(r => bounds.map((b, i) => r.slice(b.p, i + 1 < bounds.length ? bounds[i + 1].p : undefined).join('').trim()));
+  if (gap === 'auto' && header && cells.length > 1) {
+    for (let i = bounds.length - 1; i > 0; i--) {
+      const noHead = !cells[0][i], noData = cells.slice(1).every(r => !r[i]);
+      if (!(noHead || (bounds[i].weak && noData))) continue;
+      cells = cells.map(r => [...r.slice(0, i - 1), [r[i - 1], r[i]].filter(Boolean).join(' '), ...r.slice(i + 1)]);
+      bounds.splice(i, 1);
+    }
+  }
+  return { title: null, header: header ? cells.shift() : null, rows: cells, style: 'aligned with spaces', notes: [] };
+}
+
+function parseTabbed(lines, { header = true } = {}) {
+  const cells = lines.filter(l => !isSeparator(l)).map(l => l.split('\t').map(c => c.trim()));
+  return { title: null, header: header ? cells.shift() || null : null, rows: cells, style: 'tab-separated', notes: [] };
+}
+
+/* Pads every row to the same width and drops rows and columns that are completely empty. */
+function tidy(t) {
+  const width = Math.max(t.header ? t.header.length : 0, ...t.rows.map(r => r.length), 0);
+  const pad = r => Array.from({ length: width }, (_, i) => r[i] ?? '');
+  let header = t.header ? pad(t.header) : null;
+  let rows = t.rows.map(pad).filter(r => r.some(Boolean));
+  let align = t.align ? pad(t.align).map(a => a || null) : null;
+  const keep = Array.from({ length: width }, (_, i) => (header && header[i]) || rows.some(r => r[i]));
+  if (keep.some(k => !k)) {
+    const pick = r => r.filter((_, i) => keep[i]);
+    header = header && pick(header); rows = rows.map(pick); align = align && pick(align);
+  }
+  const short = t.rows.filter(r => r.some(Boolean) && r.length < width).length;
+  return { ...t, header, rows, align, short };
+}
+
+/* Everything in one go: { mode, tables: [{ title, header, rows, align, style, notes }], ignored }. */
+function parseText(text, { mode = 'auto', header = true, join = 'auto', gap = 'auto' } = {}) {
+  const lines = prepLines(text);
+  const m = mode === 'auto' ? detectMode(lines) : mode;
+  if (!m) return { mode: null, tables: [], ignored: 0 };
+  const blocks = findBlocks(lines, m);
+  const tables = blocks.map(b => tidy(
+    m === 'borders' ? parseBordered(b.lines, { header, join }) :
+    m === 'tabs' ? parseTabbed(b.lines, { header }) : parseAligned(b.lines, { header, gap })));
+  const used = blocks.reduce((n, b) => n + b.lines.length, 0);
+  const ignored = lines.filter(l => l.trim()).length - used;
+  return { mode: m, tables, ignored };
+}
+
+/* ---------- output ---------- */
+const NUM_RE = /^[-+]?(?:\d{1,3}(?:,\d{3})+|\d+)?(?:\.\d+)?(?:[eE][-+]?\d+)?%?$/;
+const isNumber = s => NUM_RE.test(s) && /\d/.test(s);
+const isNumberColumn = (rows, i) => rows.some(r => r[i]) && rows.every(r => !r[i] || isNumber(r[i]));
+const textWidth = s => Array.from(s).length;
+
+/* A Markdown table cell: | is escaped, as is a backslash that would escape the character after it. */
+const mdCell = s => String(s).replace(/\\(?=[!-\/:-@\[-`{-~])/g, '\\\\').replace(/\|/g, '\\|');
+
+/* A GFM table. Without a header row, the columns are called Column 1, Column 2… (Markdown tables need one).
+   Alignment comes from the input's Markdown separator if it had one, else number columns are right-aligned. */
+function toMarkdown(t, { pad = true, alignNumbers = true, title = true } = {}) {
+  const width = t.header ? t.header.length : Math.max(0, ...t.rows.map(r => r.length));
+  if (!width) return '';
+  const head = t.header || Array.from({ length: width }, (_, i) => `Column ${i + 1}`);
+  const align = head.map((_, i) => (t.align && t.align[i]) || (alignNumbers && isNumberColumn(t.rows, i) ? 'right' : null));
+  const cells = [head, ...t.rows].map(r => r.map(mdCell));
+  const w = head.map((_, i) => pad ? Math.max(3, ...cells.map(r => textWidth(r[i]))) : 3);
+  const fit = (s, i) => {
+    if (!pad) return s;
+    const n = w[i] - textWidth(s);
+    if (align[i] === 'right') return ' '.repeat(n) + s;
+    if (align[i] === 'center') return ' '.repeat(n >> 1) + s + ' '.repeat(n - (n >> 1));
+    return s + ' '.repeat(n);
+  };
+  const rule = head.map((_, i) => {
+    const a = align[i], l = a === 'left' || a === 'center', r = a === 'right' || a === 'center';
+    return (l ? ':' : '') + '-'.repeat(w[i] - l - r) + (r ? ':' : '');
+  });
+  const line = r => `| ${r.join(' | ')} |`;
+  const out = [line(cells[0].map(fit)), line(rule), ...cells.slice(1).map(r => line(r.map(fit)))].join('\n') + '\n';
+  return (title && t.title ? `**${mdCell(t.title)}**\n\n` : '') + out;
+}
+
+/* One CSV field, quoted when it holds the delimiter, a quote, a line break or leading/trailing spaces. */
+function csvField(v, delim) {
+  const s = String(v ?? '');
+  return s.includes(delim) || /["\r\n]|^\s|\s$/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+function toCSV(t, { delimiter = ',', header = true, eol = '\n' } = {}) {
+  const out = [];
+  if (header && t.header) out.push(t.header.map(c => csvField(c, delimiter)).join(delimiter));
+  for (const r of t.rows) out.push(r.map(c => csvField(c, delimiter)).join(delimiter));
+  return out.length ? out.join(eol) + eol : '';
+}
+
+if (typeof module !== 'undefined') module.exports = {
+  prepLines, isSeparator, detectMode, findBlocks, splitPipes, markdownAlign, parseBordered, parseAligned, parseTabbed,
+  tidy, parseText, isNumber, mdCell, toMarkdown, csvField, toCSV,
+};
+</script>
+
+<!-- ===== UI ===== -->
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const fmtN = n => n.toLocaleString('en');
+const plural = (n, w) => `${fmtN(n)} ${w}${n === 1 ? '' : 's'}`;
+
+/* ---------- settings (preferences only, saved in localStorage) ---------- */
+const SETTINGS_KEY = 'ascii-table.settings';
+const DEFAULTS = { mode: 'auto', header: true, join: 'auto', gap: 'auto', format: 'md', pad: true, alignNumbers: true, title: true, delimiter: ',', csvHeader: true };
+const settings = (() => {
+  try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch { return { ...DEFAULTS }; }
+})();
+const saveSettings = () => { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} };
+
+const DELIMITERS = [[',', 'Comma'], [';', 'Semicolon'], ['\t', 'Tab'], ['|', 'Pipe']];
+const MODE_NAMES = { borders: 'borders', spaces: 'spaces', tabs: 'tabs' };
+
+/* ---------- state ---------- */
+const input = $('#input'), output = $('#output');
+let fileName = '';
+let parsed = { mode: null, tables: [], ignored: 0 };
+let pick = 0;        // index of the table shown, or -1 for all of them
+let outText = '';
+
+/* ---------- options ---------- */
+$('#delimiter').innerHTML = DELIMITERS.map(([d, n]) => `<option value="${esc(d)}">${n}</option>`).join('');
+function bindSeg(id, key) {
+  const btns = [...document.querySelectorAll(`#${id} button`)];
+  if (!btns.some(b => b.dataset.v === settings[key])) settings[key] = DEFAULTS[key];
+  const sync = () => btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === settings[key])));
+  btns.forEach(b => b.onclick = () => { settings[key] = b.dataset.v; saveSettings(); sync(); compute(); });
+  sync();
+}
+function bindCheck(id, key) {
+  const el = $('#' + id); el.checked = !!settings[key];
+  el.onchange = () => { settings[key] = el.checked; saveSettings(); compute(); };
+}
+bindSeg('modeSeg', 'mode'); bindSeg('joinSeg', 'join'); bindSeg('gapSeg', 'gap'); bindSeg('formatSeg', 'format');
+bindCheck('optHeader', 'header'); bindCheck('optPad', 'pad'); bindCheck('optAlignNum', 'alignNumbers'); bindCheck('optTitle', 'title'); bindCheck('optCsvHeader', 'csvHeader');
+(() => {
+  const el = $('#delimiter');
+  el.value = settings.delimiter; if (el.value !== settings.delimiter) el.value = settings.delimiter = DEFAULTS.delimiter;
+  el.onchange = () => { settings.delimiter = el.value; saveSettings(); compute(); };
+})();
+$('#tableSel').onchange = e => { pick = +e.target.value; compute(); };
+
+/* ---------- convert ---------- */
+function setStatus(cls, text) { const s = $('#status'); s.className = 'status ' + cls; s.textContent = text; }
+function showMsgs(list) {
+  $('#msgs').innerHTML = list.map(m => `<div class="msg ${m.cls}"><b>${esc(m.title)}</b> ${m.html}</div>`).join('');
+}
+const convert = t => settings.format === 'csv'
+  ? toCSV(t, { delimiter: settings.delimiter, header: settings.csvHeader })
+  : toMarkdown(t, { pad: settings.pad, alignNumbers: settings.alignNumbers, title: settings.title });
+
+function compute() {
+  const text = input.value;
+  parsed = text.trim() ? parseText(text, settings) : { mode: null, tables: [], ignored: 0 };
+  const { tables, mode } = parsed;
+  if (pick >= tables.length) pick = 0;
+
+  $('#joinOpts').hidden = mode === 'spaces' || mode === 'tabs';
+  $('#gapOpts').hidden = mode !== 'spaces';
+  $('#mdOpts').hidden = settings.format !== 'md';
+  $('#csvOpts').hidden = settings.format !== 'csv';
+  const sel = $('#tableSel');
+  $('#tablePick').hidden = tables.length < 2;
+  if (tables.length > 1) {
+    sel.innerHTML = tables.map((t, i) => `<option value="${i}">${i + 1} of ${tables.length}${t.title ? ': ' + esc(t.title) : ''}</option>`).join('') + `<option value="-1">All ${tables.length}</option>`;
+    sel.value = String(pick);
+  }
+
+  const shown = pick < 0 ? tables : tables.slice(pick, pick + 1);
+  const msgs = [];
+  if (!text.trim()) setStatus('text', 'empty');
+  else if (!tables.length) {
+    setStatus('bad', 'no table found');
+    msgs.push({ cls: 'bad', title: 'No table found.', html: 'Paste the table as it was printed, including its header row.' });
+  } else {
+    const t = shown[0];
+    const odd = shown.some(x => x.rows.length && (x.header || x.rows[0]).length < 2);
+    setStatus(odd ? 'warn' : 'ok', `${t.style}${settings.mode === 'auto' ? '' : ' (chosen)'}`);
+    if (odd) msgs.push({ cls: 'warn', title: 'Only one column.', html: `If there should be more, pick how the columns are separated: <b>Borders</b>, <b>Spaces</b> or <b>Tabs</b>${mode === 'spaces' ? ', or set <b>Column gap</b> to 1+ spaces' : ''}.` });
+    for (const x of shown) for (const n of x.notes) msgs.push({ cls: 'warn', title: 'Note', html: esc(n) });
+    const short = shown.reduce((n, x) => n + x.short, 0);
+    if (short) msgs.push({ cls: 'warn', title: 'Note', html: `${plural(short, 'row')} had fewer cells than the widest row, so the rest were left blank.` });
+    if (parsed.ignored > 0 && mode === 'borders') msgs.push({ cls: 'warn', title: 'Note', html: `Left out ${plural(parsed.ignored, 'line')} around the table${tables.length === 1 ? '' : 's'}, such as a command or a row count.` });
+  }
+  showMsgs(msgs);
+
+  outText = shown.map(convert).filter(Boolean).join('\n');
+  output.value = outText;
+  ['#copyOut', '#download'].forEach(s => $(s).disabled = !outText);
+  renderTable(shown);
+}
+
+/* ---------- preview ---------- */
+function renderTable(shown) {
+  const wrap = $('#tableWrap');
+  const t = shown.length === 1 ? shown[0] : null;
+  $('#ttitle').textContent = t && t.title ? `“${t.title}”` : '';
+  if (!shown.length) {
+    wrap.innerHTML = `<div class="empty-t">${input.value.trim() ? 'Nothing to show.' : 'Paste a table to see the columns found in it.'}</div>`;
+    $('#tinfo').textContent = '';
+    return;
+  }
+  $('#tinfo').textContent = shown.map(x => `${plural(x.rows.length, 'row')} × ${plural((x.header || x.rows[0] || []).length, 'column')}`).join(' · ');
+  wrap.innerHTML = shown.map(x => {
+    const width = (x.header || x.rows[0] || []).length;
+    const cls = Array.from({ length: width }, (_, i) => {
+      const a = x.align && x.align[i];
+      return a === 'right' || (!a && isNumberColumn(x.rows, i)) ? ' class="num"' : a === 'center' ? ' class="ctr"' : '';
+    });
+    const head = x.header ? x.header.map((h, i) => `<th${cls[i]}>${esc(h) || '<span class="ctype">no heading</span>'}</th>`).join('')
+      : cls.map((c, i) => `<th${c}>Column ${i + 1} <span class="ctype">no header row</span></th>`).join('');
+    const body = x.rows.map((r, n) => `<tr><td class="rn">${n + 1}</td>${r.map((v, i) => v ? `<td${cls[i]}${v.length > 48 ? ` title="${esc(v)}"` : ''}>${esc(v)}</td>` : '<td class="blank"></td>').join('')}</tr>`).join('');
+    const cap = shown.length > 1 && x.title ? `<caption style="text-align:left;padding:8px 12px;font-weight:600">${esc(x.title)}</caption>` : '';
+    return `<table>${cap}<thead><tr><th class="rn">#</th>${head}</tr></thead><tbody>${body}</tbody></table>`;
+  }).join('<div style="height:12px"></div>');
+}
+
+/* ---------- copy / download / toast ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+const formatName = () => settings.format === 'csv' ? 'CSV' : 'Markdown';
+function copyText(text, msg) {
+  const done = () => toast(msg);
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done).catch(() => {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand('copy'); done(); } catch { toast('Couldn’t copy to the clipboard'); } t.remove();
+  });
+}
+$('#copyOut').onclick = () => copyText(outText, `Copied the ${formatName()}`);
+$('#download').onclick = () => {
+  const csv = settings.format === 'csv';
+  const one = pick >= 0 ? parsed.tables[pick] : null;
+  const base = fileName.replace(/\.[^.]*$/, '') || (one && one.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'table';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([outText], { type: csv ? 'text/csv' : 'text/markdown' }));
+  a.download = base + (csv ? '.csv' : '.md');
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* ---------- input ---------- */
+let timer;
+input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(compute, input.value.length > 5e5 ? 300 : 100); });
+
+function setInput(text, name = '') {
+  input.value = text; fileName = name; pick = 0;
+  $('#fname').textContent = name; $('#fname').title = name;
+  input.scrollTop = 0;
+  compute();
+}
+function loadFile(f) {
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => setInput(String(r.result), f.name);
+  r.readAsText(f);
+}
+$('#openFile').onclick = () => $('#file').click();
+$('#file').addEventListener('change', e => { loadFile(e.target.files[0]); e.target.value = ''; });
+const pane = $('#inPane');
+pane.addEventListener('dragover', e => { e.preventDefault(); pane.classList.add('drag'); });
+pane.addEventListener('dragleave', e => { if (!pane.contains(e.relatedTarget)) pane.classList.remove('drag'); });
+pane.addEventListener('drop', e => { e.preventDefault(); pane.classList.remove('drag'); loadFile(e.dataTransfer.files[0]); });
+$('#clear').onclick = () => { setInput(''); input.focus(); };
+
+/* Each click of Load example shows a different kind of table. */
+const EXAMPLES = [
+  ['a table with a title and +---+ borders', `.--------------------------------------------------------------.
+|                       Service health                         |
+|--------------------------------------------------------------|
+|   Service   | Region    | Status |  Latency | Note           |
+|-------------|-----------|--------|----------|----------------|
+| api         | eu-west-2 |    200 |   41 ms  | ok             |
+| auth        | eu-west-2 |    200 |   18 ms  | ok             |
+| billing     | us-east-1 |    503 |       -  | upstream down  |
+| search      | us-east-1 |    401 |  120 ms  | token expired  |
+'--------------------------------------------------------------'`],
+  ['psql output', `app=# SELECT id, name, plan, seats FROM accounts LIMIT 4;
+ id |      name       |   plan   | seats
+----+-----------------+----------+-------
+  1 | Acme Ltd        | business |    25
+  2 | Northwind       | starter  |     3
+  3 | Globex, Inc.    | business |   140
+  4 | Initech         |          |     1
+(4 rows)`],
+  ['a box-drawing table with wrapped cells', `┌──────────┬─────────┬──────────────────────────┐
+│ Package  │ Version │ Description              │
+├──────────┼─────────┼──────────────────────────┤
+│ left-pad │ 1.3.0   │ String left pad          │
+├──────────┼─────────┼──────────────────────────┤
+│ chalk    │ 5.3.0   │ Terminal string styling  │
+│          │         │ done right               │
+├──────────┼─────────┼──────────────────────────┤
+│ zod      │ 3.23.8  │ TypeScript-first schema  │
+│          │         │ validation with static   │
+│          │         │ type inference           │
+└──────────┴─────────┴──────────────────────────┘`],
+  ['columns lined up with spaces', `NAME                     READY   STATUS             RESTARTS      AGE    NOMINATED NODE
+web-7d9f8b6c5d-2xkqp     1/1     Running            0             5d2h   <none>
+web-7d9f8b6c5d-8mzrt     1/1     Running            0             5d2h   <none>
+worker-6b5f9c7d48-lq4vn  0/1     CrashLoopBackOff   12 (3m ago)   41m    <none>
+redis-0                  1/1     Running            0             12d    <none>`],
+];
+let exampleN = -1;
+$('#sample').onclick = () => {
+  exampleN = (exampleN + 1) % EXAMPLES.length;
+  setInput(EXAMPLES[exampleN][1]);
+  toast(`Example ${exampleN + 1} of ${EXAMPLES.length}: ${EXAMPLES[exampleN][0]}`);
+};
+
+/* ---------- start ---------- */
+compute();
+input.focus({ preventScroll: true });
+</script>
+</body>
+</html>

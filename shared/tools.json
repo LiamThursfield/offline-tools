@@ -148,5 +148,15 @@
     ],
     "summary": "Convert Unix times, ISO 8601 and time zones",
     "description": "Convert between Unix seconds, milliseconds, microseconds and nanoseconds, ISO 8601, RFC 2822 and dates in any time zone, in either direction, with a live clock and relative times such as “3 hours ago” or “in 2 days”."
+  },
+  {
+    "slug": "ascii-table",
+    "name": "ASCII table converter",
+    "mark": [
+      "ASCII",
+      ".table"
+    ],
+    "summary": "Turn CLI tables into Markdown or CSV",
+    "description": "Turn tables printed by command-line tools into Markdown or CSV: +---+ and box-drawing borders, psql and MySQL output, Markdown tables, and columns lined up with spaces (docker ps, kubectl get, df) or tabs, with titles, cells that wrap over several lines and the text around the table handled, number columns right-aligned, and a preview of the columns found."
   }
 ]
